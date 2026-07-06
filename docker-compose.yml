@@ -1,0 +1,38 @@
+# Local development — PostgreSQL + Redis
+# Usage: pnpm docker:up
+# Connection strings match database/.env and backend/.env defaults
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: bmv-postgres
+    restart: unless-stopped
+    ports:
+      # Host 5434 avoids conflict with local PostgreSQL on 5432/5433
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: bmv
+      POSTGRES_PASSWORD: bmv
+      POSTGRES_DB: browsemyvacations
+    volumes:
+      - bmv_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bmv -d browsemyvacations"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: bmv-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  bmv_pgdata:

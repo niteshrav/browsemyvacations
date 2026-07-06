@@ -1,0 +1,245 @@
+// Browse My Vacations — data model (MVP)
+// Run migrations from database/: pnpm migrate:dev
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum LeadSource {
+  package_card
+  package_detail
+  vacation_meter
+  contact
+  mice
+}
+
+enum LeadStatus {
+  new
+  contacted
+  quoted
+  won
+  lost
+}
+
+enum SuggestionType {
+  destination
+  package
+}
+
+enum SuggestionAction {
+  filter
+  scroll
+}
+
+model Destination {
+  id           String   @id @default(uuid())
+  name         String
+  slug         String   @unique
+  imageUrl     String?  @map("image_url")
+  displayOrder Int      @default(0) @map("display_order")
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  packages     PackageDestination[]
+  meterRates   MeterDestinationRate[]
+  suggestions  Suggestion[]
+
+  @@map("destinations")
+}
+
+model Package {
+  id               String   @id @default(uuid())
+  title            String
+  slug             String   @unique
+  categorySlug     String   @default("custom") @map("category_slug")
+  categoryName     String   @default("Custom Packages") @map("category_name")
+  displayOrder     Int      @default(0) @map("display_order")
+  durationDays     Int      @map("duration_days")
+  durationNights   Int      @map("duration_nights")
+  shortDescription String   @map("short_description") @db.Text
+  priceFrom        Decimal  @map("price_from") @db.Decimal(12, 2)
+  priceIsFixed     Boolean  @default(false) @map("price_is_fixed")
+  currency         String   @default("INR")
+  images           Json     @default("[]")
+  highlights       Json     @default("[]")
+  inclusions       Json     @default("[]")
+  exclusions       Json     @default("[]")
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  destinations PackageDestination[]
+  itineraryDays ItineraryDay[]
+  leads         Lead[]
+  suggestions   Suggestion[]
+
+  @@map("packages")
+}
+
+model PackageDestination {
+  packageId     String @map("package_id")
+  destinationId String @map("destination_id")
+
+  package     Package     @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@id([packageId, destinationId])
+  @@map("package_destinations")
+}
+
+model ItineraryDay {
+  id        String   @id @default(uuid())
+  packageId String   @map("package_id")
+  dayNumber Int      @map("day_number")
+  title     String
+  cities    Json     @default("[]")
+  summary   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  package Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  @@unique([packageId, dayNumber])
+  @@map("itinerary_days")
+}
+
+model Lead {
+  id                String     @id @default(uuid())
+  fullName          String     @map("full_name")
+  email             String
+  phone             String
+  travelDate        DateTime?  @map("travel_date") @db.Date
+  startCity         String?    @map("start_city")
+  endCity           String?    @map("end_city")
+  persons           Int?
+  rooms             Int?
+  vehiclePreference String?    @map("vehicle_preference")
+  message           String?    @db.Text
+  marketingConsent  Boolean    @default(false) @map("marketing_consent")
+  source            LeadSource
+  status            LeadStatus @default(new)
+  packageId         String?    @map("package_id")
+  meterSnapshot     Json?      @map("meter_snapshot")
+  notificationSent  Boolean    @default(false) @map("notification_sent")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
+
+  package      Package?      @relation(fields: [packageId], references: [id], onDelete: SetNull)
+  meterSession MeterSession?
+  notes        LeadNote[]
+
+  @@index([status, createdAt])
+  @@index([email])
+  @@map("leads")
+}
+
+model LeadNote {
+  id        String   @id @default(uuid())
+  leadId    String   @map("lead_id")
+  author    String
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("lead_notes")
+}
+
+model MeterSession {
+  id        String   @id @default(uuid())
+  input     Json
+  output    Json
+  leadId    String?  @unique @map("lead_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  lead Lead? @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  @@map("meter_sessions")
+}
+
+model MeterConfig {
+  id          String   @id @default(uuid())
+  name        String   @default("default")
+  active      Boolean  @default(true)
+  currency    String   @default("INR")
+  disclaimer  String   @default("Estimate is indicative. Final price confirmed by our team.")
+  outputMode  String   @default("range") @map("output_mode")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  destinationRates MeterDestinationRate[]
+  vehicleTiers     MeterVehicleTier[]
+
+  @@map("meter_configs")
+}
+
+model MeterDestinationRate {
+  id            String  @id @default(uuid())
+  meterConfigId String  @map("meter_config_id")
+  destinationId String  @map("destination_id")
+  baseRatePerNight Decimal @map("base_rate_per_night") @db.Decimal(12, 2)
+
+  meterConfig MeterConfig @relation(fields: [meterConfigId], references: [id], onDelete: Cascade)
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([meterConfigId, destinationId])
+  @@map("meter_destination_rates")
+}
+
+model MeterVehicleTier {
+  id            String  @id @default(uuid())
+  meterConfigId String  @map("meter_config_id")
+  name          String
+  multiplier    Decimal @db.Decimal(6, 2)
+  displayOrder  Int     @default(0) @map("display_order")
+
+  meterConfig MeterConfig @relation(fields: [meterConfigId], references: [id], onDelete: Cascade)
+
+  @@map("meter_vehicle_tiers")
+}
+
+model Suggestion {
+  id            String           @id @default(uuid())
+  label         String
+  type          SuggestionType
+  action        SuggestionAction @default(filter)
+  destinationId String?          @map("destination_id")
+  packageId     String?          @map("package_id")
+  displayOrder  Int              @default(0) @map("display_order")
+  active        Boolean          @default(true)
+
+  destination Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  package     Package?     @relation(fields: [packageId], references: [id], onDelete: SetNull)
+
+  @@map("suggestions")
+}
+
+model SiteContent {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  title     String?
+  body      String   @db.Text
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("site_content")
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String
+  role         String   @default("admin")
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("admin_users")
+}

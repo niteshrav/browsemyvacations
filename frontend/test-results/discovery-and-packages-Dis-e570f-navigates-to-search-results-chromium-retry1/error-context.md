@@ -1,0 +1,632 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: discovery-and-packages.spec.ts >> Discovery flow >> TC-E2E-DISC-01: home search navigates to search results
+- Location: e2e/discovery-and-packages.spec.ts:5:7
+
+# Error details
+
+```
+Test timeout of 60000ms exceeded.
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Browse My Vacations" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Browse My Vacations" [ref=e5]
+      - navigation "Main navigation" [ref=e6]:
+        - link "Home" [ref=e7] [cursor=pointer]:
+          - /url: /
+        - link "Packages" [ref=e8] [cursor=pointer]:
+          - /url: /packages
+        - link "Vacation Meter" [ref=e9] [cursor=pointer]:
+          - /url: /vacation-meter
+        - link "MICE" [ref=e10] [cursor=pointer]:
+          - /url: /mice
+        - link "About Us" [ref=e11] [cursor=pointer]:
+          - /url: /about
+        - link "Contact" [ref=e12] [cursor=pointer]:
+          - /url: /contact
+        - button "Admin" [ref=e13]
+  - main [ref=e14]:
+    - generic [ref=e15]:
+      - heading "Search results" [level=1] [ref=e16]
+      - paragraph [ref=e17]: "Showing packages for: Udaipur"
+      - generic [ref=e19]:
+        - combobox "Search by city or package" [ref=e22]: Udaipur
+        - button "Search" [ref=e23]
+      - generic [ref=e24]:
+        - article [ref=e25]:
+          - 'img "2D/1N Udaipur: The Romantic Lake Escape preview" [ref=e27]'
+          - generic [ref=e28]:
+            - 'heading "2D/1N Udaipur: The Romantic Lake Escape" [level=3] [ref=e29]'
+            - paragraph [ref=e30]: An effortless, high-end couples' escape designed around lakeside dining, royal architecture, and sunset boat cruises.
+            - paragraph [ref=e31]: 1 nights / 2 days
+            - paragraph [ref=e32]: From ₹14,600
+            - generic [ref=e33]:
+              - link "View Details" [ref=e34] [cursor=pointer]:
+                - /url: /packages/standalone-single-city-udaipur-the-romantic-lake-escape
+              - link "Customise & Quote" [ref=e35] [cursor=pointer]:
+                - /url: /packages/standalone-single-city-udaipur-the-romantic-lake-escape?quote=1
+        - article [ref=e36]:
+          - 'img "2N/3D Udaipur + Chittorgarh: The Mewar History Walk preview" [ref=e38]'
+          - generic [ref=e39]:
+            - 'heading "2N/3D Udaipur + Chittorgarh: The Mewar History Walk" [level=3] [ref=e40]'
+            - paragraph [ref=e41]: Designed for history buffs who want to explore the capital of Mewar (Udaipur) and the largest fort complex in India (Chittorgarh) in one short trip.
+            - paragraph [ref=e42]: 2 nights / 3 days
+            - paragraph [ref=e43]: From ₹20,300
+            - generic [ref=e44]:
+              - link "View Details" [ref=e45] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-chittorgarh-the-mewar-history-walk
+              - link "Customise & Quote" [ref=e46] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-chittorgarh-the-mewar-history-walk?quote=1
+        - article [ref=e47]:
+          - 'img "2N/3D Udaipur + Jawai: Lakes & Luxury Leopard Safari preview" [ref=e49]'
+          - generic [ref=e50]:
+            - 'heading "2N/3D Udaipur + Jawai: Lakes & Luxury Leopard Safari" [level=3] [ref=e51]'
+            - paragraph [ref=e52]: A high-end couple's getaway that pairs the romantic lake scenery of Udaipur with a luxury glamping and leopard safari experience.
+            - paragraph [ref=e53]: 2 nights / 3 days
+            - paragraph [ref=e54]: From ₹20,300
+            - generic [ref=e55]:
+              - link "View Details" [ref=e56] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-jawai-lakes-luxury-leopard-safari
+              - link "Customise & Quote" [ref=e57] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-jawai-lakes-luxury-leopard-safari?quote=1
+        - article [ref=e58]:
+          - 'img "2N/3D Udaipur + Kumbhalgarh: The Monsoon Quick Weekend preview" [ref=e60]'
+          - generic [ref=e61]:
+            - 'heading "2N/3D Udaipur + Kumbhalgarh: The Monsoon Quick Weekend" [level=3] [ref=e62]'
+            - paragraph [ref=e63]: A quick weekend run that comes alive during the rains, perfect for seeing Misty hills and the grand Kumbhalgarh Fort.
+            - paragraph [ref=e64]: 2 nights / 3 days
+            - paragraph [ref=e65]: From ₹20,300
+            - generic [ref=e66]:
+              - link "View Details" [ref=e67] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-kumbhalgarh-the-monsoon-quick-weekend
+              - link "Customise & Quote" [ref=e68] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-kumbhalgarh-the-monsoon-quick-weekend?quote=1
+        - article [ref=e69]:
+          - 'img "2N/3D Udaipur + Nathdwara: Lakes & Shrinathji Darshan preview" [ref=e71]'
+          - generic [ref=e72]:
+            - 'heading "2N/3D Udaipur + Nathdwara: Lakes & Shrinathji Darshan" [level=3] [ref=e73]'
+            - paragraph [ref=e74]: A neat combination of leisure and pilgrimage, perfect for families who want a quick holiday along with a dedicated Shrinathji temple darshan.
+            - paragraph [ref=e75]: 2 nights / 3 days
+            - paragraph [ref=e76]: From ₹20,300
+            - generic [ref=e77]:
+              - link "View Details" [ref=e78] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-nathdwara-lakes-shrinathji-darshan
+              - link "Customise & Quote" [ref=e79] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-nathdwara-lakes-shrinathji-darshan?quote=1
+        - article [ref=e80]:
+          - 'img "3N/4D Jaipur + Udaipur: The Flight-Hopper Special preview" [ref=e82]'
+          - generic [ref=e83]:
+            - 'heading "3N/4D Jaipur + Udaipur: The Flight-Hopper Special" [level=3] [ref=e84]'
+            - paragraph [ref=e85]: A fast, high-end itinerary optimized for travelers flying between Rajasthan's two most famous cities to maximize sightseeing time.
+            - paragraph [ref=e86]: 3 nights / 4 days
+            - paragraph [ref=e87]: From ₹24,500
+            - generic [ref=e88]:
+              - link "View Details" [ref=e89] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-jaipur-udaipur-the-flight-hopper-special
+              - link "Customise & Quote" [ref=e90] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-jaipur-udaipur-the-flight-hopper-special?quote=1
+        - article [ref=e91]:
+          - 'img "3N/4D Pushkar + Udaipur: The Central Rajasthan Connector preview" [ref=e93]'
+          - generic [ref=e94]:
+            - 'heading "3N/4D Pushkar + Udaipur: The Central Rajasthan Connector" [level=3] [ref=e95]'
+            - paragraph [ref=e96]: "Great for travelers looking to experience both worlds: the vibrant spiritual culture of Pushkar and the elegant lake views of Udaipur."
+            - paragraph [ref=e97]: 3 nights / 4 days
+            - paragraph [ref=e98]: From ₹24,500
+            - generic [ref=e99]:
+              - link "View Details" [ref=e100] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-pushkar-udaipur-the-central-rajasthan-connector
+              - link "Customise & Quote" [ref=e101] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-pushkar-udaipur-the-central-rajasthan-connector?quote=1
+        - article [ref=e102]:
+          - 'img "3N/4D Udaipur + Chittorgarh: Extended Royal History preview" [ref=e104]'
+          - generic [ref=e105]:
+            - 'heading "3N/4D Udaipur + Chittorgarh: Extended Royal History" [level=3] [ref=e106]'
+            - paragraph [ref=e107]: A deeper look into Mewar's history, giving you more time to explore Udaipur’s lake palaces before diving into Chittorgarh's historic fort tales.
+            - paragraph [ref=e108]: 3 nights / 4 days
+            - paragraph [ref=e109]: From ₹24,500
+            - generic [ref=e110]:
+              - link "View Details" [ref=e111] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-chittorgarh-extended-royal-history
+              - link "Customise & Quote" [ref=e112] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-chittorgarh-extended-royal-history?quote=1
+        - article [ref=e113]:
+          - 'img "3N/4D Udaipur + Jawai: The High-End Luxury Traveler Target preview" [ref=e115]'
+          - generic [ref=e116]:
+            - 'heading "3N/4D Udaipur + Jawai: The High-End Luxury Traveler Target" [level=3] [ref=e117]'
+            - paragraph [ref=e118]: Tailor-made for luxury travelers looking for a slow-paced holiday focused on premium lakeview hotels and exclusive wilderness tracking.
+            - paragraph [ref=e119]: 3 nights / 4 days
+            - paragraph [ref=e120]: From ₹24,500
+            - generic [ref=e121]:
+              - link "View Details" [ref=e122] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-jawai-the-high-end-luxury-traveler-target
+              - link "Customise & Quote" [ref=e123] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-jawai-the-high-end-luxury-traveler-target?quote=1
+        - article [ref=e124]:
+          - 'img "3N/4D Udaipur + Kumbhalgarh: The Premium Misty Hills Stay preview" [ref=e126]'
+          - generic [ref=e127]:
+            - 'heading "3N/4D Udaipur + Kumbhalgarh: The Premium Misty Hills Stay" [level=3] [ref=e128]'
+            - paragraph [ref=e129]: An upgraded, slower-paced hill vacation that blends the lakeside charm of Udaipur with an overnight stay in a luxury valley resort at Kumbhalgarh.
+            - paragraph [ref=e130]: 3 nights / 4 days
+            - paragraph [ref=e131]: From ₹24,500
+            - generic [ref=e132]:
+              - link "View Details" [ref=e133] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-kumbhalgarh-the-premium-misty-hills-stay
+              - link "Customise & Quote" [ref=e134] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-kumbhalgarh-the-premium-misty-hills-stay?quote=1
+        - article [ref=e135]:
+          - 'img "3N/4D Udaipur + Mount Abu: Lakes & Mountains Combo preview" [ref=e137]'
+          - generic [ref=e138]:
+            - 'heading "3N/4D Udaipur + Mount Abu: Lakes & Mountains Combo" [level=3] [ref=e139]'
+            - paragraph [ref=e140]: A perfect short getaway combining the romantic lakes of Udaipur with the refreshing mountain air of Rajasthan’s only hill station.
+            - paragraph [ref=e141]: 3 nights / 4 days
+            - paragraph [ref=e142]: From ₹24,500
+            - generic [ref=e143]:
+              - link "View Details" [ref=e144] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-mount-abu-lakes-mountains-combo
+              - link "Customise & Quote" [ref=e145] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-mount-abu-lakes-mountains-combo?quote=1
+        - article [ref=e146]:
+          - 'img "3N/4D Udaipur + Nathdwara: Leisure + Spiritual Combo preview" [ref=e148]'
+          - generic [ref=e149]:
+            - 'heading "3N/4D Udaipur + Nathdwara: Leisure + Spiritual Combo" [level=3] [ref=e150]'
+            - paragraph [ref=e151]: An extended, stress-free family vacation that gives you two full days of sightseeing in Udaipur alongside a peaceful pilgrimage experience in Nathdwara.
+            - paragraph [ref=e152]: 3 nights / 4 days
+            - paragraph [ref=e153]: From ₹24,500
+            - generic [ref=e154]:
+              - link "View Details" [ref=e155] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-nathdwara-leisure-spiritual-combo
+              - link "Customise & Quote" [ref=e156] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-nathdwara-leisure-spiritual-combo?quote=1
+        - article [ref=e157]:
+          - 'img "4N/5D Jaipur + Udaipur: The First-Timer Rajasthan Taster preview" [ref=e159]'
+          - generic [ref=e160]:
+            - 'heading "4N/5D Jaipur + Udaipur: The First-Timer Rajasthan Taster" [level=3] [ref=e161]'
+            - paragraph [ref=e162]: The ultimate introduction to Rajasthan for first-time visitors, offering a balanced, comprehensive look at both the Pink City and the City of Lakes.
+            - paragraph [ref=e163]: 4 nights / 5 days
+            - paragraph [ref=e164]: From ₹28,700
+            - generic [ref=e165]:
+              - link "View Details" [ref=e166] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-jaipur-udaipur-the-first-timer-rajasthan-taster
+              - link "Customise & Quote" [ref=e167] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-jaipur-udaipur-the-first-timer-rajasthan-taster?quote=1
+        - article [ref=e168]:
+          - 'img "4N/5D Jodhpur + Jawai + Udaipur: The Ultra-Luxury Transit Link preview" [ref=e170]'
+          - generic [ref=e171]:
+            - 'heading "4N/5D Jodhpur + Jawai + Udaipur: The Ultra-Luxury Transit Link" [level=3] [ref=e172]'
+            - paragraph [ref=e173]: A premium, high-end routing that bridges Rajasthan's two primary tourist hubs with an exclusive, luxury glamping stop for leopard tracking.
+            - paragraph [ref=e174]: 4 nights / 5 days
+            - paragraph [ref=e175]: From ₹30,200
+            - generic [ref=e176]:
+              - link "View Details" [ref=e177] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jodhpur-jawai-udaipur-the-ultra-luxury-transit-link
+              - link "Customise & Quote" [ref=e178] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jodhpur-jawai-udaipur-the-ultra-luxury-transit-link?quote=1
+        - article [ref=e179]:
+          - 'img "4N/5D Udaipur + Kumbhalgarh + Mount Abu: The Mewar Hill Station Special preview" [ref=e181]'
+          - generic [ref=e182]:
+            - 'heading "4N/5D Udaipur + Kumbhalgarh + Mount Abu: The Mewar Hill Station Special" [level=3] [ref=e183]'
+            - paragraph [ref=e184]: A great escape from the plains. Combines the romantic lakes of Udaipur with grand hill fortress architecture and cool mountain peaks.
+            - paragraph [ref=e185]: 4 nights / 5 days
+            - paragraph [ref=e186]: From ₹30,200
+            - generic [ref=e187]:
+              - link "View Details" [ref=e188] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-mount-abu-the-mewar-hill-station-special
+              - link "Customise & Quote" [ref=e189] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-mount-abu-the-mewar-hill-station-special?quote=1
+        - article [ref=e190]:
+          - 'img "4N/5D Udaipur + Kumbhalgarh + Nathdwara: Lakes, Forts, and Shrinathji preview" [ref=e192]'
+          - generic [ref=e193]:
+            - 'heading "4N/5D Udaipur + Kumbhalgarh + Nathdwara: Lakes, Forts, and Shrinathji" [level=3] [ref=e194]'
+            - paragraph [ref=e195]: A highly popular, well-rounded holiday loop covering pristine lakes, massive mountain fortress walls, and an effortless temple darshan.
+            - paragraph [ref=e196]: 4 nights / 5 days
+            - paragraph [ref=e197]: From ₹30,200
+            - generic [ref=e198]:
+              - link "View Details" [ref=e199] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-nathdwara-lakes-forts-and-shrinathji
+              - link "Customise & Quote" [ref=e200] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-nathdwara-lakes-forts-and-shrinathji?quote=1
+        - article [ref=e201]:
+          - 'img "4N/5D Udaipur + Mount Abu + Chittorgarh: Hills, Lakes, and History preview" [ref=e203]'
+          - generic [ref=e204]:
+            - 'heading "4N/5D Udaipur + Mount Abu + Chittorgarh: Hills, Lakes, and History" [level=3] [ref=e205]'
+            - paragraph [ref=e206]: An excellent, high-contrast loop that transitions seamlessly from legendary battlements to romantic lakes and cool mountain viewpoints.
+            - paragraph [ref=e207]: 4 nights / 5 days
+            - paragraph [ref=e208]: From ₹30,200
+            - generic [ref=e209]:
+              - link "View Details" [ref=e210] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-mount-abu-chittorgarh-hills-lakes-and-history
+              - link "Customise & Quote" [ref=e211] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-mount-abu-chittorgarh-hills-lakes-and-history?quote=1
+        - article [ref=e212]:
+          - 'img "4N/5D Udaipur + Mount Abu: The Gujarati Family Classic Holiday preview" [ref=e214]'
+          - generic [ref=e215]:
+            - 'heading "4N/5D Udaipur + Mount Abu: The Gujarati Family Classic Holiday" [level=3] [ref=e216]'
+            - paragraph [ref=e217]: A classic family favorite route optimized for a relaxed pace, plenty of sightseeing, and a cooling mountain retreat.
+            - paragraph [ref=e218]: 4 nights / 5 days
+            - paragraph [ref=e219]: From ₹28,700
+            - generic [ref=e220]:
+              - link "View Details" [ref=e221] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-mount-abu-the-gujarati-family-classic-holiday
+              - link "Customise & Quote" [ref=e222] [cursor=pointer]:
+                - /url: /packages/dual-city-combinations-udaipur-mount-abu-the-gujarati-family-classic-holiday?quote=1
+        - article [ref=e223]:
+          - 'img "4N/5D Udaipur + Nathdwara + Chittorgarh: The Faith & Forts Corridor preview" [ref=e225]'
+          - generic [ref=e226]:
+            - 'heading "4N/5D Udaipur + Nathdwara + Chittorgarh: The Faith & Forts Corridor" [level=3] [ref=e227]'
+            - paragraph [ref=e228]: A brilliant mix of royal lake heritage, powerful Mewar fort history, and a seamless family pilgrimage connection.
+            - paragraph [ref=e229]: 4 nights / 5 days
+            - paragraph [ref=e230]: From ₹30,200
+            - generic [ref=e231]:
+              - link "View Details" [ref=e232] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-nathdwara-chittorgarh-the-faith-forts-corridor
+              - link "Customise & Quote" [ref=e233] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-nathdwara-chittorgarh-the-faith-forts-corridor?quote=1
+        - article [ref=e234]:
+          - 'img "5N/6D Chittorgarh + Udaipur + Kumbhalgarh: The Mewar Dynasty Trail preview" [ref=e236]'
+          - generic [ref=e237]:
+            - 'heading "5N/6D Chittorgarh + Udaipur + Kumbhalgarh: The Mewar Dynasty Trail" [level=3] [ref=e238]'
+            - paragraph [ref=e239]: A dedicated immersion into the rich history of the Mewar rulers, visiting grand hill battlements, lakeside palaces, and massive fortified walls.
+            - paragraph [ref=e240]: 5 nights / 6 days
+            - paragraph [ref=e241]: From ₹34,400
+            - generic [ref=e242]:
+              - link "View Details" [ref=e243] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-chittorgarh-udaipur-kumbhalgarh-the-mewar-dynasty-trail
+              - link "Customise & Quote" [ref=e244] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-chittorgarh-udaipur-kumbhalgarh-the-mewar-dynasty-trail?quote=1
+        - article [ref=e245]:
+          - 'img "5N/6D Jaipur + Jodhpur + Udaipur: The Three Capitals Run preview" [ref=e247]'
+          - generic [ref=e248]:
+            - 'heading "5N/6D Jaipur + Jodhpur + Udaipur: The Three Capitals Run" [level=3] [ref=e249]'
+            - paragraph [ref=e250]: "A highly efficient routing that hits the absolute essentials of Rajasthan travel: the Pink City, the Blue City, and the City of Lakes."
+            - paragraph [ref=e251]: 5 nights / 6 days
+            - paragraph [ref=e252]: From ₹34,400
+            - generic [ref=e253]:
+              - link "View Details" [ref=e254] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jaipur-jodhpur-udaipur-the-three-capitals-run
+              - link "Customise & Quote" [ref=e255] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jaipur-jodhpur-udaipur-the-three-capitals-run?quote=1
+        - article [ref=e256]:
+          - 'img "5N/6D Jaipur + Pushkar + Udaipur: The Culture & Romantic Lake Route preview" [ref=e258]'
+          - generic [ref=e259]:
+            - 'heading "5N/6D Jaipur + Pushkar + Udaipur: The Culture & Romantic Lake Route" [level=3] [ref=e260]'
+            - paragraph [ref=e261]: Seamlessly blends the grand architecture of the Pink City, the spiritual atmosphere of Pushkar, and the lakeside romance of Udaipur.
+            - paragraph [ref=e262]: 5 nights / 6 days
+            - paragraph [ref=e263]: From ₹34,400
+            - generic [ref=e264]:
+              - link "View Details" [ref=e265] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jaipur-pushkar-udaipur-the-culture-romantic-lake-route
+              - link "Customise & Quote" [ref=e266] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jaipur-pushkar-udaipur-the-culture-romantic-lake-route?quote=1
+        - article [ref=e267]:
+          - 'img "5N/6D Jodhpur + Jawai + Udaipur: The Premium Heritage & Wildlife Combo preview" [ref=e269]'
+          - generic [ref=e270]:
+            - 'heading "5N/6D Jodhpur + Jawai + Udaipur: The Premium Heritage & Wildlife Combo" [level=3] [ref=e271]'
+            - paragraph [ref=e272]: An upgraded luxury itinerary giving you extra time to enjoy Jodhpur’s upscale stepwell cafes along with deep wildlife exploration in Jawai.
+            - paragraph [ref=e273]: 5 nights / 6 days
+            - paragraph [ref=e274]: From ₹34,400
+            - generic [ref=e275]:
+              - link "View Details" [ref=e276] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jodhpur-jawai-udaipur-the-premium-heritage-wildlife-combo
+              - link "Customise & Quote" [ref=e277] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jodhpur-jawai-udaipur-the-premium-heritage-wildlife-combo?quote=1
+        - article [ref=e278]:
+          - 'img "5N/6D Nathdwara + Udaipur + Mount Abu: Spiritual Hills Vacation preview" [ref=e280]'
+          - generic [ref=e281]:
+            - 'heading "5N/6D Nathdwara + Udaipur + Mount Abu: Spiritual Hills Vacation" [level=3] [ref=e282]'
+            - paragraph [ref=e283]: A classic family choice that connects a peaceful deity darshan at Nathdwara with beautiful lake scenery and a refreshing mountain stay.
+            - paragraph [ref=e284]: 5 nights / 6 days
+            - paragraph [ref=e285]: From ₹34,400
+            - generic [ref=e286]:
+              - link "View Details" [ref=e287] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-nathdwara-udaipur-mount-abu-spiritual-hills-vacation
+              - link "Customise & Quote" [ref=e288] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-nathdwara-udaipur-mount-abu-spiritual-hills-vacation?quote=1
+        - article [ref=e289]:
+          - 'img "5N/6D Udaipur + Jawai + Kumbhalgarh: The Nature Enthusiast Elite Route preview" [ref=e291]'
+          - generic [ref=e292]:
+            - 'heading "5N/6D Udaipur + Jawai + Kumbhalgarh: The Nature Enthusiast Elite Route" [level=3] [ref=e293]'
+            - paragraph [ref=e294]: A high-end, nature-first itinerary that completely skips commercial cities to focus on tranquil lakes, rugged safaris, and pristine valley retreats.
+            - paragraph [ref=e295]: 5 nights / 6 days
+            - paragraph [ref=e296]: From ₹34,400
+            - generic [ref=e297]:
+              - link "View Details" [ref=e298] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-jawai-kumbhalgarh-the-nature-enthusiast-elite-route
+              - link "Customise & Quote" [ref=e299] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-jawai-kumbhalgarh-the-nature-enthusiast-elite-route?quote=1
+        - article [ref=e300]:
+          - 'img "5N/6D Udaipur + Jawai + Mount Abu: Luxury Wildlife & Hill Station Combo preview" [ref=e302]'
+          - generic [ref=e303]:
+            - 'heading "5N/6D Udaipur + Jawai + Mount Abu: Luxury Wildlife & Hill Station Combo" [level=3] [ref=e304]'
+            - paragraph [ref=e305]: Combines the elegant romance of Udaipur with the thrilling wildlife of Jawai and the cooling mountain environment of Mount Abu.
+            - paragraph [ref=e306]: 5 nights / 6 days
+            - paragraph [ref=e307]: From ₹34,400
+            - generic [ref=e308]:
+              - link "View Details" [ref=e309] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-jawai-mount-abu-luxury-wildlife-hill-station-combo
+              - link "Customise & Quote" [ref=e310] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-jawai-mount-abu-luxury-wildlife-hill-station-combo?quote=1
+        - article [ref=e311]:
+          - 'img "5N/6D Udaipur + Kumbhalgarh + Chittorgarh: The Historic Mewar Deep Dive preview" [ref=e313]'
+          - generic [ref=e314]:
+            - 'heading "5N/6D Udaipur + Kumbhalgarh + Chittorgarh: The Historic Mewar Deep Dive" [level=3] [ref=e315]'
+            - paragraph [ref=e316]: Built for serious history buffs who want to dive deep into the legendary tales, architecture, and battlegrounds of the grand Mewar Dynasty.
+            - paragraph [ref=e317]: 5 nights / 6 days
+            - paragraph [ref=e318]: From ₹34,400
+            - generic [ref=e319]:
+              - link "View Details" [ref=e320] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-chittorgarh-the-historic-mewar-deep-dive
+              - link "Customise & Quote" [ref=e321] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-chittorgarh-the-historic-mewar-deep-dive?quote=1
+        - article [ref=e322]:
+          - 'img "5N/6D Udaipur + Kumbhalgarh + Mount Abu: The Luxury Misty Escapes Route preview" [ref=e324]'
+          - generic [ref=e325]:
+            - 'heading "5N/6D Udaipur + Kumbhalgarh + Mount Abu: The Luxury Misty Escapes Route" [level=3] [ref=e326]'
+            - paragraph [ref=e327]: An upscale mountain retreat that gives you extra time to indulge in premium luxury properties tucked away in the misty hills of the Aravalli range.
+            - paragraph [ref=e328]: 5 nights / 6 days
+            - paragraph [ref=e329]: From ₹34,400
+            - generic [ref=e330]:
+              - link "View Details" [ref=e331] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-mount-abu-the-luxury-misty-escapes-route
+              - link "Customise & Quote" [ref=e332] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-mount-abu-the-luxury-misty-escapes-route?quote=1
+        - article [ref=e333]:
+          - 'img "5N/6D Udaipur + Mount Abu + Nathdwara: The Ultimate Gujarati Family Holiday preview" [ref=e335]'
+          - generic [ref=e336]:
+            - 'heading "5N/6D Udaipur + Mount Abu + Nathdwara: The Ultimate Gujarati Family Holiday" [level=3] [ref=e337]'
+            - paragraph [ref=e338]: "Our #1 recommended package for multigenerational families. Perfectly matches mountain relaxation for the kids with peaceful temple darshans for parents."
+            - paragraph [ref=e339]: 5 nights / 6 days
+            - paragraph [ref=e340]: From ₹34,400
+            - generic [ref=e341]:
+              - link "View Details" [ref=e342] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-mount-abu-nathdwara-the-ultimate-gujarati-family-holiday
+              - link "Customise & Quote" [ref=e343] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-mount-abu-nathdwara-the-ultimate-gujarati-family-holiday?quote=1
+        - article [ref=e344]:
+          - 'img "5N/6D Udaipur + Nathdwara + Chittorgarh: The Extended Devotional Tour preview" [ref=e346]'
+          - generic [ref=e347]:
+            - 'heading "5N/6D Udaipur + Nathdwara + Chittorgarh: The Extended Devotional Tour" [level=3] [ref=e348]'
+            - paragraph [ref=e349]: Tailor-made for families looking for a more relaxed, spiritually focused trip with an extended two-night stay in the holy town of Nathdwara.
+            - paragraph [ref=e350]: 5 nights / 6 days
+            - paragraph [ref=e351]: From ₹34,400
+            - generic [ref=e352]:
+              - link "View Details" [ref=e353] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-nathdwara-chittorgarh-the-extended-devotional-tour
+              - link "Customise & Quote" [ref=e354] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-nathdwara-chittorgarh-the-extended-devotional-tour?quote=1
+        - article [ref=e355]:
+          - 'img "6N/7D Bikaner + Jaisalmer + Udaipur: The Great Desert to Oases Transit preview" [ref=e357]'
+          - generic [ref=e358]:
+            - 'heading "6N/7D Bikaner + Jaisalmer + Udaipur: The Great Desert to Oases Transit" [level=3] [ref=e359]'
+            - paragraph [ref=e360]: A brilliant cross-state transit itinerary that highlights the huge contrast between the hot, arid sand dunes and the lush, romantic lake oases of Udaipur.
+            - paragraph [ref=e361]: 6 nights / 7 days
+            - paragraph [ref=e362]: From ₹38,600
+            - generic [ref=e363]:
+              - link "View Details" [ref=e364] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-bikaner-jaisalmer-udaipur-the-great-desert-to-oases-transit
+              - link "Customise & Quote" [ref=e365] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-bikaner-jaisalmer-udaipur-the-great-desert-to-oases-transit?quote=1
+        - article [ref=e366]:
+          - 'img "6N/7D Jaipur + Jodhpur + Udaipur: The Comprehensive City Trio preview" [ref=e368]'
+          - generic [ref=e369]:
+            - 'heading "6N/7D Jaipur + Jodhpur + Udaipur: The Comprehensive City Trio" [level=3] [ref=e370]'
+            - paragraph [ref=e371]: An expanded, highly comfortable version of the Three Capitals tour. Adds extra nights to ensure an easygoing pace for families and group vacations.
+            - paragraph [ref=e372]: 6 nights / 7 days
+            - paragraph [ref=e373]: From ₹38,600
+            - generic [ref=e374]:
+              - link "View Details" [ref=e375] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jaipur-jodhpur-udaipur-the-comprehensive-city-trio
+              - link "Customise & Quote" [ref=e376] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jaipur-jodhpur-udaipur-the-comprehensive-city-trio?quote=1
+        - article [ref=e377]:
+          - 'img "6N/7D Jaipur + Ranthambore + Udaipur: The Palaces & Tigers Signature Run preview" [ref=e379]'
+          - generic [ref=e380]:
+            - 'heading "6N/7D Jaipur + Ranthambore + Udaipur: The Palaces & Tigers Signature Run" [level=3] [ref=e381]'
+            - paragraph [ref=e382]: "Our premier premium multi-city itinerary. Perfectly hits the top three holiday highlights: grand palaces, incredible tiger tracking, and beautiful lakeside luxury."
+            - paragraph [ref=e383]: 6 nights / 7 days
+            - paragraph [ref=e384]: From ₹38,600
+            - generic [ref=e385]:
+              - link "View Details" [ref=e386] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jaipur-ranthambore-udaipur-the-palaces-tigers-signature-run
+              - link "Customise & Quote" [ref=e387] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jaipur-ranthambore-udaipur-the-palaces-tigers-signature-run?quote=1
+        - article [ref=e388]:
+          - 'img "6N/7D Jawai + Udaipur + Chittorgarh: Luxury Wildlife & History Link preview" [ref=e390]'
+          - generic [ref=e391]:
+            - 'heading "6N/7D Jawai + Udaipur + Chittorgarh: Luxury Wildlife & History Link" [level=3] [ref=e392]'
+            - paragraph [ref=e393]: A premium tour that blends upscale, high-margin wilderness glamping and leopard tracking with lakeside royalty and incredible fort history.
+            - paragraph [ref=e394]: 6 nights / 7 days
+            - paragraph [ref=e395]: From ₹38,600
+            - generic [ref=e396]:
+              - link "View Details" [ref=e397] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jawai-udaipur-chittorgarh-luxury-wildlife-history-link
+              - link "Customise & Quote" [ref=e398] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-jawai-udaipur-chittorgarh-luxury-wildlife-history-link?quote=1
+        - article [ref=e399]:
+          - 'img "6N/7D Pushkar + Jodhpur + Udaipur: The Central Heritage to Southern Lakes Path preview" [ref=e401]'
+          - generic [ref=e402]:
+            - 'heading "6N/7D Pushkar + Jodhpur + Udaipur: The Central Heritage to Southern Lakes Path" [level=3] [ref=e403]'
+            - paragraph [ref=e404]: A beautifully orchestrated journey connecting holy lake shrines, rugged fort architecture, and sophisticated lakeside palaces.
+            - paragraph [ref=e405]: 6 nights / 7 days
+            - paragraph [ref=e406]: From ₹38,600
+            - generic [ref=e407]:
+              - link "View Details" [ref=e408] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-pushkar-jodhpur-udaipur-the-central-heritage-to-southern-lakes-path
+              - link "Customise & Quote" [ref=e409] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-pushkar-jodhpur-udaipur-the-central-heritage-to-southern-lakes-path?quote=1
+        - article [ref=e410]:
+          - 'img "6N/7D Udaipur + Kumbhalgarh + Mount Abu: The Complete Southern Escapes Tour preview" [ref=e412]'
+          - generic [ref=e413]:
+            - 'heading "6N/7D Udaipur + Kumbhalgarh + Mount Abu: The Complete Southern Escapes Tour" [level=3] [ref=e414]'
+            - paragraph [ref=e415]: A highly comprehensive tour of Southern Rajasthan, giving you an even mix of lakeside leisure, historic trekking, and a laid-back hill station vacation.
+            - paragraph [ref=e416]: 6 nights / 7 days
+            - paragraph [ref=e417]: From ₹38,600
+            - generic [ref=e418]:
+              - link "View Details" [ref=e419] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-mount-abu-the-complete-southern-escapes-tour
+              - link "Customise & Quote" [ref=e420] [cursor=pointer]:
+                - /url: /packages/three-city-circuits-udaipur-kumbhalgarh-mount-abu-the-complete-southern-escapes-tour?quote=1
+        - article [ref=e421]:
+          - 'img "7N/8D Jaipur + Pushkar + Jodhpur + Udaipur: The Four Corner Heritage Run preview" [ref=e423]'
+          - generic [ref=e424]:
+            - 'heading "7N/8D Jaipur + Pushkar + Jodhpur + Udaipur: The Four Corner Heritage Run" [level=3] [ref=e425]'
+            - paragraph [ref=e426]: Connects Rajasthan's major urban gems-The Pink, Blue, and White cities-completely avoiding arid sand dunes to focus on palaces and lakes.
+            - paragraph [ref=e427]: 7 nights / 8 days
+            - paragraph [ref=e428]: From ₹44,300
+            - generic [ref=e429]:
+              - link "View Details" [ref=e430] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jaipur-pushkar-jodhpur-udaipur-the-four-corner-heritage-run
+              - link "Customise & Quote" [ref=e431] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jaipur-pushkar-jodhpur-udaipur-the-four-corner-heritage-run?quote=1
+        - article [ref=e432]:
+          - 'img "7N/8D Jodhpur + Jawai + Udaipur + Kumbhalgarh: The Ultra-Luxury Heritage & preview" [ref=e434]'
+          - generic [ref=e435]:
+            - 'heading "7N/8D Jodhpur + Jawai + Udaipur + Kumbhalgarh: The Ultra-Luxury Heritage &" [level=3] [ref=e436]'
+            - paragraph [ref=e437]: High-margin operational route combining boutique heritage city stays, private 4x4 leopard tracking, and exclusive glamping.
+            - paragraph [ref=e438]: 7 nights / 8 days
+            - paragraph [ref=e439]: From ₹44,300
+            - generic [ref=e440]:
+              - link "View Details" [ref=e441] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jodhpur-jawai-udaipur-kumbhalgarh-the-ultra-luxury-heritage
+              - link "Customise & Quote" [ref=e442] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jodhpur-jawai-udaipur-kumbhalgarh-the-ultra-luxury-heritage?quote=1
+        - article [ref=e443]:
+          - 'img "7N/8D Udaipur + Chittorgarh + Kumbhalgarh + Nathdwara: The Deep Mewar History preview" [ref=e445]'
+          - generic [ref=e446]:
+            - 'heading "7N/8D Udaipur + Chittorgarh + Kumbhalgarh + Nathdwara: The Deep Mewar History" [level=3] [ref=e447]'
+            - paragraph [ref=e448]: A dedicated historical dive mapping out the epic tales of Rajput chivalry across the four major bastions of the Mewar Dynasty.
+            - paragraph [ref=e449]: 7 nights / 8 days
+            - paragraph [ref=e450]: From ₹44,300
+            - generic [ref=e451]:
+              - link "View Details" [ref=e452] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-udaipur-chittorgarh-kumbhalgarh-nathdwara-the-deep-mewar-history
+              - link "Customise & Quote" [ref=e453] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-udaipur-chittorgarh-kumbhalgarh-nathdwara-the-deep-mewar-history?quote=1
+        - article [ref=e454]:
+          - 'img "7N/8D Udaipur + Kumbhalgarh + Mount Abu + Nathdwara: The Complete Southern preview" [ref=e456]'
+          - generic [ref=e457]:
+            - 'heading "7N/8D Udaipur + Kumbhalgarh + Mount Abu + Nathdwara: The Complete Southern" [level=3] [ref=e458]'
+            - paragraph [ref=e459]: Completely avoids the hot plains, taking travelers through mist-laden Aravalli peaks, hill fortresses, cool mountain lakes, and sacred spaces.
+            - paragraph [ref=e460]: 7 nights / 8 days
+            - paragraph [ref=e461]: From ₹44,300
+            - generic [ref=e462]:
+              - link "View Details" [ref=e463] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-udaipur-kumbhalgarh-mount-abu-nathdwara-the-complete-southern
+              - link "Customise & Quote" [ref=e464] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-udaipur-kumbhalgarh-mount-abu-nathdwara-the-complete-southern?quote=1
+        - article [ref=e465]:
+          - 'img "8N/9D Bikaner + Jaisalmer + Jodhpur + Jawai + Udaipur: The Ultimate preview" [ref=e467]'
+          - generic [ref=e468]:
+            - 'heading "8N/9D Bikaner + Jaisalmer + Jodhpur + Jawai + Udaipur: The Ultimate" [level=3] [ref=e469]'
+            - paragraph [ref=e470]: The ultimate cross-state luxury overland path tracking directly from northern havelis, through dunes and safaris, down to southern lakes.
+            - paragraph [ref=e471]: 8 nights / 9 days
+            - paragraph [ref=e472]: From ₹48,500
+            - generic [ref=e473]:
+              - link "View Details" [ref=e474] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-bikaner-jaisalmer-jodhpur-jawai-udaipur-the-ultimate
+              - link "Customise & Quote" [ref=e475] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-bikaner-jaisalmer-jodhpur-jawai-udaipur-the-ultimate?quote=1
+        - article [ref=e476]:
+          - 'img "8N/9D Jaipur + Pushkar + Jodhpur + Jawai + Udaipur: The Royal Capitals & Leopard preview" [ref=e478]'
+          - generic [ref=e479]:
+            - 'heading "8N/9D Jaipur + Pushkar + Jodhpur + Jawai + Udaipur: The Royal Capitals & Leopard" [level=3] [ref=e480]'
+            - paragraph [ref=e481]: A highly curated premium itinerary mapping out iconic city history alongside raw granite-hill leopard tracking.
+            - paragraph [ref=e482]: 8 nights / 9 days
+            - paragraph [ref=e483]: From ₹48,500
+            - generic [ref=e484]:
+              - link "View Details" [ref=e485] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jaipur-pushkar-jodhpur-jawai-udaipur-the-royal-capitals-leopard
+              - link "Customise & Quote" [ref=e486] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jaipur-pushkar-jodhpur-jawai-udaipur-the-royal-capitals-leopard?quote=1
+        - article [ref=e487]:
+          - 'img "8N/9D Jaipur + Pushkar + Jodhpur + Udaipur: The Absolute Grand Rajasthan Classic preview" [ref=e489]'
+          - generic [ref=e490]:
+            - 'heading "8N/9D Jaipur + Pushkar + Jodhpur + Udaipur: The Absolute Grand Rajasthan Classic" [level=3] [ref=e491]'
+            - paragraph [ref=e492]: An elite, deeply immersive package providing extra days in Udaipur for secondary mountain fortresses and long lake cruises.
+            - paragraph [ref=e493]: 8 nights / 9 days
+            - paragraph [ref=e494]: From ₹48,500
+            - generic [ref=e495]:
+              - link "View Details" [ref=e496] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jaipur-pushkar-jodhpur-udaipur-the-absolute-grand-rajasthan-classic
+              - link "Customise & Quote" [ref=e497] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jaipur-pushkar-jodhpur-udaipur-the-absolute-grand-rajasthan-classic?quote=1
+        - article [ref=e498]:
+          - 'img "8N/9D Jodhpur + Jawai + Udaipur + Mount Abu: The Ultimate Nature, Wildlife & Palace preview" [ref=e500]'
+          - generic [ref=e501]:
+            - 'heading "8N/9D Jodhpur + Jawai + Udaipur + Mount Abu: The Ultimate Nature, Wildlife & Palace" [level=3] [ref=e502]'
+            - paragraph [ref=e503]: The premier southern vacation loop matching heritage palaces and mountain vistas with raw wilderness tracking.
+            - paragraph [ref=e504]: 8 nights / 9 days
+            - paragraph [ref=e505]: From ₹48,500
+            - generic [ref=e506]:
+              - link "View Details" [ref=e507] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jodhpur-jawai-udaipur-mount-abu-the-ultimate-nature-wildlife-palace
+              - link "Customise & Quote" [ref=e508] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-jodhpur-jawai-udaipur-mount-abu-the-ultimate-nature-wildlife-palace?quote=1
+        - article [ref=e509]:
+          - 'img "8N/9D Udaipur + Chittorgarh + Nathdwara + Kumbhalgarh + Mount Abu: The Complete preview" [ref=e511]'
+          - generic [ref=e512]:
+            - 'heading "8N/9D Udaipur + Chittorgarh + Nathdwara + Kumbhalgarh + Mount Abu: The Complete" [level=3] [ref=e513]'
+            - paragraph [ref=e514]: A masterfully woven family-centric mega-circuit covering the best of faith, fortress architecture, and cool hill stations in the south.
+            - paragraph [ref=e515]: 8 nights / 9 days
+            - paragraph [ref=e516]: From ₹48,500
+            - generic [ref=e517]:
+              - link "View Details" [ref=e518] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-udaipur-chittorgarh-nathdwara-kumbhalgarh-mount-abu-the-complete
+              - link "Customise & Quote" [ref=e519] [cursor=pointer]:
+                - /url: /packages/regional-deep-dives-udaipur-chittorgarh-nathdwara-kumbhalgarh-mount-abu-the-complete?quote=1
+      - generic [ref=e520]:
+        - heading "City-wise tourist plans" [level=2] [ref=e521]
+        - paragraph [ref=e522]: Suggested plans for Udaipur
+        - generic [ref=e523]:
+          - article [ref=e524]:
+            - img "Udaipur sightseeing" [ref=e526]
+            - heading "Udaipur Heritage Highlights" [level=3] [ref=e527]
+            - paragraph [ref=e528]: 2 Nights / 3 Days
+            - list [ref=e529]:
+              - listitem [ref=e530]: Local sightseeing
+              - listitem [ref=e531]: Old city walk
+              - listitem [ref=e532]: Sunset viewpoint
+          - article [ref=e533]:
+            - img "Udaipur sightseeing" [ref=e535]
+            - heading "Udaipur Culture & Food Trail" [level=3] [ref=e536]
+            - paragraph [ref=e537]: 3 Nights / 4 Days
+            - list [ref=e538]:
+              - listitem [ref=e539]: Folk performance
+              - listitem [ref=e540]: Street food tour
+              - listitem [ref=e541]: Handicraft market visit
+          - article [ref=e542]:
+            - img "Udaipur sightseeing" [ref=e544]
+            - heading "Udaipur Leisure Escape" [level=3] [ref=e545]
+            - paragraph [ref=e546]: 4 Nights / 5 Days
+            - list [ref=e547]:
+              - listitem [ref=e548]: Comfort stay
+              - listitem [ref=e549]: Nearby day trip
+              - listitem [ref=e550]: Photography-friendly spots
+      - link "← Back to home" [ref=e551] [cursor=pointer]:
+        - /url: /
+  - contentinfo [ref=e552]:
+    - generic [ref=e553]:
+      - paragraph [ref=e554]: Vacations You'll Love. Memories You'll Keep.
+      - paragraph [ref=e555]: © 2026 Browse My Vacations. All rights reserved.
+      - generic [ref=e556]:
+        - link "About" [ref=e557] [cursor=pointer]:
+          - /url: /about
+        - link "Contact" [ref=e558] [cursor=pointer]:
+          - /url: /contact
+        - link "Vacation Meter" [ref=e559] [cursor=pointer]:
+          - /url: /vacation-meter
+        - link "Privacy" [ref=e560] [cursor=pointer]:
+          - /url: /privacy
+```

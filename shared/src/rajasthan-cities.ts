@@ -1,0 +1,25 @@
+export const RAJASTHAN_TOURIST_CITIES = [
+  "Ajmer",
+  "Alwar",
+  "Amer",
+  "Barmer",
+  "Bharatpur",
+  "Bikaner",
+  "Bundi",
+  "Chittorgarh",
+  "Jaipur",
+  "Jaisalmer",
+  "Jhalawar",
+  "Jodhpur",
+  "Kota",
+  "Kumbhalgarh",
+  "Mount Abu",
+  "Nathdwara",
+  "Osian",
+  "Pushkar",
+  "Ranakpur",
+  "Sawai Madhopur",
+  "Udaipur",
+] as const;
+
+export type RajasthanTouristCity = (typeof RAJASTHAN_TOURIST_CITIES)[number];

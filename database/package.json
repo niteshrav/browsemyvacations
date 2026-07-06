@@ -1,0 +1,41 @@
+{
+  "name": "@bmv/database",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "generate": "prisma generate",
+    "migrate:dev": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "seed": "prisma db seed",
+    "studio": "prisma studio",
+    "generate:package-bible": "tsx scripts/generate-package-bible.ts",
+    "lint": "tsc --noEmit",
+    "test": "node -e \"process.exit(0)\"",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@bmv/shared": "workspace:*",
+    "@prisma/client": "^6.8.2",
+    "bcryptjs": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.15.3",
+    "pdf-parse": "1.1.1",
+    "prisma": "^6.8.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

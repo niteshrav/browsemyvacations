@@ -1,0 +1,39 @@
+{
+  "name": "browsemyvacations",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Browse My Vacations — curated travel packages & lead generation",
+  "scripts": {
+    "dev": "pnpm dev:prepare && concurrently -n api,web -c green,magenta \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+    "dev:prepare": "node scripts/dev-prepare.mjs",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "build": "pnpm db:generate && pnpm --filter @bmv/database build && pnpm --filter backend build && pnpm --filter frontend build",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:backend": "pnpm --filter backend build",
+    "start:frontend": "pnpm --filter frontend start",
+    "start:backend": "pnpm --filter backend start:prod",
+    "db:generate": "pnpm --filter @bmv/database generate",
+    "db:migrate": "pnpm --filter @bmv/database migrate:dev",
+    "db:push": "pnpm --filter @bmv/database db:push",
+    "db:studio": "pnpm --filter @bmv/database studio",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "test:unit": "pnpm --filter @bmv/shared test && pnpm --filter backend test && pnpm --filter frontend test",
+    "test:e2e": "pnpm --filter backend test:e2e && pnpm test:e2e:web",
+    "test:e2e:web": "lsof -ti:3100,3102 | xargs kill -9 2>/dev/null || true; sleep 2; pnpm --filter frontend exec playwright install chromium && CI=true pnpm --filter frontend test:e2e",
+    "db:seed": "pnpm --filter @bmv/database seed",
+    "gate": "pnpm --filter @bmv/shared build && pnpm lint && pnpm test:unit && pnpm build",
+    "gate:full": "pnpm gate && pnpm docker:up && sleep 4 && pnpm db:push && pnpm db:seed && pnpm test:e2e",
+    "launch:verify": "pnpm --filter @bmv/shared test -- launch && pnpm gate"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
