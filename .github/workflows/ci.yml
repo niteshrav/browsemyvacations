@@ -54,14 +54,14 @@ jobs:
       - name: Generate Prisma client
         run: pnpm db:generate
 
+      - name: Build shared package
+        run: pnpm --filter @bmv/shared build
+
       - name: Build database package
         run: pnpm --filter @bmv/database build
 
       - name: Build backend
         run: pnpm --filter backend build
-
-      - name: Build shared package
-        run: pnpm --filter @bmv/shared build
 
       - name: Push schema and seed
         run: pnpm db:push && pnpm db:seed

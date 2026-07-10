@@ -10,7 +10,7 @@
     "dev:prepare": "node scripts/dev-prepare.mjs",
     "dev:frontend": "pnpm --filter frontend dev",
     "dev:backend": "pnpm --filter backend dev",
-    "build": "pnpm db:generate && pnpm --filter @bmv/database build && pnpm --filter backend build && pnpm --filter frontend build",
+    "build": "pnpm db:generate && pnpm --filter @bmv/shared build && pnpm --filter @bmv/database build && pnpm --filter backend build && pnpm --filter frontend build",
     "build:frontend": "pnpm --filter frontend build",
     "build:backend": "pnpm --filter backend build",
     "start:frontend": "pnpm --filter frontend start",
