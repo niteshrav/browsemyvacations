@@ -5,7 +5,8 @@ const API_PORT = process.env.E2E_API_PORT ?? String(BMV_E2E_API_PORT);
 const WEB_PORT = process.env.E2E_WEB_PORT ?? String(BMV_E2E_WEB_PORT);
 const DATABASE_URL =
   process.env.DATABASE_URL ??
-  "postgresql://bmv:bmv@localhost:5433/browsemyvacations?schema=public";
+  "postgresql://bmv:bmv@localhost:5432/browsemyvacations?schema=public";
+const JWT_SECRET = process.env.JWT_SECRET ?? "ci-test-secret-min-16-chars";
 
 export default defineConfig({
   testDir: "./e2e",
@@ -31,6 +32,8 @@ export default defineConfig({
         ...process.env,
         PORT: API_PORT,
         DATABASE_URL,
+        DIRECT_URL: DATABASE_URL,
+        JWT_SECRET,
         CORS_ORIGIN: `http://127.0.0.1:${WEB_PORT},http://localhost:${WEB_PORT}`,
       },
     },

@@ -13,7 +13,9 @@ export async function loginAsAdmin(page: Page) {
   await page.getByLabel("Email").fill(adminCredentials.email);
   await page.getByLabel("Password").fill(adminCredentials.password);
   await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/admin\/destinations/, { timeout: 30_000 });
+  await expect(page.getByRole("heading", { name: "Destinations", level: 1 })).toBeVisible({
+    timeout: 30_000,
+  });
 }
 
 export async function assertAdminProtectedScreens(page: Page) {

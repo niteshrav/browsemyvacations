@@ -37,6 +37,10 @@ jobs:
       DATABASE_URL: postgresql://bmv:bmv@localhost:5432/browsemyvacations?schema=public
       DIRECT_URL: postgresql://bmv:bmv@localhost:5432/browsemyvacations?schema=public
       REDIS_URL: redis://localhost:6379
+      JWT_SECRET: ci-test-secret-min-16-chars
+      CORS_ORIGIN: http://localhost:3100
+      NEXT_PUBLIC_SITE_URL: http://localhost:3100
+      NEXT_PUBLIC_API_URL: http://localhost:3101/api/v1
 
     steps:
       - uses: actions/checkout@v4
@@ -45,7 +49,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
@@ -69,15 +73,13 @@ jobs:
       - name: Unit tests
         run: pnpm test:unit
 
+      - name: Install Playwright browsers
+        run: pnpm --filter frontend exec playwright install --with-deps chromium
+
       - name: E2E tests
         run: pnpm test:e2e
         env:
-          JWT_SECRET: ci-test-secret-min-16-chars
-          CORS_ORIGIN: http://localhost:3100
-          REDIS_URL: redis://localhost:6379
+          CI: true
 
       - name: Build frontend
         run: pnpm --filter frontend build
-        env:
-          NEXT_PUBLIC_SITE_URL: http://localhost:3100
-          NEXT_PUBLIC_API_URL: http://localhost:3101/api/v1

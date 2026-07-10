@@ -12,7 +12,7 @@ export type E2ePageRoute = {
 };
 
 export const PUBLIC_E2E_PAGES: E2ePageRoute[] = [
-  { id: "home", path: "/", heading: "Vacations You'll Love", module: "public" },
+  { id: "home", path: "/", heading: "Vacations You'll Love. Memories You'll Keep.", module: "public" },
   { id: "packages", path: "/packages", heading: "Tour Packages", module: "public" },
   { id: "vacation-meter", path: "/vacation-meter", heading: "Vacation Feasibility Radar", module: "public" },
   { id: "about", path: "/about", heading: ABOUT_PAGE.hero.heading, module: "public" },
