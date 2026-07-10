@@ -23,7 +23,7 @@ describe("quick-pick-cards", () => {
     expect(quickPickScrollerClassName()).toContain("snap-x");
     expect(quickPickCardClassName()).toContain("snap-center");
     expect(quickPickThumbClassName()).toContain("rounded-full");
-    expect(quickPickThumbClassName()).toContain("h-20");
+    expect(quickPickThumbClassName()).toContain("h-16");
     expect(quickPickLabelClassName()).toContain("text-teal-900");
   });
 

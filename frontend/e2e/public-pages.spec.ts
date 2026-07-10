@@ -48,9 +48,8 @@ test.describe("Home admin login", () => {
     await dialog.getByLabel("Email").fill("admin@browsemyvacations.com");
     await dialog.getByLabel("Password").fill("changeme123");
     await dialog.getByRole("button", { name: "Sign in" }).click();
-    await expect(page.getByRole("heading", { name: "Destinations", level: 1 })).toBeVisible({
-      timeout: 30_000,
-    });
+    await page.waitForURL(/\/admin\/destinations/, { timeout: 30_000 });
+    await expect(page.getByRole("heading", { name: "Destinations", level: 1 })).toBeVisible();
   });
 });
 

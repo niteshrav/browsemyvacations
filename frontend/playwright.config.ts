@@ -32,8 +32,6 @@ export default defineConfig({
         ...process.env,
         PORT: API_PORT,
         DATABASE_URL,
-        DIRECT_URL: DATABASE_URL,
-        JWT_SECRET,
         CORS_ORIGIN: `http://127.0.0.1:${WEB_PORT},http://localhost:${WEB_PORT}`,
       },
     },

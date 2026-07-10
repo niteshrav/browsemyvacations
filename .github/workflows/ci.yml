@@ -37,19 +37,17 @@ jobs:
       DATABASE_URL: postgresql://bmv:bmv@localhost:5432/browsemyvacations?schema=public
       DIRECT_URL: postgresql://bmv:bmv@localhost:5432/browsemyvacations?schema=public
       REDIS_URL: redis://localhost:6379
-      JWT_SECRET: ci-test-secret-min-16-chars
-      CORS_ORIGIN: http://localhost:3100
-      NEXT_PUBLIC_SITE_URL: http://localhost:3100
-      NEXT_PUBLIC_API_URL: http://localhost:3101/api/v1
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: pnpm
 
       - name: Install dependencies
@@ -58,14 +56,14 @@ jobs:
       - name: Generate Prisma client
         run: pnpm db:generate
 
-      - name: Build shared package
-        run: pnpm --filter @bmv/shared build
-
       - name: Build database package
         run: pnpm --filter @bmv/database build
 
       - name: Build backend
         run: pnpm --filter backend build
+
+      - name: Build shared package
+        run: pnpm --filter @bmv/shared build
 
       - name: Push schema and seed
         run: pnpm db:push && pnpm db:seed
@@ -73,13 +71,15 @@ jobs:
       - name: Unit tests
         run: pnpm test:unit
 
-      - name: Install Playwright browsers
-        run: pnpm --filter frontend exec playwright install --with-deps chromium
-
       - name: E2E tests
         run: pnpm test:e2e
         env:
-          CI: true
+          JWT_SECRET: ci-test-secret-min-16-chars
+          CORS_ORIGIN: http://localhost:3100
+          REDIS_URL: redis://localhost:6379
 
       - name: Build frontend
         run: pnpm --filter frontend build
+        env:
+          NEXT_PUBLIC_SITE_URL: http://localhost:3100
+          NEXT_PUBLIC_API_URL: http://localhost:3101/api/v1

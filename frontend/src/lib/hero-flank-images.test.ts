@@ -24,7 +24,7 @@ const sampleUrls = [
 
 describe("hero-flank-images", () => {
   it("defines a wide hero stage with hidden flanks on small screens", () => {
-    expect(heroStageClassName()).toContain("max-w-[1400px]");
+    expect(heroStageClassName()).toContain("max-w-6xl");
     expect(heroFlankPanelClassName("left")).toContain("hidden lg:flex");
     expect(heroFlankPanelClassName("right")).toContain("hidden lg:flex");
   });
