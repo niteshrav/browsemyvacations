@@ -123,6 +123,6 @@ test.describe("Packages flow", () => {
   test("TC-E2E-PKG-02: package detail shows quote action", async ({ page }) => {
     await page.goto(`/packages/${E2E_SEED_PACKAGE_SLUG}`);
     await expect(page.getByRole("heading", { name: E2E_SEED_PACKAGE_TITLE })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Get Quote" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Customise & Quote" })).toBeVisible();
   });
 });

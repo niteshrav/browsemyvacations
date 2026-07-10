@@ -12,7 +12,7 @@ test.describe("Lead capture", () => {
     await page.getByRole("checkbox", { name: /Privacy Policy/i }).check();
     await page.getByRole("button", { name: "Send Inquiry" }).click();
 
-    await expect(page.getByText("Request received")).toBeVisible({ timeout: 15_000 });
-    await expect(page.getByText("Thank you! Our team will")).toBeVisible();
+    await expect(page.getByTestId("contact-form-success")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByTestId("contact-form-success").getByText("Thank you! Our team will")).toBeVisible();
   });
 });
