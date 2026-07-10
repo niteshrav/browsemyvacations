@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
 
+// Fix SSL certificate verification in local dev (corporate proxies / self-signed certs)
+if (process.env.NODE_ENV === "development") {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+}
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {

@@ -5,6 +5,8 @@
   "description": "Browse My Vacations — curated travel packages & lead generation",
   "scripts": {
     "dev": "pnpm dev:prepare && concurrently -n api,web -c green,magenta \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+    "dev:no-docker": "node -e \"process.env.BMV_DEV_SKIP_DOCKER='true'; require('child_process').execSync('pnpm dev', { stdio: 'inherit' });\"",
+    "dev:frontend-only": "node -e \"process.env.BMV_DEV_SKIP_DOCKER='true'; process.env.BMV_DEV_SKIP_DB_PREPARE='true'; require('child_process').execSync('pnpm dev:frontend', { stdio: 'inherit' });\"",
     "dev:prepare": "node scripts/dev-prepare.mjs",
     "dev:frontend": "pnpm --filter frontend dev",
     "dev:backend": "pnpm --filter backend dev",
@@ -25,6 +27,7 @@
     "test:e2e": "pnpm --filter backend test:e2e && pnpm test:e2e:web",
     "test:e2e:web": "lsof -ti:3100,3102 | xargs kill -9 2>/dev/null || true; sleep 2; pnpm --filter frontend exec playwright install chromium && CI=true pnpm --filter frontend test:e2e",
     "db:seed": "pnpm --filter @bmv/database seed",
+    "db:seed:admin": "pnpm --filter @bmv/database seed:admin",
     "gate": "pnpm --filter @bmv/shared build && pnpm lint && pnpm test:unit && pnpm build",
     "gate:full": "pnpm gate && pnpm docker:up && sleep 4 && pnpm db:push && pnpm db:seed && pnpm test:e2e",
     "launch:verify": "pnpm --filter @bmv/shared test -- launch && pnpm gate"

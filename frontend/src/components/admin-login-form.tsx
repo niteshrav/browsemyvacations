@@ -23,7 +23,7 @@ export function AdminLoginForm({ formIdPrefix = "admin", onSuccess }: Props) {
     setLoading(true);
     setError(null);
     const form = new FormData(e.currentTarget);
-    const email = String(form.get("email"));
+    const email = String(form.get("email")).trim().toLowerCase();
     const password = String(form.get("password"));
     try {
       const { accessToken } = await adminLogin(email, password);

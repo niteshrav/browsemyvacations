@@ -20,6 +20,8 @@ export type PackageDetail = PackageCard & {
     highlights: string[];
     inclusions: string[];
     exclusions: string[];
+    knowBeforeYouGo: string[];
+    featureBadges: string[];
   };
   destinations: Array<{ id: string; name: string; slug: string }>;
   itinerary: Array<{

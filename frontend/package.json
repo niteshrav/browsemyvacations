@@ -16,6 +16,7 @@
   "dependencies": {
     "@bmv/shared": "workspace:*",
     "@vis.gl/react-google-maps": "^1.8.3",
+    "framer-motion": "^12.42.2",
     "next": "^15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"

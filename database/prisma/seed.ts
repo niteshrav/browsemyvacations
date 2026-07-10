@@ -1,4 +1,5 @@
 import {
+  buildPackageDetailContent,
   cityNameToSlug,
   getPackageBibleDestinationNames,
   HOME_QUICK_PICK_CITIES,
@@ -66,6 +67,16 @@ async function main() {
   }
 
   for (const pkg of PACKAGE_BIBLE_CATALOG) {
+    const destinationNames = getPackageBibleDestinationNames(pkg);
+    const detailContent = buildPackageDetailContent({
+      title: pkg.title,
+      durationDays: pkg.durationDays,
+      durationNights: pkg.durationNights,
+      shortDescription: pkg.shortDescription,
+      destinations: destinationNames,
+      itinerary: pkg.itinerary,
+    });
+
     const created = await prisma.package.upsert({
       where: { slug: pkg.slug },
       update: {
@@ -79,6 +90,9 @@ async function main() {
         priceFrom: pkg.priceFrom,
         priceIsFixed: false,
         images: pkg.images,
+        highlights: detailContent.highlights,
+        inclusions: detailContent.inclusions,
+        exclusions: detailContent.exclusions,
         active: true,
       },
       create: {
@@ -93,11 +107,13 @@ async function main() {
         priceFrom: pkg.priceFrom,
         priceIsFixed: false,
         images: pkg.images,
+        highlights: detailContent.highlights,
+        inclusions: detailContent.inclusions,
+        exclusions: detailContent.exclusions,
         active: true,
       },
     });
 
-    const destinationNames = getPackageBibleDestinationNames(pkg);
     await prisma.packageDestination.deleteMany({ where: { packageId: created.id } });
     for (const destinationName of destinationNames) {
       const destinationId = destinationIdByName.get(destinationName);

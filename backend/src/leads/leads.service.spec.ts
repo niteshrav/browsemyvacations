@@ -1,7 +1,6 @@
 import { NotFoundException } from "@nestjs/common";
-import { getQueueToken } from "@nestjs/bullmq";
 import { Test, TestingModule } from "@nestjs/testing";
-import { LEAD_NOTIFICATION_QUEUE } from "./leads.constants";
+import { EmailService } from "./email.service";
 import { LeadsService } from "./leads.service";
 import { PrismaService } from "../prisma/prisma.service";
 
@@ -12,7 +11,7 @@ describe("LeadsService", () => {
     lead: { create: jest.fn(), findMany: jest.fn(), findUnique: jest.fn(), update: jest.fn() },
     leadNote: { create: jest.fn() },
   };
-  const queueMock = { add: jest.fn().mockResolvedValue(undefined) };
+  const emailMock = { sendLeadAlert: jest.fn().mockResolvedValue(true) };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -20,13 +19,13 @@ describe("LeadsService", () => {
       providers: [
         LeadsService,
         { provide: PrismaService, useValue: { client: prismaMock } },
-        { provide: getQueueToken(LEAD_NOTIFICATION_QUEUE), useValue: queueMock },
+        { provide: EmailService, useValue: emailMock },
       ],
     }).compile();
     service = module.get(LeadsService);
   });
 
-  it("creates lead and enqueues notification", async () => {
+  it("creates lead and sends email notification", async () => {
     prismaMock.package.findFirst.mockResolvedValue({ id: "pkg-1", slug: "standalone-single-city-udaipur-the-romantic-lake-escape" });
     prismaMock.lead.create.mockResolvedValue({
       id: "lead-1",
@@ -48,7 +47,7 @@ describe("LeadsService", () => {
     });
 
     expect(result.id).toBe("lead-1");
-    expect(queueMock.add).toHaveBeenCalled();
+    expect(emailMock.sendLeadAlert).toHaveBeenCalledWith("lead-1");
   });
 
   it("strips HTML from message on create", async () => {

@@ -1,4 +1,5 @@
 import { DestinationSection } from "@/components/destination-section";
+import { CatalogEmptyState } from "@/components/catalog-empty-state";
 import { HeroSearch } from "@/components/hero-search";
 import { HeroStage } from "@/components/hero-stage";
 import { VacationFeasibilityRadarPopup } from "@/components/vacation-feasibility-radar-popup";
@@ -17,8 +18,8 @@ export default async function HomePage() {
   return (
     <div className="site-container py-10 sm:py-14">
       <HeroStage anchor={heroImageAnchor}>
-        <section className="mx-auto max-w-3xl text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-teal-900 md:text-5xl md:leading-tight">
+        <section className="mx-auto max-w-5xl text-center">
+          <h1 className="text-3xl font-bold tracking-tight text-teal-900 sm:text-4xl md:text-5xl md:leading-tight">
             Vacations You&apos;ll Love. Memories You&apos;ll Keep.
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-stone-600 md:text-xl">
@@ -35,7 +36,10 @@ export default async function HomePage() {
       ))}
 
       {emptyMessage && (
-        <p className="mt-12 text-center text-stone-600">{emptyMessage}</p>
+        <CatalogEmptyState
+          message={emptyMessage}
+          apiDown={!catalogAvailable}
+        />
       )}
 
       <VacationFeasibilityRadarPopup />

@@ -1,5 +1,8 @@
 import { PACKAGE_BIBLE_CATALOG } from "../seed/package-bible-catalog";
 import { PACKAGE_BIBLE_E2E_SLUG } from "../seed/package-bible";
+import { ABOUT_PAGE } from "../launch/about-content";
+import { CONTACT_PAGE } from "../launch/contact-content";
+import { MICE_PAGE } from "../launch/mice-content";
 
 export type E2ePageRoute = {
   id: string;
@@ -12,9 +15,9 @@ export const PUBLIC_E2E_PAGES: E2ePageRoute[] = [
   { id: "home", path: "/", heading: "Vacations You'll Love", module: "public" },
   { id: "packages", path: "/packages", heading: "Tour Packages", module: "public" },
   { id: "vacation-meter", path: "/vacation-meter", heading: "Vacation Feasibility Radar", module: "public" },
-  { id: "about", path: "/about", heading: "About Browse My Vacations", module: "public" },
-  { id: "contact", path: "/contact", heading: "Contact Us", module: "public" },
-  { id: "mice", path: "/mice", heading: "MICE Travel", module: "public" },
+  { id: "about", path: "/about", heading: ABOUT_PAGE.hero.heading, module: "public" },
+  { id: "contact", path: "/contact", heading: CONTACT_PAGE.hero.heading, module: "public" },
+  { id: "mice", path: "/mice", heading: MICE_PAGE.hero.heading, module: "public" },
   { id: "privacy", path: "/privacy", heading: "Privacy Policy", module: "public" },
 ];
 

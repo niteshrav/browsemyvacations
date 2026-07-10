@@ -1,5 +1,8 @@
 import { getApiUrl } from "./api";
 
+export const API_UNREACHABLE_MESSAGE =
+  "Unable to reach our booking server. Please call us or message on WhatsApp — your details are safe to try again once the server is back.";
+
 export type CreateLeadPayload = {
   fullName: string;
   email: string;
@@ -23,17 +26,27 @@ export type CreateLeadResponse = {
 };
 
 export async function submitLead(payload: CreateLeadPayload): Promise<CreateLeadResponse> {
-  const res = await fetch(getApiUrl("/leads"), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  let res: Response;
+  try {
+    res = await fetch(getApiUrl("/leads"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(API_UNREACHABLE_MESSAGE);
+    }
+    throw error;
+  }
   const data = (await res.json().catch(() => ({}))) as CreateLeadResponse & {
     message?: unknown;
   };
   if (!res.ok) {
     let msg = "Could not submit your request. Please check the form and try again.";
-    if (typeof data.message === "string") {
+    if (res.status >= 500) {
+      msg = "Our server is temporarily unavailable. Please try again in a moment or contact us directly.";
+    } else if (typeof data.message === "string") {
       msg = data.message;
     } else if (data.message && typeof data.message === "object") {
       const flat = data.message as { formErrors?: string[]; fieldErrors?: Record<string, string[]> };

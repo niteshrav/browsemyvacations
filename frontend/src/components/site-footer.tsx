@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-stone-200 bg-white py-10">
+    <footer className="mt-auto border-t border-stone-200 bg-white py-10" data-site-chrome="footer">
       <div className="site-container text-center text-sm text-stone-600">
         <p className="font-medium text-stone-800">
           Vacations You&apos;ll Love. Memories You&apos;ll Keep.

@@ -55,4 +55,12 @@ describe("adminLogin", () => {
       "Invalid credentials",
     );
   });
+
+  it("throws helpful message when API is unreachable", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("Failed to fetch")));
+
+    await expect(adminLogin("admin@browsemyvacations.com", "changeme123", e2eApiBase)).rejects.toThrow(
+      "Unable to reach admin API",
+    );
+  });
 });

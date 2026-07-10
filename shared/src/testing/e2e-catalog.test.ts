@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { HOME_QUICK_PICK_CITIES } from "../seed/quick-picks";
+import { CONTACT_PAGE } from "../launch/contact-content";
 import {
   ADMIN_AUTH_E2E_PAGES,
   ADMIN_PROTECTED_E2E_PAGES,
@@ -46,7 +47,7 @@ describe("e2e catalog", () => {
   });
 
   it("finds public page metadata by path", () => {
-    expect(findPublicE2ePage("/contact")?.heading).toBe("Contact Us");
+    expect(findPublicE2ePage("/contact")?.heading).toBe(CONTACT_PAGE.hero.heading);
     expect(findPublicE2ePage("/missing")).toBeUndefined();
   });
 });

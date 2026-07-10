@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectQueue } from "@nestjs/bullmq";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import {
   stripHtmlTags,
   type CreateLeadInput,
@@ -8,15 +7,16 @@ import {
   LEAD_QUOTE_CONFIRMATION_MESSAGE,
 } from "@bmv/shared";
 import { LeadSource, LeadStatus, Prisma } from "@bmv/database";
-import { Queue } from "bullmq";
 import { PrismaService } from "../prisma/prisma.service";
-import { LEAD_NOTIFICATION_QUEUE, LEAD_ALERT_JOB } from "./leads.constants";
+import { EmailService } from "./email.service";
 
 @Injectable()
 export class LeadsService {
+  private readonly logger = new Logger(LeadsService.name);
+
   constructor(
     private readonly prisma: PrismaService,
-    @InjectQueue(LEAD_NOTIFICATION_QUEUE) private readonly notificationQueue: Queue,
+    private readonly email: EmailService,
   ) {}
 
   async create(input: CreateLeadInput) {
@@ -54,7 +54,10 @@ export class LeadsService {
       include: { package: { select: { id: true, title: true, slug: true } } },
     });
 
-    await this.notificationQueue.add(LEAD_ALERT_JOB, { leadId: lead.id });
+    // Send email directly (no Redis/BullMQ required)
+    this.email.sendLeadAlert(lead.id).catch((e) => {
+      this.logger.warn(`Lead email failed for ${lead.id}: ${e.message}`);
+    });
 
     return this.mapPublic(lead);
   }

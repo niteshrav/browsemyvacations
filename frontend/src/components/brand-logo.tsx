@@ -1,7 +1,9 @@
 import {
   BRAND_LOGO_ALT,
   BRAND_LOGO_DISPLAY_HEIGHT,
+  BRAND_LOGO_HEIGHT,
   BRAND_LOGO_SRC,
+  BRAND_LOGO_WIDTH,
   brandLogoIntegratedClassName,
 } from "@/lib/brand-logo";
 
@@ -11,6 +13,8 @@ type BrandLogoProps = {
 };
 
 export function BrandLogo({ priority = false, className }: BrandLogoProps) {
+  const displayWidth = Math.round((BRAND_LOGO_DISPLAY_HEIGHT * BRAND_LOGO_WIDTH) / BRAND_LOGO_HEIGHT);
+
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
@@ -18,7 +22,7 @@ export function BrandLogo({ priority = false, className }: BrandLogoProps) {
       alt={BRAND_LOGO_ALT}
       className={className ?? brandLogoIntegratedClassName()}
       height={BRAND_LOGO_DISPLAY_HEIGHT}
-      width={Math.round((BRAND_LOGO_DISPLAY_HEIGHT * 1536) / 1024)}
+      width={displayWidth}
       decoding="async"
       fetchPriority={priority ? "high" : "auto"}
     />

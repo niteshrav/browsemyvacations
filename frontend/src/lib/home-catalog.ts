@@ -1,4 +1,4 @@
-import { packageMatchesCityFilter } from "@bmv/shared";
+import { RAJASTHAN_TOURIST_CITIES, cityNameToSlug, packageMatchesCityFilter } from "@bmv/shared";
 import { fetchDestinations, fetchPackages, isCatalogApiReachable } from "./catalog-api";
 import { fetchSuggestions } from "./discovery-api";
 import { resolveHomeQuickPickSuggestions } from "./quick-pick-suggestions";
@@ -15,6 +15,23 @@ export type HomeDestinationPackages = {
   destination: Destination;
   packages: PackageCard[];
 };
+
+function resolveFallbackDestinationsFromPackages(packages: PackageCard[]): Destination[] {
+  const knownCityNameBySlug = new Map(
+    RAJASTHAN_TOURIST_CITIES.map((city) => [cityNameToSlug(city), city] as const),
+  );
+  const slugSet = new Set(packages.flatMap((pkg) => pkg.destinationSlugs).filter(Boolean));
+  return [...slugSet]
+    .sort((a, b) => a.localeCompare(b))
+    .map((slug, index) => ({
+      id: `fallback-${slug}`,
+      name: knownCityNameBySlug.get(slug) ?? slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+      slug,
+      imageUrl: null,
+      displayOrder: index + 1,
+      active: true,
+    }));
+}
 
 export function groupHomePackagesByDestination(
   destinations: Destination[],
@@ -55,11 +72,14 @@ export async function loadHomePageData(): Promise<{
     isCatalogApiReachable(),
   ]);
 
+  const effectiveDestinations =
+    destinations.length > 0 ? destinations : resolveFallbackDestinationsFromPackages(packages);
+
   return {
-    destinations,
+    destinations: effectiveDestinations,
     suggestions: resolveHomeQuickPickSuggestions(suggestions),
     packagesByDest: groupHomePackagesByDestination(
-      destinations,
+      effectiveDestinations,
       packages as PackageCardWithDestinations[],
     ),
     catalogAvailable,

@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { AdminErrorAlert } from "@/components/admin/admin-alerts";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminPanel } from "@/components/admin/admin-panel";
+import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
 import { adminFetch } from "@/lib/admin-auth";
+import { adminInputClassName, adminLabelClassName } from "@/lib/admin-ui";
 
 type LeadDetail = {
   id: string;
@@ -37,6 +42,7 @@ export default function AdminLeadDetailPage() {
       .then(async (res) => {
         if (!res.ok) throw new Error("load failed");
         setLead(await res.json());
+        setError(null);
       })
       .catch(() => setError("Failed to load lead"));
   }, [id]);
@@ -57,83 +63,114 @@ export default function AdminLeadDetailPage() {
     }
   }
 
-  if (error) return <p className="text-red-600">{error}</p>;
-  if (!lead) return <p className="text-stone-600">Loading…</p>;
+  if (error) {
+    return <AdminErrorAlert message={error} />;
+  }
+
+  if (!lead) {
+    return <p className="text-sm text-stone-500">Loading lead…</p>;
+  }
+
+  const details = [
+    { label: "Email", value: lead.email },
+    { label: "Phone", value: lead.phone },
+    { label: "Source", value: lead.source.replace(/_/g, " ") },
+    { label: "Created", value: new Date(lead.createdAt).toLocaleString() },
+    lead.travelDate ? { label: "Travel date", value: lead.travelDate.slice(0, 10) } : null,
+    lead.startCity ? { label: "Start city", value: lead.startCity } : null,
+    lead.endCity ? { label: "End city", value: lead.endCity } : null,
+    lead.persons ? { label: "Persons", value: String(lead.persons) } : null,
+    lead.rooms ? { label: "Rooms", value: String(lead.rooms) } : null,
+    lead.vehiclePreference ? { label: "Vehicle", value: lead.vehiclePreference } : null,
+  ].filter(Boolean) as Array<{ label: string; value: string }>;
 
   return (
-    <div>
-      <Link href="/admin/leads" className="text-sm text-teal-700 hover:underline">
-        ← All leads
+    <div className="space-y-6">
+      <Link href="/admin/leads" className="inline-flex text-sm font-medium text-teal-700 hover:underline">
+        ← Back to leads
       </Link>
-      <h1 className="mt-4 text-2xl font-bold">{lead.fullName}</h1>
-      <p className="mt-1 capitalize text-stone-600">
-        {lead.status} · {lead.source}
-      </p>
 
-      <dl className="mt-6 grid gap-2 text-sm sm:grid-cols-2">
-        <div>
-          <dt className="font-medium text-stone-500">Email</dt>
-          <dd>{lead.email}</dd>
-        </div>
-        <div>
-          <dt className="font-medium text-stone-500">Phone</dt>
-          <dd>{lead.phone}</dd>
-        </div>
-        {lead.package && (
-          <div className="sm:col-span-2">
-            <dt className="font-medium text-stone-500">Package</dt>
-            <dd>
-              <a href={`/packages/${lead.package.slug}`} className="text-teal-800 hover:underline">
+      <AdminPageHeader
+        title={lead.fullName}
+        description="Review inquiry details and add internal follow-up notes."
+        actions={<AdminStatusBadge label={lead.status} />}
+      />
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <AdminPanel title="Contact details">
+          <dl className="grid gap-4 sm:grid-cols-2">
+            {details.map((item) => (
+              <div key={item.label}>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-stone-500">{item.label}</dt>
+                <dd className="mt-1 text-sm text-stone-800">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+          {lead.package ? (
+            <div className="mt-5 rounded-xl border border-teal-100 bg-teal-50/50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">Package</p>
+              <Link href={`/packages/${lead.package.slug}`} className="mt-1 inline-block font-medium text-teal-800 hover:underline">
                 {lead.package.title}
-              </a>
-            </dd>
-          </div>
-        )}
-        {lead.travelDate && (
-          <div>
-            <dt className="font-medium text-stone-500">Travel date</dt>
-            <dd>{lead.travelDate.slice(0, 10)}</dd>
-          </div>
-        )}
-        {lead.message && (
-          <div className="sm:col-span-2">
-            <dt className="font-medium text-stone-500">Message</dt>
-            <dd>{lead.message}</dd>
-          </div>
-        )}
-      </dl>
+              </Link>
+            </div>
+          ) : null}
+          {lead.message ? (
+            <div className="mt-5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">Message</p>
+              <p className="mt-2 rounded-xl bg-stone-50 p-4 text-sm leading-relaxed text-stone-700">{lead.message}</p>
+            </div>
+          ) : null}
+        </AdminPanel>
 
-      <section className="mt-10">
-        <h2 className="font-semibold">Internal notes</h2>
-        <ul className="mt-4 space-y-3">
-          {lead.notes.map((n) => (
-            <li key={n.id} className="rounded border border-stone-200 p-3 text-sm">
-              <p className="font-medium">{n.author}</p>
-              <p className="mt-1 text-stone-700">{n.content}</p>
-              <p className="mt-1 text-xs text-stone-400">{new Date(n.createdAt).toLocaleString()}</p>
-            </li>
-          ))}
-        </ul>
-        <form onSubmit={addNote} className="mt-4 space-y-2">
-          <input
-            value={noteAuthor}
-            onChange={(e) => setNoteAuthor(e.target.value)}
-            className="w-full rounded border px-3 py-2 text-sm"
-            placeholder="Author"
-          />
-          <textarea
-            value={noteContent}
-            onChange={(e) => setNoteContent(e.target.value)}
-            required
-            rows={3}
-            className="w-full rounded border px-3 py-2 text-sm"
-            placeholder="Add a note…"
-          />
-          <button type="submit" className="rounded-lg bg-teal-700 px-4 py-2 text-sm text-white">
-            Save note
-          </button>
-        </form>
-      </section>
+        <AdminPanel title="Internal notes" description="Visible only to your team.">
+          <ul className="space-y-3">
+            {lead.notes.length === 0 ? (
+              <li className="text-sm text-stone-500">No notes yet.</li>
+            ) : (
+              lead.notes.map((n) => (
+                <li key={n.id} className="rounded-xl border border-stone-200 bg-stone-50 p-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="font-medium text-stone-900">{n.author}</p>
+                    <p className="text-xs text-stone-400">{new Date(n.createdAt).toLocaleString()}</p>
+                  </div>
+                  <p className="mt-2 text-sm leading-relaxed text-stone-700">{n.content}</p>
+                </li>
+              ))
+            )}
+          </ul>
+
+          <form onSubmit={addNote} className="mt-5 space-y-3 border-t border-stone-100 pt-5">
+            <div>
+              <label htmlFor="note-author" className={adminLabelClassName()}>
+                Author
+              </label>
+              <input
+                id="note-author"
+                value={noteAuthor}
+                onChange={(e) => setNoteAuthor(e.target.value)}
+                className={adminInputClassName()}
+              />
+            </div>
+            <div>
+              <label htmlFor="note-content" className={adminLabelClassName()}>
+                Note
+              </label>
+              <textarea
+                id="note-content"
+                value={noteContent}
+                onChange={(e) => setNoteContent(e.target.value)}
+                required
+                rows={4}
+                placeholder="Add follow-up details, quote sent, customer preference…"
+                className={adminInputClassName()}
+              />
+            </div>
+            <button type="submit" className="btn-primary">
+              Save note
+            </button>
+          </form>
+        </AdminPanel>
+      </div>
     </div>
   );
 }

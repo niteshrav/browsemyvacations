@@ -3,12 +3,25 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { clearAdminToken, getAdminToken } from "@/lib/admin-auth";
+import { AdminProfileMenu } from "@/components/admin/admin-profile-menu";
+import { getAdminProfileFromToken, getAdminToken } from "@/lib/admin-auth";
 import { ADMIN_LOGIN_PATH } from "@/lib/admin-routes";
+import {
+  ADMIN_NAV_ITEMS,
+  adminContainerClassName,
+  adminContentClassName,
+  adminNavLinkClassName,
+  adminShellClassName,
+  adminTopBarClassName,
+  isAdminNavActive,
+} from "@/lib/admin-ui";
 
 export default function AdminProtectedLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const profile = getAdminProfileFromToken();
+  const profileEmail = profile?.email ?? "admin@browsemyvacations.com";
+  const profileRole = (profile?.role ?? "admin").toUpperCase();
 
   useEffect(() => {
     if (!getAdminToken()) {
@@ -17,37 +30,38 @@ export default function AdminProtectedLayout({ children }: { children: React.Rea
   }, [pathname, router]);
 
   return (
-    <div className="site-container py-8">
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-stone-200 pb-4">
-        <nav className="flex flex-wrap gap-2 text-sm font-medium" aria-label="Admin navigation">
-          <Link href="/admin/destinations" className="nav-link">
-            Destinations
-          </Link>
-          <Link href="/admin/packages" className="nav-link">
-            Packages
-          </Link>
-          <Link href="/admin/leads" className="nav-link">
-            Leads
-          </Link>
-          <Link href="/admin/meter" className="nav-link">
-            Meter
-          </Link>
-          <Link href="/" className="nav-link text-stone-500">
-            View site
-          </Link>
-        </nav>
-        <button
-          type="button"
-          className="nav-link text-stone-500"
-          onClick={() => {
-            clearAdminToken();
-            router.push(ADMIN_LOGIN_PATH);
-          }}
-        >
-          Sign out
-        </button>
+    <div className={adminShellClassName()}>
+      <style jsx global>{`
+        [data-site-chrome="header"],
+        [data-site-chrome="footer"] {
+          display: none !important;
+        }
+      `}</style>
+      <div className={adminContainerClassName()}>
+        <header className={adminTopBarClassName()}>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-teal-700">Admin panel</p>
+              <p className="mt-1 text-lg font-semibold text-stone-900">Browse My Vacations</p>
+            </div>
+            <AdminProfileMenu email={profileEmail} role={profileRole} />
+          </div>
+
+          <nav className="mt-5 flex flex-wrap gap-2 border-t border-stone-100 pt-4" aria-label="Admin navigation">
+            {ADMIN_NAV_ITEMS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={adminNavLinkClassName(isAdminNavActive(pathname, item.href))}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </header>
+
+        <div className={adminContentClassName()}>{children}</div>
       </div>
-      {children}
     </div>
   );
 }

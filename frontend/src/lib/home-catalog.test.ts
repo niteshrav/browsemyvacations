@@ -92,4 +92,23 @@ describe("loadHomePageData", () => {
       catalogAvailable: false,
     });
   });
+
+  it("derives destinations from fallback packages when destinations API is empty", async () => {
+    vi.spyOn(await import("./catalog-api"), "fetchDestinations").mockResolvedValue([]);
+    vi.spyOn(await import("./discovery-api"), "fetchSuggestions").mockResolvedValue([]);
+    vi.spyOn(await import("./catalog-api"), "fetchPackages").mockResolvedValue([
+      makePackage({
+        id: "p-jaipur",
+        title: "2D/1N Jaipur",
+        slug: "standalone-single-city-jaipur",
+        destinationSlugs: ["jaipur"],
+      }),
+    ]);
+    vi.spyOn(await import("./catalog-api"), "isCatalogApiReachable").mockResolvedValue(false);
+
+    await expect(loadHomePageData()).resolves.toMatchObject({
+      destinations: [{ slug: "jaipur", name: "Jaipur" }],
+      catalogAvailable: false,
+    });
+  });
 });

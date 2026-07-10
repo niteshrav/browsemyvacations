@@ -11,7 +11,8 @@ export class AuthService {
   ) {}
 
   async login(email: string, password: string) {
-    const user = await this.prisma.client.adminUser.findUnique({ where: { email } });
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = await this.prisma.client.adminUser.findUnique({ where: { email: normalizedEmail } });
     if (!user || !user.active) {
       throw new UnauthorizedException("Invalid credentials");
     }
@@ -28,5 +29,25 @@ export class AuthService {
       accessToken,
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
     };
+  }
+
+  async changePassword(userId: string, currentPassword: string, newPassword: string) {
+    const user = await this.prisma.client.adminUser.findUnique({ where: { id: userId } });
+    if (!user || !user.active) {
+      throw new UnauthorizedException("Invalid credentials");
+    }
+
+    const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!valid) {
+      throw new UnauthorizedException("Current password is incorrect");
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    await this.prisma.client.adminUser.update({
+      where: { id: userId },
+      data: { passwordHash },
+    });
+
+    return { message: "Password updated successfully" };
   }
 }

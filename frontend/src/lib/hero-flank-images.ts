@@ -8,12 +8,12 @@ export type HeroFlankImages = {
 };
 
 export function heroStageClassName(): string {
-  return "relative mx-auto flex w-full max-w-6xl items-stretch gap-4 lg:gap-6 xl:gap-8";
+  return "relative mx-auto flex w-full max-w-[1400px] items-stretch gap-5 lg:gap-7 xl:gap-10";
 }
 
 export function heroFlankPanelClassName(side: "left" | "right"): string {
   const align = side === "left" ? "items-end" : "items-start";
-  return `hidden lg:flex w-36 xl:w-44 shrink-0 flex-col justify-center gap-3 ${align}`;
+  return `hidden lg:flex w-44 xl:w-56 shrink-0 flex-col justify-center gap-5 ${align}`;
 }
 
 export function heroFlankPanelHiddenClassName(): string {
@@ -21,7 +21,7 @@ export function heroFlankPanelHiddenClassName(): string {
 }
 
 export function heroFlankImageClassName(): string {
-  return "relative h-28 w-full overflow-hidden rounded-2xl border border-stone-200/80 shadow-md";
+  return "group relative h-32 w-full overflow-hidden rounded-2xl border border-stone-200/80 shadow-md transition-shadow duration-500 hover:border-teal-200/90 hover:shadow-xl";
 }
 
 export function hashString(input: string): number {
@@ -33,7 +33,31 @@ export function hashString(input: string): number {
 }
 
 export function buildHeroFlankImageUrl(fullUrl: string): string {
-  return fullUrl.replace(/\?.*$/, "?auto=format&fit=crop&w=320&h=360&q=80");
+  return fullUrl.replace(/\?.*$/, "?auto=format&fit=crop&w=400&h=460&q=85");
+}
+
+export function getHeroImagePool(): string[] {
+  return collectHeroTourismPhotoUrls().map(buildHeroFlankImageUrl);
+}
+
+export function pickNextHeroImage(
+  pool: readonly string[],
+  current: string,
+  salt: string,
+): string {
+  const options = pool.filter((url) => url && url !== current);
+  if (options.length === 0) {
+    return current;
+  }
+  return options[hashString(salt) % options.length] ?? current;
+}
+
+/** Stagger flank thumbnails like the reference collage layout. */
+export function heroFlankImageOffsetClassName(index: number, side: "left" | "right"): string {
+  const leftOffsets = ["translate-x-3", "-translate-x-1", "translate-x-2"];
+  const rightOffsets = ["-translate-x-3", "translate-x-1", "-translate-x-2"];
+  const offsets = side === "left" ? leftOffsets : rightOffsets;
+  return offsets[index % offsets.length] ?? "";
 }
 
 export function selectHeroFlankImages(

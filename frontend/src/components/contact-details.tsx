@@ -1,4 +1,4 @@
-import { BMV_CONTACT } from "@bmv/shared";
+import { BMV_CONTACT, buildWhatsAppHref } from "@bmv/shared";
 
 type ContactDetailsProps = {
   showFormHint?: boolean;
@@ -11,6 +11,17 @@ export function ContactDetails({ showFormHint = false }: ContactDetailsProps) {
         Phone:{" "}
         <a href={BMV_CONTACT.telHref} className="font-medium text-teal-800 hover:underline">
           {BMV_CONTACT.phoneDisplay}
+        </a>
+      </p>
+      <p>
+        WhatsApp:{" "}
+        <a
+          href={buildWhatsAppHref("Hi Browse My Vacations, I'd like to know more about your packages.")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-teal-800 hover:underline"
+        >
+          {BMV_CONTACT.whatsappDisplay}
         </a>
       </p>
       <p>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { adminFetch } from "@/lib/admin-auth";
+import { adminInputClassName } from "@/lib/admin-ui";
 
 type Props = {
   packageId: string;
@@ -39,19 +40,20 @@ export function PackageImageUpload({ packageId, onUploaded }: Props) {
   }
 
   return (
-    <div className="mt-2">
-      <label className="block text-xs text-stone-500">
-        Upload image
+    <div className="mt-4 rounded-xl border border-dashed border-stone-300 bg-white p-4">
+      <label className="block text-sm font-medium text-stone-700">
+        Upload package image
         <input
           type="file"
           accept="image/jpeg,image/png,image/webp"
           disabled={uploading}
           onChange={onChange}
-          className="mt-1 block w-full text-xs"
+          className={`${adminInputClassName()} file:mr-3 file:rounded-md file:border-0 file:bg-teal-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-teal-800`}
         />
       </label>
-      {uploading && <p className="text-xs text-stone-500">Uploading…</p>}
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      <p className="mt-2 text-xs text-stone-500">JPEG, PNG, or WebP · max 5MB</p>
+      {uploading ? <p className="mt-2 text-xs font-medium text-teal-700">Uploading…</p> : null}
+      {error ? <p className="mt-2 text-xs text-red-600">{error}</p> : null}
     </div>
   );
 }

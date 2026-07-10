@@ -6,20 +6,26 @@ describe("mice inquiry", () => {
     expect(
       buildMiceInquiryMessage({
         company: "Acme Corp",
-        eventType: "Annual offsite",
+        contactPerson: "Jane Doe",
+        destination: "Udaipur",
         groupSize: "45",
-        preferredDates: "November 2026",
+        travelDates: "November 2026",
+        budget: "15–20 Lakh",
+        requirementType: "Corporate Offsite",
         message: "Need lake-view venue",
       }),
     ).toContain("Company: Acme Corp");
     expect(
       buildMiceInquiryMessage({
         company: "Acme Corp",
-        eventType: "Annual offsite",
+        contactPerson: "Jane Doe",
+        destination: "",
         groupSize: "45",
-        preferredDates: "",
+        travelDates: "",
+        budget: "",
+        requirementType: "Incentive Travel",
         message: "",
       }),
-    ).toContain("Preferred dates: Flexible");
+    ).toContain("Travel dates: Flexible");
   });
 });

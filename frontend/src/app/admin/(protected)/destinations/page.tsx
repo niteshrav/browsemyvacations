@@ -1,24 +1,38 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { AdminErrorAlert } from "@/components/admin/admin-alerts";
+import { AdminEmptyState } from "@/components/admin/admin-empty-state";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminPanel } from "@/components/admin/admin-panel";
+import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
 import { adminFetch } from "@/lib/admin-auth";
+import { adminInputClassName, adminLabelClassName, adminTableClassName, adminTableHeadClassName, adminTableWrapClassName } from "@/lib/admin-ui";
 import type { Destination } from "@/types/catalog";
 
 export default function AdminDestinationsPage() {
   const [items, setItems] = useState<Destination[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   async function load() {
+    setLoading(true);
     const res = await adminFetch("/admin/destinations");
     if (!res.ok) {
       setError("Failed to load destinations");
+      setLoading(false);
       return;
     }
     setItems(await res.json());
+    setError(null);
+    setLoading(false);
   }
 
   useEffect(() => {
-    load().catch(() => setError("Failed to load"));
+    load().catch(() => {
+      setError("Failed to load");
+      setLoading(false);
+    });
   }, []);
 
   async function onCreate(e: FormEvent<HTMLFormElement>) {
@@ -42,32 +56,81 @@ export default function AdminDestinationsPage() {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Destinations</h1>
-      {error && <p className="mt-2 text-red-600">{error}</p>}
+    <div className="space-y-6">
+      <AdminPageHeader
+        title="Destinations"
+        description="Manage Rajasthan cities shown in search, packages, and quick picks."
+      />
 
-      <form onSubmit={onCreate} className="mt-8 grid max-w-lg gap-3 rounded-lg border p-4">
-        <h2 className="font-semibold">Add destination</h2>
-        <input name="name" placeholder="Name" required className="rounded border px-3 py-2" />
-        <input name="slug" placeholder="slug" required pattern="[a-z0-9-]+" className="rounded border px-3 py-2" />
-        <input name="displayOrder" type="number" defaultValue={0} className="rounded border px-3 py-2" />
-        <button type="submit" className="rounded bg-teal-700 py-2 text-white">
-          Create
-        </button>
-      </form>
+      {error ? <AdminErrorAlert message={error} /> : null}
 
-      <ul className="mt-8 divide-y rounded-lg border">
-        {items.map((d) => (
-          <li key={d.id} className="flex justify-between px-4 py-3">
-            <span>
-              {d.name} <span className="text-stone-500">({d.slug})</span>
-            </span>
-            <span className={d.active ? "text-green-700" : "text-stone-400"}>
-              {d.active ? "Active" : "Inactive"}
-            </span>
-          </li>
-        ))}
-      </ul>
+      <div className="grid gap-6 xl:grid-cols-[22rem_1fr]">
+        <AdminPanel title="Add destination" description="Create a new destination for the catalog.">
+          <form onSubmit={onCreate} className="space-y-4">
+            <div>
+              <label htmlFor="dest-name" className={adminLabelClassName()}>
+                Name
+              </label>
+              <input id="dest-name" name="name" required placeholder="Jaipur" className={adminInputClassName()} />
+            </div>
+            <div>
+              <label htmlFor="dest-slug" className={adminLabelClassName()}>
+                Slug
+              </label>
+              <input
+                id="dest-slug"
+                name="slug"
+                required
+                pattern="[a-z0-9-]+"
+                placeholder="jaipur"
+                className={adminInputClassName()}
+              />
+            </div>
+            <div>
+              <label htmlFor="dest-order" className={adminLabelClassName()}>
+                Display order
+              </label>
+              <input id="dest-order" name="displayOrder" type="number" defaultValue={0} className={adminInputClassName()} />
+            </div>
+            <button type="submit" className="btn-primary w-full">
+              Create destination
+            </button>
+          </form>
+        </AdminPanel>
+
+        <AdminPanel title="All destinations" description={`${items.length} destination(s) in catalog`}>
+          {loading ? (
+            <p className="text-sm text-stone-500">Loading destinations…</p>
+          ) : items.length === 0 ? (
+            <AdminEmptyState title="No destinations yet" description="Add your first destination using the form." />
+          ) : (
+            <div className={adminTableWrapClassName()}>
+              <table className={adminTableClassName()}>
+                <thead className={adminTableHeadClassName()}>
+                  <tr>
+                    <th className="px-4 py-3">Name</th>
+                    <th className="px-4 py-3">Slug</th>
+                    <th className="px-4 py-3">Order</th>
+                    <th className="px-4 py-3">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stone-100">
+                  {items.map((d) => (
+                    <tr key={d.id} className="hover:bg-stone-50/80">
+                      <td className="px-4 py-3 font-medium text-stone-900">{d.name}</td>
+                      <td className="px-4 py-3 text-stone-500">{d.slug}</td>
+                      <td className="px-4 py-3 text-stone-600">{d.displayOrder}</td>
+                      <td className="px-4 py-3">
+                        <AdminStatusBadge label={d.active ? "Active" : "Inactive"} active={d.active} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </AdminPanel>
+      </div>
     </div>
   );
 }

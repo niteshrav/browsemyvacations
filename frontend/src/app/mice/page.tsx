@@ -1,58 +1,38 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ContactDetails } from "@/components/contact-details";
-import { MiceInquiryForm } from "@/components/mice-inquiry-form";
+import { MICE_PAGE } from "@bmv/shared";
+import { MiceHero } from "@/components/mice/mice-hero";
+import { MiceIntroSection } from "@/components/mice/mice-intro-section";
+import { MiceServicesSection } from "@/components/mice/mice-services-section";
+import { MiceWhyBmvSection } from "@/components/mice/mice-why-bmv-section";
+import { MiceDestinationsSection } from "@/components/mice/mice-destinations-section";
+import { MiceHandlesSection } from "@/components/mice/mice-handles-section";
+import { MiceClientsSection } from "@/components/mice/mice-clients-section";
+import { MiceFormatsSection } from "@/components/mice/mice-formats-section";
+import { MiceProcessSection } from "@/components/mice/mice-process-section";
+import { MiceCtaBanner } from "@/components/mice/mice-cta-banner";
+import { MiceFormSection } from "@/components/mice/mice-form-section";
+import { MiceSeoSection } from "@/components/mice/mice-seo-section";
 
 export const metadata: Metadata = {
-  title: "MICE",
-  description: "Meetings, incentives, conferences, and events travel across Rajasthan.",
+  title: MICE_PAGE.metadata.title,
+  description: MICE_PAGE.metadata.description,
 };
-
-const MICE_OFFERINGS = [
-  "Corporate offsites and leadership retreats in Jaipur, Udaipur, and Jodhpur",
-  "Incentive travel programs with curated stays, dining, and heritage experiences",
-  "Conference support — venue shortlists, group transfers, and on-ground coordination",
-  "Team-building itineraries combining palaces, desert camps, and cultural evenings",
-] as const;
 
 export default function MicePage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-2xl font-bold text-teal-900">MICE Travel</h1>
-      <p className="mt-4 text-stone-600">
-        Plan meetings, incentives, conferences, and events across Rajasthan with a dedicated BMV
-        corporate travel desk.
-      </p>
-
-      <section className="mt-8">
-        <h2 className="text-lg font-semibold text-teal-900">Corporate offerings</h2>
-        <ul className="mt-3 list-disc space-y-2 pl-5 text-stone-700">
-          {MICE_OFFERINGS.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="mt-10">
-        <h2 className="text-lg font-semibold text-teal-900">Talk to our MICE desk</h2>
-        <p className="mt-2 text-sm text-stone-600">
-          Call us directly or submit the inquiry form — we will respond within 24–48 hours.
-        </p>
-        <div className="mt-4">
-          <ContactDetails />
-        </div>
-      </section>
-
-      <section className="mt-10">
-        <h2 className="text-lg font-semibold text-teal-900">MICE inquiry form</h2>
-        <div className="mt-4">
-          <MiceInquiryForm />
-        </div>
-      </section>
-
-      <Link href="/contact" className="mt-8 inline-block text-teal-700 hover:underline">
-        General contact page →
-      </Link>
+    <div className="bg-white">
+      <MiceHero />
+      <MiceIntroSection />
+      <MiceServicesSection />
+      <MiceWhyBmvSection />
+      <MiceDestinationsSection />
+      <MiceHandlesSection />
+      <MiceClientsSection />
+      <MiceFormatsSection />
+      <MiceProcessSection />
+      <MiceCtaBanner />
+      <MiceFormSection />
+      <MiceSeoSection />
     </div>
   );
 }

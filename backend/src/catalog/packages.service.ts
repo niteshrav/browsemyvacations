@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import type { CreatePackageInput, UpdatePackageInput } from "@bmv/shared";
-import { findRajasthanCityBySlug, packageMatchesCityFilter } from "@bmv/shared";
+import { findRajasthanCityBySlug, packageMatchesCityFilter, resolvePackageOverviewContent } from "@bmv/shared";
 import { Prisma } from "@bmv/database";
 import { PrismaService } from "../prisma/prisma.service";
 import { decimalToNumber } from "../common/serialize";
@@ -273,21 +273,41 @@ export class PackagesService {
       row,
       row.destinations.map((d) => d.destination.slug),
     );
+    const itinerary = row.itineraryDays.map((d) => ({
+      dayNumber: d.dayNumber,
+      title: d.title,
+      cities: Array.isArray(d.cities) ? (d.cities as string[]) : [],
+      summary: d.summary,
+    }));
+    const destinationNames = row.destinations.map((d) => d.destination.name);
+    const overviewContent = resolvePackageOverviewContent(
+      {
+        highlights: Array.isArray(row.highlights) ? (row.highlights as string[]) : [],
+        inclusions: Array.isArray(row.inclusions) ? (row.inclusions as string[]) : [],
+        exclusions: Array.isArray(row.exclusions) ? (row.exclusions as string[]) : [],
+      },
+      {
+        title: row.title,
+        durationDays: row.durationDays,
+        durationNights: row.durationNights,
+        shortDescription: row.shortDescription,
+        destinations: destinationNames,
+        itinerary,
+      },
+    );
+
     return {
       ...card,
       overview: {
         description: row.shortDescription,
-        highlights: Array.isArray(row.highlights) ? row.highlights : [],
-        inclusions: Array.isArray(row.inclusions) ? row.inclusions : [],
-        exclusions: Array.isArray(row.exclusions) ? row.exclusions : [],
+        highlights: overviewContent.highlights,
+        inclusions: overviewContent.inclusions,
+        exclusions: overviewContent.exclusions,
+        knowBeforeYouGo: overviewContent.knowBeforeYouGo,
+        featureBadges: overviewContent.featureBadges,
       },
       destinations: row.destinations.map((d) => d.destination),
-      itinerary: row.itineraryDays.map((d) => ({
-        dayNumber: d.dayNumber,
-        title: d.title,
-        cities: Array.isArray(d.cities) ? d.cities : [],
-        summary: d.summary,
-      })),
+      itinerary,
     };
   }
 

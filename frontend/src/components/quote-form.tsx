@@ -43,6 +43,12 @@ export function QuoteForm({
       return;
     }
 
+    const phoneVal = String(form.get("phone") ?? "").trim();
+    if (phoneVal.length < 6) {
+      setError("Please enter a valid phone number (minimum 6 digits).");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const personsRaw = String(form.get("persons") ?? "").trim();
@@ -126,6 +132,7 @@ export function QuoteForm({
             name="phone"
             type="tel"
             required
+            placeholder="+91 98765 43210"
             className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
           />
         </div>

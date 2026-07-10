@@ -2,11 +2,12 @@ import { describe, expect, it } from "vitest";
 import { ABOUT_PAGE } from "./about-content";
 
 describe("about page content", () => {
-  it("includes company story, trust signals, and a contact path", () => {
-    expect(ABOUT_PAGE.heading).toBe("About Browse My Vacations");
-    expect(ABOUT_PAGE.intro.length).toBeGreaterThan(40);
-    expect(ABOUT_PAGE.sections).toHaveLength(2);
-    expect(ABOUT_PAGE.sections[1]?.bullets?.length).toBeGreaterThanOrEqual(3);
-    expect(ABOUT_PAGE.contactCta.href).toBe("/contact");
+  it("includes hero, curate cards, philosophy, and CTAs", () => {
+    expect(ABOUT_PAGE.hero.heading).toBe("Travel, Curated More Thoughtfully");
+    expect(ABOUT_PAGE.hero.intro.length).toBeGreaterThan(40);
+    expect(ABOUT_PAGE.curate.cards).toHaveLength(3);
+    expect(ABOUT_PAGE.philosophy.body.length).toBeGreaterThan(40);
+    expect(ABOUT_PAGE.footerCta.primaryCta.href).toBe("/packages");
+    expect(ABOUT_PAGE.footerCta.secondaryCta.href).toBe("/contact");
   });
 });

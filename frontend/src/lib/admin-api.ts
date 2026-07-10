@@ -26,7 +26,18 @@ export async function adminLogin(
   apiBase?: string,
 ): Promise<AdminLoginResponse> {
   const { url, init } = buildAdminLoginRequest(email, password, apiBase);
-  const res = await fetch(url, init);
+  let res: Response;
+  try {
+    res = await fetch(url, init);
+  } catch (error) {
+    if (error instanceof TypeError) {
+      const endpoint = new URL(url);
+      throw new Error(
+        `Unable to reach admin API (${endpoint.origin}). Please start backend server and check database connectivity.`,
+      );
+    }
+    throw error;
+  }
 
   if (!res.ok) {
     const err = (await res.json().catch(() => ({}))) as { message?: string };

@@ -59,21 +59,16 @@ test.describe("Discovery flow", () => {
     expect(naturalWidth).toBeGreaterThan(0);
   });
 
-  test("TC-E2E-DISC-09: hero flank images can be toggled and shuffled", async ({ page }) => {
+  test("TC-E2E-DISC-09: hero flank images change on hover", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/");
     const leftFlank = page.getByTestId("hero-flank-left");
     const firstSrc = await leftFlank.locator("img").first().getAttribute("src");
 
-    await page.getByTestId("hero-flank-toggle").click();
-    await expect(leftFlank).toBeHidden();
-
-    await page.getByTestId("hero-flank-toggle").click();
-    await expect(leftFlank).toBeVisible();
-
-    await page.getByTestId("hero-flank-shuffle").click();
-    const shuffledSrc = await leftFlank.locator("img").first().getAttribute("src");
-    expect(shuffledSrc).not.toBe(firstSrc);
+    await leftFlank.locator("button").first().hover();
+    await expect
+      .poll(async () => leftFlank.locator("img").first().getAttribute("src"))
+      .not.toBe(firstSrc);
   });
 
   test("TC-E2E-DISC-03: hero combobox lists Rajasthan cities on focus", async ({ page }) => {

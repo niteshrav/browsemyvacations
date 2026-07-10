@@ -13,7 +13,14 @@ const pkg: PackageDetail = {
   price: { display: 24500, isFixed: false, currency: "INR" },
   images: ["https://images.unsplash.com/photo-1"],
   destinationSlugs: ["udaipur"],
-  overview: { description: "Desc", highlights: [], inclusions: [], exclusions: [] },
+  overview: {
+    description: "Desc",
+    highlights: [],
+    inclusions: [],
+    exclusions: [],
+    knowBeforeYouGo: [],
+    featureBadges: [],
+  },
   destinations: [{ id: "d1", name: "Udaipur", slug: "udaipur" }],
   itinerary: [],
 };

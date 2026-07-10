@@ -7,6 +7,7 @@ import {
   heroFlankPanelClassName,
   heroFlankPanelHiddenClassName,
   heroStageClassName,
+  pickNextHeroImage,
   selectHeroFlankImages,
   shuffleHeroFlankImages,
 } from "./hero-flank-images";
@@ -29,8 +30,14 @@ describe("hero-flank-images", () => {
   });
 
   it("builds compact flank image urls", () => {
-    expect(buildHeroFlankImageUrl(sampleUrls[0])).toContain("w=320");
-    expect(buildHeroFlankImageUrl(sampleUrls[0])).toContain("h=360");
+    expect(buildHeroFlankImageUrl(sampleUrls[0])).toContain("w=400");
+    expect(buildHeroFlankImageUrl(sampleUrls[0])).toContain("h=460");
+  });
+
+  it("picks a different hero image from the pool on hover", () => {
+    const next = pickNextHeroImage(sampleUrls.map(buildHeroFlankImageUrl), buildHeroFlankImageUrl(sampleUrls[0]), "hover-1");
+    expect(next).not.toBe(buildHeroFlankImageUrl(sampleUrls[0]));
+    expect(sampleUrls.map(buildHeroFlankImageUrl)).toContain(next);
   });
 
   it("selects deterministic tourism images for left and right flanks", () => {
