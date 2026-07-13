@@ -22,7 +22,7 @@ export const PUBLIC_E2E_PAGES: E2ePageRoute[] = [
 ];
 
 export const ADMIN_AUTH_E2E_PAGES: E2ePageRoute[] = [
-  { id: "admin-login", path: "/admin/login", heading: "Admin login", module: "admin-auth" },
+  { id: "admin-login", path: "/admin/login", heading: "Sign in", module: "admin-auth" },
 ];
 
 export const ADMIN_PROTECTED_E2E_PAGES: E2ePageRoute[] = [

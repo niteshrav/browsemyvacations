@@ -20,7 +20,7 @@ test.describe("Admin auth", () => {
   test("TC-E2E-ADM-02: unauthenticated user is redirected from protected admin", async ({ page }) => {
     await page.goto("/admin/packages");
     await page.waitForURL("**/admin/login");
-    await expect(page.getByRole("heading", { name: "Admin login" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
   });
 
   test("TC-E2E-ADM-03: authenticated admin can open all protected screens", async ({ page }) => {

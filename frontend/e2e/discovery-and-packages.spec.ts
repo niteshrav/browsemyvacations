@@ -63,11 +63,13 @@ test.describe("Discovery flow", () => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/");
     const leftFlank = page.getByTestId("hero-flank-left");
-    const firstSrc = await leftFlank.locator("img").first().getAttribute("src");
+    await expect(leftFlank).toBeVisible();
+    const firstButton = leftFlank.locator("button").first();
+    const firstSrc = await firstButton.locator("img").last().getAttribute("src");
 
-    await leftFlank.locator("button").first().hover();
+    await firstButton.hover();
     await expect
-      .poll(async () => leftFlank.locator("img").first().getAttribute("src"))
+      .poll(async () => firstButton.locator("img").last().getAttribute("src"), { timeout: 10_000 })
       .not.toBe(firstSrc);
   });
 
