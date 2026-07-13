@@ -1,3 +1,4 @@
+import "./load-env";
 import { ValidationPipe } from "@nestjs/common";
 import { BMV_DEV_API_PORT, BMV_DEV_SITE_URL } from "@bmv/shared";
 import { NestFactory } from "@nestjs/core";

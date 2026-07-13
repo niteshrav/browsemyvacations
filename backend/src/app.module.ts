@@ -14,7 +14,8 @@ import { PrismaModule } from "./prisma/prisma.module";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [".env", "../database/.env", ".env.local", "../database/.env.local"],
+      // Local overrides must load first — later files do not overwrite existing keys.
+      envFilePath: [".env.local", "../database/.env.local", ".env", "../database/.env"],
     }),
     ThrottlerModule.forRoot([
       {
