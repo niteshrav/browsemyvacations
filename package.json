@@ -16,7 +16,7 @@
     "hostinger:frontend": "node scripts/hostinger-fix-binaries.mjs && pnpm --filter @bmv/shared build && pnpm --filter frontend build",
     "hostinger:backend": "node scripts/hostinger-fix-binaries.mjs && pnpm db:generate && pnpm --filter @bmv/shared build && pnpm --filter @bmv/database build && pnpm --filter backend build",
     "hostinger:install": "pnpm install --ignore-scripts",
-    "postinstall": "node scripts/hostinger-fix-binaries.mjs",
+    "vercel:frontend": "pnpm --filter @bmv/shared build && pnpm --filter frontend build",
     "start:frontend": "pnpm --filter frontend start",
     "start:backend": "pnpm --filter backend start:prod",
     "db:generate": "pnpm --filter @bmv/database generate",
