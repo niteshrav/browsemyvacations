@@ -3,3 +3,18 @@ packages:
   - "backend"
   - "database"
   - "shared"
+
+# pnpm 11: settings live here (not package.json). Needed for Hostinger installs.
+dangerouslyAllowAllBuilds: true
+
+allowBuilds:
+  "@nestjs/core": true
+  "@prisma/client": true
+  prisma: true
+  sharp: true
+  esbuild: true
+  unrs-resolver: true
+  "@swc/core": true
+  msgpackr-extract: true
+  bcrypt: true
+  bcryptjs: true
