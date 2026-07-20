@@ -1,25 +1,22 @@
 # Production web image — build from repo root:
 # docker build -f frontend/Dockerfile -t bmv-web .
 
-FROM node:20-alpine AS base
-RUN apk add --no-cache libc6-compat python3 make g++
-RUN npm install -g pnpm@9.15.0
-ENV CI=true
+FROM node:20-alpine AS builder
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-FROM base AS deps
-COPY package.json pnpm-workspace.yaml ./
+RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
+ENV CI=true
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY backend/package.json ./backend/
 COPY database/package.json ./database/
 COPY shared/package.json ./shared/
 COPY frontend/package.json ./frontend/
-RUN pnpm install --no-frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
-FROM base AS build
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/frontend/node_modules ./frontend/node_modules
-COPY --from=deps /app/shared/node_modules ./shared/node_modules 2>/dev/null || true
-COPY . .
+COPY shared ./shared
+COPY frontend ./frontend
 
 ARG NEXT_PUBLIC_SITE_URL=https://browsemyvacation.cloud.dcdeploy.cloud
 ARG NEXT_PUBLIC_API_URL=https://browsemyvacation.cloud.dcdeploy.cloud/api/v1
@@ -35,12 +32,11 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
-RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
-COPY --from=build --chown=root:root /app/frontend/.next ./frontend/.next
-COPY --from=build --chown=root:root /app/frontend/public ./frontend/public
-COPY --from=build --chown=root:root /app/frontend/package.json ./frontend/package.json
-COPY --from=build --chown=root:root /app/node_modules ./node_modules
-COPY --from=build --chown=root:root /app/shared ./shared
+
+COPY --from=builder /app/frontend/.next/standalone ./
+COPY --from=builder /app/frontend/.next/static ./frontend/.next/static
+COPY --from=builder /app/frontend/public ./frontend/public
+
 WORKDIR /app/frontend
 EXPOSE 3000
-CMD ["node", "../node_modules/.bin/next", "start", "-H", "0.0.0.0", "-p", "3000"]
+CMD ["node", "server.js"]
