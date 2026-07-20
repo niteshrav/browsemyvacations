@@ -38,9 +38,9 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const port = process.env.PORT ?? String(BMV_DEV_API_PORT);
-  await app.listen(port);
-  console.log(`BMV API running on http://localhost:${port}/api/v1`);
+  const port = Number(process.env.PORT ?? BMV_DEV_API_PORT);
+  await app.listen(port, "0.0.0.0");
+  console.log(`BMV API running on http://0.0.0.0:${port}/api/v1`);
 }
 
 bootstrap();

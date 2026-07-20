@@ -1,0 +1,55 @@
+# DCDeploy manifest — https://docs.dcdeploy.com/docs/deploy/dcdeploy-yaml
+# Deploy order: 1) bmv-api (+ Neon DB env vars)  2) bmv-web (set NEXT_PUBLIC_* to live URLs)
+#
+# Dashboard: Environment → Deploy → paste this YAML or create services manually.
+# Set secrets in the DCDeploy UI (not in this file).
+
+services:
+  bmv-api:
+    type: service
+    machineType: DCD-1
+    regions: India
+    build:
+      context: ./
+      dockerfilePath: ./backend/Dockerfile
+      repo: niteshrav/browsemyvacations
+      ref: main
+      refType: branch
+      autoBuild: true
+      private: true
+    ports:
+      - 3001
+    protocol: https
+    minScale: 1
+    maxScale: 1
+    environment:
+      NODE_ENV: production
+      PORT: "3001"
+      # Required — set in DCDeploy dashboard before first deploy:
+      # DATABASE_URL, DIRECT_URL, JWT_SECRET, CORS_ORIGIN
+      # Optional: REDIS_URL, RESEND_API_KEY, CLOUDINARY_*
+
+  bmv-web:
+    type: service
+    machineType: DCD-1
+    regions: India
+    build:
+      context: ./
+      dockerfilePath: ./frontend/Dockerfile
+      repo: niteshrav/browsemyvacations
+      ref: main
+      refType: branch
+      autoBuild: true
+      private: true
+    ports:
+      - 3000
+    protocol: https
+    minScale: 1
+    maxScale: 1
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: "0.0.0.0"
+      # Required at BUILD time (set before deploy / rebuild):
+      # NEXT_PUBLIC_SITE_URL=https://your-frontend.cloud.dcdeploy.cloud
+      # NEXT_PUBLIC_API_URL=https://your-api.cloud.dcdeploy.cloud/api/v1
