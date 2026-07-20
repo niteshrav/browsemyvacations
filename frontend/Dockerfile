@@ -7,12 +7,12 @@ WORKDIR /app
 ENV CI=true
 RUN corepack enable && corepack prepare pnpm@11.13.0 --activate
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY backend/package.json ./backend/
 COPY database/package.json ./database/
 COPY shared/package.json ./shared/
 COPY frontend/package.json ./frontend/
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 COPY shared ./shared
 COPY frontend ./frontend
