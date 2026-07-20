@@ -19,7 +19,7 @@ describe("frontend package scripts", () => {
 
   it("cleans .next only before production builds", () => {
     const scripts = readFrontendPackageJson().scripts ?? {};
-    expect(scripts.prebuild).toBe("rm -rf .next");
+    expect(scripts.prebuild).toContain("rmSync('.next'");
   });
 
   it("exposes an explicit cache reset for local development", () => {
