@@ -7,10 +7,13 @@ RUN corepack enable && corepack prepare pnpm@11.13.0 --activate
 WORKDIR /app
 
 FROM base AS deps
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY backend/package.json ./backend/
+COPY database/package.json ./database/
 COPY shared/package.json ./shared/
 COPY frontend/package.json ./frontend/
-RUN pnpm install --frozen-lockfile
+# All workspace package.json files are required for frozen lockfile; skip scripts (e.g. prisma generate).
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules

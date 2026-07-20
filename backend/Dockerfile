@@ -6,11 +6,11 @@ RUN corepack enable && corepack prepare pnpm@11.13.0 --activate
 WORKDIR /app
 
 FROM base AS deps
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY shared/package.json ./shared/
 COPY database/package.json ./database/
 COPY backend/package.json ./backend/
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
