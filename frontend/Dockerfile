@@ -4,6 +4,7 @@
 FROM node:20-alpine AS base
 RUN apk add --no-cache libc6-compat
 RUN corepack enable && corepack prepare pnpm@11.13.0 --activate
+ENV CI=true
 WORKDIR /app
 
 FROM base AS deps
