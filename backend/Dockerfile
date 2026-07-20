@@ -6,7 +6,7 @@ RUN corepack enable && corepack prepare pnpm@11.13.0 --activate
 WORKDIR /app
 
 FROM base AS deps
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY shared/package.json ./shared/
 COPY database/package.json ./database/
 COPY backend/package.json ./backend/
