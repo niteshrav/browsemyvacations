@@ -24,3 +24,6 @@ frontend.zip
 *.log
 .DS_Store
 Thumbs.db
+
+# Assets that shouldn't be required for image builds
+Logo - Browse my vacations.jpeg

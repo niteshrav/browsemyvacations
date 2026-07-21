@@ -1,7 +1,7 @@
 # Production API image — build from repo root:
 # docker build -f backend/Dockerfile -t bmv-api .
 
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 RUN corepack enable && corepack prepare pnpm@11.13.0 --activate
 ENV CI=true
 WORKDIR /app
