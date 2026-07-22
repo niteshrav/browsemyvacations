@@ -19,8 +19,32 @@ describe("DCDeploy Dockerfile standalone layout", () => {
     const backendDockerfile = readFileSync(backendDockerfilePath, "utf8");
 
     expect(backendDockerfile).toContain("FROM node:22-alpine AS base");
+    expect(backendDockerfile).toContain("FROM node:22-alpine AS runner");
     expect(backendDockerfile).toContain("http://localhost:3001/api/v1/health");
     expect(backendDockerfile).toContain('CMD ["node", "dist/main.js"]');
+  });
+
+  it("runs the API from the monorepo backend path so pnpm workspace deps resolve", () => {
+    const backendDockerfilePath = path.resolve(__dirname, "../../../backend/Dockerfile");
+    const backendDockerfile = readFileSync(backendDockerfilePath, "utf8");
+
+    // Root-only node_modules copy breaks Nest resolution (@nestjs/common MODULE_NOT_FOUND).
+    expect(backendDockerfile).toContain("WORKDIR /app/backend");
+    expect(backendDockerfile).toContain(
+      "COPY --from=build --chown=nestjs:nodejs /app/backend ./backend",
+    );
+    expect(backendDockerfile).toContain(
+      "COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules",
+    );
+    expect(backendDockerfile).toContain(
+      "COPY --from=build --chown=nestjs:nodejs /app/shared ./shared",
+    );
+    expect(backendDockerfile).toContain(
+      "COPY --from=build --chown=nestjs:nodejs /app/database ./database",
+    );
+    expect(backendDockerfile).not.toContain(
+      "COPY --from=build --chown=nestjs:nodejs /app/backend/dist ./dist",
+    );
   });
 });
 
