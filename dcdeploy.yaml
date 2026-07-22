@@ -27,6 +27,7 @@ services:
       PORT: "3001"
       # Required — set in DCDeploy dashboard before first deploy:
       # DATABASE_URL, DIRECT_URL, JWT_SECRET, CORS_ORIGIN
+      # CORS_ORIGIN can be the web URL; *.dcdeploy.cloud origins are also allowed.
       # Optional: REDIS_URL, RESEND_API_KEY, CLOUDINARY_*
 
   bmv-web:

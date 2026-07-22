@@ -5,6 +5,7 @@ import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { join } from "path";
 import { AppModule } from "./app.module";
+import { createCorsOriginDelegate } from "./common/cors-origin";
 
 function applySecurityHeaders(
   _req: unknown,
@@ -32,9 +33,8 @@ async function bootstrap() {
     }),
   );
 
-  const corsOrigin = process.env.CORS_ORIGIN ?? BMV_DEV_SITE_URL;
   app.enableCors({
-    origin: corsOrigin.split(",").map((o) => o.trim()),
+    origin: createCorsOriginDelegate(process.env.CORS_ORIGIN, BMV_DEV_SITE_URL),
     credentials: true,
   });
 
