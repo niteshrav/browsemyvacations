@@ -7,11 +7,14 @@ describe("DCDeploy Dockerfile standalone layout", () => {
     const dockerfilePath = path.resolve(__dirname, "../../Dockerfile");
     const dockerfile = readFileSync(dockerfilePath, "utf8");
 
+    // outputFileTracingRoot is the monorepo root, so standalone nests under frontend/.
     expect(dockerfile).toContain("FROM node:22-bookworm-slim AS builder");
     expect(dockerfile).toContain("FROM node:22-bookworm-slim AS runner");
-    expect(dockerfile).toContain('COPY --from=builder /app/frontend/public ./public');
-    expect(dockerfile).toContain('COPY --from=builder /app/frontend/.next/static ./.next/static');
-    expect(dockerfile).toContain('CMD ["node", "server.js"]');
+    expect(dockerfile).toContain('COPY --from=builder /app/frontend/public ./frontend/public');
+    expect(dockerfile).toContain(
+      "COPY --from=builder /app/frontend/.next/static ./frontend/.next/static",
+    );
+    expect(dockerfile).toContain('CMD ["node", "frontend/server.js"]');
   });
 
   it("builds the backend with a Node 22 base and correct healthcheck", () => {
