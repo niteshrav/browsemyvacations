@@ -38,10 +38,16 @@ describe("brand logo", () => {
   });
 
   it("defines intrinsic dimensions for layout sizing", () => {
-    expect(BRAND_LOGO_WIDTH).toBe(1536);
-    expect(BRAND_LOGO_HEIGHT).toBe(1024);
+    // 3x of ~168×112 display (h-28) keeps retina sharp without shipping a 1536px asset.
+    expect(BRAND_LOGO_WIDTH).toBe(504);
+    expect(BRAND_LOGO_HEIGHT).toBe(336);
     expect(BRAND_LOGO_DISPLAY_HEIGHT).toBeGreaterThan(0);
     expect(BRAND_LOGO_WIDTH).toBeGreaterThan(BRAND_LOGO_HEIGHT);
+  });
+
+  it("keeps the public PNG small enough for fast header loads", () => {
+    const bytes = readFileSync(getBrandLogoPublicPath()).byteLength;
+    expect(bytes).toBeLessThan(80_000);
   });
 
   it("serves the logo directly on the same surface color as the page body", () => {

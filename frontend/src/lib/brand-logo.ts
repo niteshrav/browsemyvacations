@@ -3,8 +3,9 @@ import path from "node:path";
 
 export const BRAND_LOGO_SRC = "/brand/browsemyvacations-logo.png";
 export const BRAND_LOGO_ALT = "Browse My Vacations";
-export const BRAND_LOGO_WIDTH = 1536;
-export const BRAND_LOGO_HEIGHT = 1024;
+/** Intrinsic pixel size of the public PNG (3× of ~168×112 display). */
+export const BRAND_LOGO_WIDTH = 504;
+export const BRAND_LOGO_HEIGHT = 336;
 export const BRAND_LOGO_DISPLAY_HEIGHT = 112;
 
 /** Tailwind height tokens for responsive logo sizing. */
