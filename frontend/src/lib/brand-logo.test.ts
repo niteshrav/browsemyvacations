@@ -5,6 +5,7 @@ import {
   BRAND_LOGO_ALT,
   BRAND_LOGO_DISPLAY_HEIGHT,
   BRAND_LOGO_HEIGHT,
+  BRAND_LOGO_PATH,
   BRAND_LOGO_SRC,
   BRAND_LOGO_SOURCE_PATH,
   BRAND_LOGO_USE_OPTIMIZER,
@@ -12,13 +13,16 @@ import {
   brandLogoAssetHasAlphaChannel,
   brandLogoIntegratedClassName,
   getBrandLogoPublicPath,
+  resolveBrandLogoSrc,
   siteHeaderClassName,
 } from "./brand-logo";
 import { rootBodyClassName } from "./root-layout";
 
 describe("brand logo", () => {
   it("points to a transparent Browse My Vacations logo asset in public", () => {
+    expect(BRAND_LOGO_PATH).toBe("/brand/browsemyvacations-logo.png");
     expect(BRAND_LOGO_SRC).toBe("/brand/browsemyvacations-logo.png");
+    expect(resolveBrandLogoSrc()).toBe("/brand/browsemyvacations-logo.png");
     expect(getBrandLogoPublicPath()).toBe(
       path.join(process.cwd(), "public", "brand", "browsemyvacations-logo.png"),
     );

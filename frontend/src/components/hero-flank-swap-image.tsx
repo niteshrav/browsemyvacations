@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { tourismImageClassName } from "@/lib/tourism-image";
+import { resolveTourismImageSrc, tourismImageClassName } from "@/lib/tourism-image";
 
 type Props = {
   src: string;
@@ -9,16 +9,17 @@ type Props = {
 };
 
 export function HeroFlankSwapImage({ src, zoomed = false }: Props) {
-  const [shown, setShown] = useState(src);
+  const cdnSrc = resolveTourismImageSrc(src);
+  const [shown, setShown] = useState(cdnSrc);
   const [leaving, setLeaving] = useState<string | null>(null);
 
   useEffect(() => {
-    if (src === shown) return;
+    if (cdnSrc === shown) return;
     setLeaving(shown);
-    setShown(src);
+    setShown(cdnSrc);
     const timer = setTimeout(() => setLeaving(null), 520);
     return () => clearTimeout(timer);
-  }, [src, shown]);
+  }, [cdnSrc, shown]);
 
   return (
     <div className="relative h-full w-full overflow-hidden">

@@ -1,10 +1,12 @@
+import { deliverCdnImageUrl } from "../cdn/cloudinary";
 import { cityNameToSlug } from "../city-slug";
 import { RAJASTHAN_TOURIST_CITIES } from "../rajasthan-cities";
 
 export const QUICK_PICK_THUMB_PARAMS = "?auto=format&fit=crop&w=80&h=80&q=80";
 
 export function buildQuickPickThumbUrl(photoId: string): string {
-  return `https://images.unsplash.com/photo-${photoId}${QUICK_PICK_THUMB_PARAMS}`;
+  const origin = `https://images.unsplash.com/photo-${photoId}${QUICK_PICK_THUMB_PARAMS}`;
+  return deliverCdnImageUrl(origin, { width: 80, height: 80, crop: "fill" });
 }
 
 export const HOME_QUICK_PICKS = [

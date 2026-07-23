@@ -11,6 +11,7 @@ export * from "./meter/route-matrix";
 export * from "./meter/route-map";
 export * from "./search/match-packages";
 export * from "./sanitize";
+export * from "./cdn/cloudinary";
 export * from "./city-tourism-images";
 export * from "./rajasthan-cities";
 export * from "./city-slug";

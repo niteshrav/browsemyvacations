@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { tourismImageClassName } from "@/lib/tourism-image";
+import { resolveTourismImageSrc, tourismImageClassName } from "@/lib/tourism-image";
 
 type Props = {
   src: string;
@@ -29,7 +29,7 @@ export function TourismImage({ src, alt, className }: Props) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
+      src={resolveTourismImageSrc(src)}
       alt={alt}
       className={className ?? tourismImageClassName()}
       loading="lazy"

@@ -1,7 +1,10 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { deliverBrandAssetUrl } from "@bmv/shared";
 
-export const BRAND_LOGO_SRC = "/brand/browsemyvacations-logo.png";
+export const BRAND_LOGO_PATH = "/brand/browsemyvacations-logo.png";
+/** Local public path; resolved to Cloudinary when CDN env is configured. */
+export const BRAND_LOGO_SRC = deliverBrandAssetUrl(BRAND_LOGO_PATH);
 export const BRAND_LOGO_ALT = "Browse My Vacations";
 /** Intrinsic pixel size of the public PNG (3× of ~168×112 display). */
 export const BRAND_LOGO_WIDTH = 504;
@@ -32,6 +35,10 @@ export function siteHeaderClassName(): string {
 
 export function getBrandLogoPublicPath(): string {
   return path.join(process.cwd(), "public", "brand", "browsemyvacations-logo.png");
+}
+
+export function resolveBrandLogoSrc(): string {
+  return deliverBrandAssetUrl(BRAND_LOGO_PATH);
 }
 
 export function brandLogoAssetHasAlphaChannel(): boolean {

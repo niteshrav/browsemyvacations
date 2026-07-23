@@ -506,7 +506,7 @@ sequenceDiagram
 | Styling | Tailwind CSS + shadcn/ui |
 | Forms | React Hook Form + Zod (shared schemas in `packages/shared`) |
 | Data fetching | TanStack Query for client; `fetch` in RSC for SSR |
-| Images | `next/image` + Cloudinary loader |
+| Images | `next/image` + Cloudinary CDN delivery (`deliverCdnImageUrl`) |
 | Analytics | PostHog or GA4 events (US-PLAT-05) |
 
 ### 11.3 Key UI components
@@ -565,7 +565,7 @@ sequenceDiagram
 | System | MVP | Integration pattern |
 |--------|-----|---------------------|
 | **Resend** | Yes | Worker sends `lead.alert` template |
-| **Cloudinary** | Yes | Admin upload → URL stored on package |
+| **Cloudinary** | Yes | Edge CDN for tourism/package/brand images via fetch + admin upload → URL stored on package |
 | **PostHog / GA4** | Yes | Client SDK on web |
 | **WhatsApp Business** | Post-MVP | Deep link pre-filled from lead; or API notify |
 | **Zoho/HubSpot CRM** | Post-MVP | Webhook on lead create from worker |

@@ -7,6 +7,7 @@ import { SearchAnalytics } from "@/components/search-analytics";
 import { PackageCard } from "@/components/package-card";
 import { getCityTouristPlans } from "@/lib/city-tourist-plans";
 import { fetchSearch, formatSearchQueryLabel } from "@/lib/discovery-api";
+import { resolveTourismImageSrc } from "@/lib/tourism-image";
 
 export const metadata: Metadata = {
   title: "Search packages",
@@ -96,7 +97,7 @@ export default async function SearchPage({ searchParams }: Props) {
               <article key={plan.title} className="rounded-lg border border-stone-200 bg-white p-4">
                 <div className="relative mb-3 h-44 overflow-hidden rounded-md bg-stone-100">
                   <Image
-                    src={plan.imageUrl}
+                    src={resolveTourismImageSrc(plan.imageUrl)}
                     alt={`${plan.city} sightseeing`}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"

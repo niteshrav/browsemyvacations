@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { deliverCdnImageUrl } from "@bmv/shared";
 import { formatInrPrice } from "@/lib/format";
 import type { PackageDetail } from "@/types/catalog";
 
@@ -38,7 +39,7 @@ function CrossList({ items }: { items: string[] }) {
 }
 
 export function PackageDetailSections({ pkg, onQuoteClick }: Props) {
-  const image = pkg.images[0];
+  const image = pkg.images[0] ? deliverCdnImageUrl(pkg.images[0], { width: 1600, crop: "fill" }) : undefined;
   const routeCities = pkg.itinerary.flatMap((day) => day.cities);
   const uniqueRoute = [...new Set(routeCities)];
 

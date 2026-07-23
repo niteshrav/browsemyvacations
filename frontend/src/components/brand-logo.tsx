@@ -2,9 +2,9 @@ import {
   BRAND_LOGO_ALT,
   BRAND_LOGO_DISPLAY_HEIGHT,
   BRAND_LOGO_HEIGHT,
-  BRAND_LOGO_SRC,
   BRAND_LOGO_WIDTH,
   brandLogoIntegratedClassName,
+  resolveBrandLogoSrc,
 } from "@/lib/brand-logo";
 
 type BrandLogoProps = {
@@ -18,7 +18,7 @@ export function BrandLogo({ priority = false, className }: BrandLogoProps) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={BRAND_LOGO_SRC}
+      src={resolveBrandLogoSrc()}
       alt={BRAND_LOGO_ALT}
       className={className ?? brandLogoIntegratedClassName()}
       height={BRAND_LOGO_DISPLAY_HEIGHT}

@@ -1,14 +1,21 @@
 /**
  * Verified Unsplash tourism photos (https://unsplash.com/license).
  * Single source of truth for package fallbacks, city plans, and seed images.
+ * When Cloudinary is configured, delivery goes through the image CDN.
  */
+
+import { deliverCdnImageUrl } from "./cdn/cloudinary";
 
 export const BANNED_TOURISM_PHOTO_IDS = ["1524492412937"] as const;
 
 export const UNSPLASH_IMAGE_PARAMS = "?auto=format&fit=crop&w=1200&q=80";
 
-export function buildUnsplashUrl(photoId: string): string {
+export function buildUnsplashOriginUrl(photoId: string): string {
   return `https://images.unsplash.com/photo-${photoId}${UNSPLASH_IMAGE_PARAMS}`;
+}
+
+export function buildUnsplashUrl(photoId: string): string {
+  return deliverCdnImageUrl(buildUnsplashOriginUrl(photoId), { width: 1200, crop: "fill" });
 }
 
 export function isBannedTourismPhotoUrl(url: string): boolean {

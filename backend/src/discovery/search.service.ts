@@ -1,8 +1,15 @@
 import { Injectable } from "@nestjs/common";
-import { packageMatchesSearchQuery, type SearchablePackage } from "@bmv/shared";
+import { deliverCdnImageUrl, packageMatchesSearchQuery, type SearchablePackage } from "@bmv/shared";
 import { Prisma } from "@bmv/database";
 import { PrismaService } from "../prisma/prisma.service";
 import { decimalToNumber } from "../common/serialize";
+
+function deliverPackageImages(images: Prisma.JsonValue): string[] {
+  if (!Array.isArray(images)) return [];
+  return images
+    .filter((image): image is string => typeof image === "string" && image.trim().length > 0)
+    .map((image) => deliverCdnImageUrl(image, { width: 1200, crop: "fill" }));
+}
 
 const packageCardSelect = {
   id: true,
@@ -79,7 +86,7 @@ export class SearchService {
         isFixed: row.priceIsFixed,
         currency: row.currency,
       },
-      images: Array.isArray(row.images) ? row.images : [],
+      images: deliverPackageImages(row.images),
     };
   }
 }
