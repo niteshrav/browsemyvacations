@@ -3,11 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HeroFlankSwapImage } from "@/components/hero-flank-swap-image";
 import {
-  HERO_FLANK_IMAGE_COUNT_PER_SIDE,
+  HERO_COLLAGE_COUNT,
   getHeroImagePool,
-  heroFlankImageClassName,
+  heroCollageImageClassName,
   heroFlankImageOffsetClassName,
   heroFlankPanelClassName,
+  heroHalfBackgroundClassName,
   heroStageClassName,
   pickNextHeroImage,
   type HeroFlankImages,
@@ -16,65 +17,88 @@ import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 const AUTO_ROTATE_INTERVAL_MS = 4000;
 
-type FlankSide = "left" | "right";
-
 type Props = {
   anchor: string;
   initialImages: HeroFlankImages;
   children: React.ReactNode;
 };
 
-type FlankPanelProps = {
-  side: FlankSide;
-  images: string[];
-  testId: string;
-  activeIndex: number;
-  onHoverSlot: (side: FlankSide, index: number) => void;
-  onPause: () => void;
-  onResume: () => void;
-};
-
-function HeroFlankPanel({
-  side,
+function HeroCollagePanel({
   images,
-  testId,
   activeIndex,
   onHoverSlot,
   onPause,
   onResume,
-}: FlankPanelProps) {
+}: {
+  images: string[];
+  activeIndex: number;
+  onHoverSlot: (index: number) => void;
+  onPause: () => void;
+  onResume: () => void;
+}) {
   if (images.length === 0) return null;
 
   return (
     <aside
-      className={heroFlankPanelClassName(side)}
-      data-testid={testId}
+      className={heroFlankPanelClassName("left")}
+      data-testid="hero-flank-left"
       onMouseLeave={onResume}
       onBlur={onResume}
     >
-      {images.map((src, i) => (
-        <button
-          key={`${side}-${i}`}
-          type="button"
-          className={`${heroFlankImageClassName()} ${heroFlankImageOffsetClassName(i, side)} cursor-pointer transition-all duration-500 ${
-            i === activeIndex
-              ? "z-10 scale-[1.04] ring-2 ring-teal-300/70 shadow-xl"
-              : "opacity-85 hover:opacity-100"
-          }`}
-          onMouseEnter={() => {
-            onPause();
-            onHoverSlot(side, i);
-          }}
-          onFocus={() => {
-            onPause();
-            onHoverSlot(side, i);
-          }}
-          aria-label={`Browse ${side} inspiration image ${i + 1}`}
-          aria-pressed={i === activeIndex}
-        >
-          <HeroFlankSwapImage src={src} zoomed={i === activeIndex} />
-        </button>
-      ))}
+      <div className="grid grid-cols-2 gap-2 xl:gap-2.5">
+        {images.map((src, i) => (
+          <button
+            key={`collage-${i}`}
+            type="button"
+            className={`${heroCollageImageClassName()} ${heroFlankImageOffsetClassName(i, "left")} cursor-pointer ${
+              i === activeIndex
+                ? "z-10 scale-[1.02] ring-1 ring-teal-800/25 shadow-[0_12px_28px_rgba(28,25,23,0.16)]"
+                : "opacity-90 hover:opacity-100"
+            }`}
+            onMouseEnter={() => {
+              onPause();
+              onHoverSlot(i);
+            }}
+            onFocus={() => {
+              onPause();
+              onHoverSlot(i);
+            }}
+            aria-label={`Browse inspiration image ${i + 1}`}
+            aria-pressed={i === activeIndex}
+          >
+            <HeroFlankSwapImage src={src} zoomed={i === activeIndex} />
+          </button>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+function HeroFeaturedPanel({
+  src,
+  onPause,
+  onResume,
+}: {
+  src: string;
+  onPause: () => void;
+  onResume: () => void;
+}) {
+  if (!src) return null;
+
+  return (
+    <aside
+      className={heroHalfBackgroundClassName()}
+      data-testid="hero-flank-right"
+      onMouseEnter={onPause}
+      onMouseLeave={onResume}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt="Lake palace destination inspiration"
+        className="absolute inset-0 h-full w-full object-cover object-[58%_38%]"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-teal-950/25 via-transparent to-transparent" />
     </aside>
   );
 }
@@ -101,14 +125,12 @@ function HeroMobileStrip({
       onMouseLeave={onResume}
       onTouchEnd={onResume}
     >
-      {images.map((src, i) => (
+      {images.slice(0, 8).map((src, i) => (
         <button
           key={`mobile-${i}`}
           type="button"
-          className={`group relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-stone-200/80 shadow-md transition-all duration-500 ${
-            i === activeIndex
-              ? "scale-105 ring-2 ring-teal-300/60 shadow-lg"
-              : "opacity-75"
+          className={`group relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-stone-200/80 shadow-md transition-all duration-500 ${
+            i === activeIndex ? "scale-105 ring-2 ring-teal-800/30 shadow-lg" : "opacity-75"
           }`}
           onMouseEnter={() => {
             onPause();
@@ -136,11 +158,12 @@ export function HeroStageClient({ anchor, initialImages, children }: Props) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
   const imagePool = useMemo(() => getHeroImagePool(), []);
-  const imageCount = HERO_FLANK_IMAGE_COUNT_PER_SIDE;
-  const mobileImages = [...new Set([...images.left, ...images.right])];
-  const rotateCount = Math.max(imageCount, mobileImages.length);
-  const desktopActiveIndex = activeIndex % imageCount;
+  const collageCount = Math.max(images.left.length, HERO_COLLAGE_COUNT);
+  const mobileImages = images.left;
+  const rotateCount = Math.max(collageCount, mobileImages.length, 1);
+  const desktopActiveIndex = activeIndex % Math.max(images.left.length, 1);
   const mobileActiveIndex = activeIndex % Math.max(mobileImages.length, 1);
+  const featuredSrc = images.right[0] ?? "";
 
   useEffect(() => {
     if (isPaused || prefersReducedMotion) return;
@@ -152,76 +175,61 @@ export function HeroStageClient({ anchor, initialImages, children }: Props) {
     };
   }, [isPaused, prefersReducedMotion, rotateCount]);
 
-  function slotKey(side: FlankSide | "mobile", index: number) {
-    return `${side}-${index}`;
-  }
-
-  function swapSlotImage(side: FlankSide, index: number) {
-    const key = slotKey(side, index);
+  function swapCollageImage(index: number) {
+    const key = `left-${index}`;
     const nextSalt = (slotSalts[key] ?? 0) + 1;
     setSlotSalts((prev) => ({ ...prev, [key]: nextSalt }));
     setImages((prev) => {
-      const current = prev[side][index];
+      const current = prev.left[index];
       const next = pickNextHeroImage(imagePool, current, `${anchor}:${key}:${nextSalt}`);
-      const updatedSide = [...prev[side]];
-      updatedSide[index] = next;
-      return { ...prev, [side]: updatedSide };
-    });
-    setActiveIndex(index);
-  }
-
-  function swapMobileImage(index: number) {
-    const key = slotKey("mobile", index);
-    const nextSalt = (slotSalts[key] ?? 0) + 1;
-    setSlotSalts((prev) => ({ ...prev, [key]: nextSalt }));
-    const current = mobileImages[index];
-    const next = pickNextHeroImage(imagePool, current, `${anchor}:${key}:${nextSalt}`);
-    setImages((prev) => {
-      const leftIndex = prev.left.indexOf(current);
-      const rightIndex = prev.right.indexOf(current);
-      const nextImages = { ...prev, left: [...prev.left], right: [...prev.right] };
-      if (leftIndex >= 0) nextImages.left[leftIndex] = next;
-      if (rightIndex >= 0) nextImages.right[rightIndex] = next;
-      if (leftIndex < 0 && rightIndex < 0) {
-        const targetSide = index % 2 === 0 ? "left" : "right";
-        const targetIndex = Math.floor(index / 2) % imageCount;
-        nextImages[targetSide][targetIndex] = next;
-      }
-      return nextImages;
+      const updatedLeft = [...prev.left];
+      updatedLeft[index] = next;
+      return { ...prev, left: updatedLeft };
     });
     setActiveIndex(index);
   }
 
   return (
     <div className={heroStageClassName()} data-testid="hero-stage">
-      <HeroFlankPanel
-        side="left"
-        images={images.left}
-        testId="hero-flank-left"
-        activeIndex={desktopActiveIndex}
-        onHoverSlot={swapSlotImage}
-        onPause={() => setIsPaused(true)}
-        onResume={() => setIsPaused(false)}
-      />
-      <div className="min-w-0 flex-1">
-        {children}
-        <HeroMobileStrip
-          images={mobileImages}
-          activeIndex={mobileActiveIndex}
-          onHoverSlot={swapMobileImage}
+      {/* collage | text (clean) | short right photo — image never under copy */}
+      <div className="site-container relative z-10 grid w-full items-center gap-6 py-12 sm:py-14 lg:grid-cols-[minmax(9rem,12rem)_minmax(0,1fr)_minmax(15rem,22rem)] lg:gap-8 lg:py-16 xl:grid-cols-[minmax(10rem,13.5rem)_minmax(0,1fr)_minmax(17rem,24rem)] xl:gap-10">
+        <HeroCollagePanel
+          images={images.left}
+          activeIndex={desktopActiveIndex}
+          onHoverSlot={swapCollageImage}
+          onPause={() => setIsPaused(true)}
+          onResume={() => setIsPaused(false)}
+        />
+        <div className="relative flex min-w-0 flex-col justify-center">
+          {children}
+          <HeroMobileStrip
+            images={mobileImages}
+            activeIndex={mobileActiveIndex}
+            onHoverSlot={swapCollageImage}
+            onPause={() => setIsPaused(true)}
+            onResume={() => setIsPaused(false)}
+          />
+          {featuredSrc ? (
+            <div
+              className="relative mt-8 min-h-[16rem] overflow-hidden rounded-2xl lg:hidden"
+              data-testid="hero-flank-right-mobile"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={featuredSrc}
+                alt="Lake palace destination inspiration"
+                className="absolute inset-0 h-full w-full object-cover object-[55%_40%]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-teal-950/35 via-transparent to-transparent" />
+            </div>
+          ) : null}
+        </div>
+        <HeroFeaturedPanel
+          src={featuredSrc}
           onPause={() => setIsPaused(true)}
           onResume={() => setIsPaused(false)}
         />
       </div>
-      <HeroFlankPanel
-        side="right"
-        images={images.right}
-        testId="hero-flank-right"
-        activeIndex={desktopActiveIndex}
-        onHoverSlot={swapSlotImage}
-        onPause={() => setIsPaused(true)}
-        onResume={() => setIsPaused(false)}
-      />
     </div>
   );
 }

@@ -42,15 +42,15 @@ test.describe("Discovery flow", () => {
     }
   });
 
-  test("TC-E2E-DISC-08: hero shows Rajasthan tourism photos on left and right flanks", async ({ page }) => {
+  test("TC-E2E-DISC-08: hero shows collage and featured destination photos", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/");
     const leftFlank = page.getByTestId("hero-flank-left");
     const rightFlank = page.getByTestId("hero-flank-right");
     await expect(leftFlank).toBeVisible();
     await expect(rightFlank).toBeVisible();
-    await expect(leftFlank.locator("img")).toHaveCount(3);
-    await expect(rightFlank.locator("img")).toHaveCount(3);
+    await expect(leftFlank.locator("img")).toHaveCount(8);
+    await expect(rightFlank.locator("img")).toHaveCount(1);
     await expect(leftFlank.locator("img").first()).toHaveAttribute("src", /images\.unsplash\.com/);
     const naturalWidth = await leftFlank
       .locator("img")
@@ -59,7 +59,7 @@ test.describe("Discovery flow", () => {
     expect(naturalWidth).toBeGreaterThan(0);
   });
 
-  test("TC-E2E-DISC-09: hero flank images change on hover", async ({ page }) => {
+  test("TC-E2E-DISC-09: hero collage images change on hover", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/");
     const leftFlank = page.getByTestId("hero-flank-left");
@@ -117,7 +117,7 @@ test.describe("Discovery flow", () => {
 test.describe("Packages flow", () => {
   test("TC-E2E-PKG-01: packages list loads", async ({ page }) => {
     await page.goto("/packages");
-    await expect(page.getByRole("heading", { name: "Tour Packages" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Curated Rajasthan Experiences" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Standalone Single-City Escapes" })).toBeVisible();
     await expect(page.getByText(E2E_SEED_PACKAGE_TITLE)).toBeVisible({ timeout: 15_000 });
   });

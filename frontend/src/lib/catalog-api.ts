@@ -78,7 +78,17 @@ export async function fetchPackages(destinationSlug?: string): Promise<PackageCa
   const fallback = destinationSlug
     ? FALLBACK_PACKAGES.filter((pkg) => pkg.destinationSlugs.includes(destinationSlug))
     : FALLBACK_PACKAGES;
-  return safeFetch(url, fallback);
+
+  try {
+    const res = await fetch(url, { cache: CATALOG_FETCH_CACHE });
+    if (!res.ok) return fallback;
+    const data = (await res.json()) as PackageCard[];
+    // API up but catalog empty (unseeded DB) — still show Package Bible packages.
+    if (!Array.isArray(data) || data.length === 0) return fallback;
+    return data;
+  } catch {
+    return fallback;
+  }
 }
 
 export async function fetchPackageBySlug(slug: string): Promise<PackageDetail | null> {

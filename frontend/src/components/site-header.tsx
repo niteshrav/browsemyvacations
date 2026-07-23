@@ -15,7 +15,7 @@ const nav = [
 export function SiteHeader() {
   return (
     <header className={siteHeaderClassName()} data-site-chrome="header">
-      <div className="site-container flex flex-col gap-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:py-4">
+      <div className="site-container flex flex-col gap-2 py-2 sm:flex-row sm:items-center sm:justify-between sm:py-2.5">
         <Link href="/" className="inline-flex shrink-0 items-center self-start transition hover:opacity-95">
           <BrandLogo priority />
         </Link>

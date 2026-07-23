@@ -11,6 +11,9 @@ type Props = {
   packageTitle?: string;
   defaultTravelDate?: string;
   defaultStartCity?: string;
+  defaultEndCity?: string;
+  defaultFullName?: string;
+  defaultPhone?: string;
   defaultMessage?: string;
   meterSnapshot?: Record<string, unknown>;
   onSuccess?: () => void;
@@ -23,6 +26,9 @@ export function QuoteForm({
   packageTitle,
   defaultTravelDate,
   defaultStartCity,
+  defaultEndCity,
+  defaultFullName,
+  defaultPhone,
   defaultMessage,
   meterSnapshot,
   onSuccess,
@@ -108,6 +114,7 @@ export function QuoteForm({
             id="fullName"
             name="fullName"
             required
+            defaultValue={defaultFullName}
             className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
           />
         </div>
@@ -132,6 +139,7 @@ export function QuoteForm({
             name="phone"
             type="tel"
             required
+            defaultValue={defaultPhone}
             placeholder="+91 98765 43210"
             className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
           />
@@ -180,6 +188,7 @@ export function QuoteForm({
               <input
                 id="endCity"
                 name="endCity"
+                defaultValue={defaultEndCity}
                 className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2"
               />
             </div>

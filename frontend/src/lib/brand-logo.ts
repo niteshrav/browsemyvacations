@@ -6,11 +6,11 @@ export const BRAND_LOGO_ALT = "Browse My Vacations";
 /** Intrinsic pixel size of the public PNG (3× of ~168×112 display). */
 export const BRAND_LOGO_WIDTH = 504;
 export const BRAND_LOGO_HEIGHT = 336;
-export const BRAND_LOGO_DISPLAY_HEIGHT = 112;
+export const BRAND_LOGO_DISPLAY_HEIGHT = 56;
 
 /** Tailwind height tokens for responsive logo sizing. */
-export const BRAND_LOGO_HEIGHT_CLASS = "h-20 sm:h-28";
-export const BRAND_LOGO_MAX_WIDTH_CLASS = "max-w-[min(100%,520px)]";
+export const BRAND_LOGO_HEIGHT_CLASS = "h-12 sm:h-14";
+export const BRAND_LOGO_MAX_WIDTH_CLASS = "max-w-[min(100%,320px)]";
 
 /** Logo is served directly (not via the image optimizer) on the page surface. */
 export const BRAND_LOGO_USE_OPTIMIZER = false;

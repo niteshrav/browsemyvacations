@@ -2,7 +2,9 @@ import { buildUnsplashUrl } from "../city-tourism-images";
 
 /** Curated Unsplash tourism photos for marketing pages (https://unsplash.com/license). */
 export const MARKETING_IMAGES = {
-  aboutHero: buildUnsplashUrl("1599661046289-e31897846e41"),
+  /** Homepage half-bleed hero — City Palace / Lake Pichola at golden hour. */
+  heroHalfBackground: buildUnsplashUrl("1695956353120-54ce5e91632b"),
+  aboutHero: buildUnsplashUrl("1695956353120-54ce5e91632b"),
   retailHolidays: buildUnsplashUrl("1477587458883-47145ed94245"),
   customJourneys: buildUnsplashUrl("1703092289078-ff03b771237c"),
   corporateMice: buildUnsplashUrl("1600880292203-757bb62b4baf"),
@@ -13,9 +15,9 @@ export const MARKETING_IMAGES = {
   miceIntro: buildUnsplashUrl("1540575467063-178a50c2df87"),
   miceCtaBanner: buildUnsplashUrl("1506905925346-21bda4d32df4"),
   contactHero: buildUnsplashUrl("1477587458883-47145ed94245"),
-  contactCta: buildUnsplashUrl("1599661046289-e31897846e41"),
+  contactCta: buildUnsplashUrl("1695956353120-54ce5e91632b"),
   destinations: {
-    udaipur: buildUnsplashUrl("1599661046289-e31897846e41"),
+    udaipur: buildUnsplashUrl("1695956353120-54ce5e91632b"),
     jaipur: buildUnsplashUrl("1477587458883-47145ed94245"),
     jodhpur: buildUnsplashUrl("1602643454724-21d5a40722db"),
     jaisalmer: buildUnsplashUrl("1551717256-ad2ac9ab0261"),
@@ -36,11 +38,11 @@ export const MARKETING_IMAGES = {
     incentive: buildUnsplashUrl("1507525428034-b723cf961d3e"),
     conferences: buildUnsplashUrl("1540575467063-178a50c2df87"),
     dealerMeets: buildUnsplashUrl("1477587458883-47145ed94245"),
-    leadership: buildUnsplashUrl("1599661046289-e31897846e41"),
+    leadership: buildUnsplashUrl("1695956353120-54ce5e91632b"),
     international: buildUnsplashUrl("1512453979798-5ea266f8880c"),
   },
   formats: {
-    udaipurLeadership: buildUnsplashUrl("1599661046289-e31897846e41"),
+    udaipurLeadership: buildUnsplashUrl("1695956353120-54ce5e91632b"),
     jaipurDealer: buildUnsplashUrl("1477587458883-47145ed94245"),
     goaOffsite: buildUnsplashUrl("1507525428034-b723cf961d3e"),
     jaisalmerIncentive: buildUnsplashUrl("1551717256-ad2ac9ab0261"),

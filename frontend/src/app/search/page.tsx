@@ -6,7 +6,7 @@ import { HeroSearch } from "@/components/hero-search";
 import { SearchAnalytics } from "@/components/search-analytics";
 import { PackageCard } from "@/components/package-card";
 import { getCityTouristPlans } from "@/lib/city-tourist-plans";
-import { fetchSearch } from "@/lib/discovery-api";
+import { fetchSearch, formatSearchQueryLabel } from "@/lib/discovery-api";
 
 export const metadata: Metadata = {
   title: "Search packages",
@@ -25,31 +25,60 @@ export default async function SearchPage({ searchParams }: Props) {
     redirect("/");
   }
 
-  const { packages } = await fetchSearch(query);
-  const cityPlans = getCityTouristPlans(query);
+  const { packages, relatedPackages = [] } = await fetchSearch(query);
+  const displayQuery = formatSearchQueryLabel(query);
+  const cityPlans = getCityTouristPlans(displayQuery);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
       <SearchAnalytics query={query} />
-      <h1 className="text-2xl font-bold text-teal-900">Search results</h1>
+      <h1 className="font-serif text-3xl font-semibold text-teal-950">Search results</h1>
       <p className="mt-2 text-stone-600">
-        Showing packages for: <span className="font-medium">{query}</span>
+        Showing packages for: <span className="font-medium">{displayQuery}</span>
       </p>
 
-      <div className="mt-6 max-w-md">
-        <HeroSearch defaultQuery={query} />
+      <div className="mt-6 max-w-xl">
+        <HeroSearch defaultQuery={displayQuery} />
       </div>
 
       {packages.length === 0 ? (
-        <div className="mt-10 rounded-lg border border-stone-200 bg-stone-50 p-8 text-center">
-          <p className="text-stone-700">No packages matched your search.</p>
-          <p className="mt-2 text-sm text-stone-500">Try another city or browse from the home page.</p>
-          <Link href="/" className="mt-4 inline-block text-teal-700 hover:underline">
-            Browse destinations
-          </Link>
+        <div className="mt-10 space-y-8">
+          <div className="rounded-2xl border border-stone-200 bg-stone-50 p-8 text-center">
+            <p className="text-stone-700">
+              No dedicated curated packages for <span className="font-medium">{displayQuery}</span>{" "}
+              yet.
+            </p>
+            <p className="mt-2 text-sm text-stone-500">
+              Explore related journeys below, or browse all destinations.
+            </p>
+            <div className="mt-4 flex flex-wrap justify-center gap-3">
+              <Link href="/packages" className="btn-primary">
+                Browse all packages
+              </Link>
+              <Link href="/" className="btn-secondary">
+                Browse destinations
+              </Link>
+            </div>
+          </div>
+
+          {relatedPackages.length > 0 ? (
+            <section>
+              <h2 className="font-serif text-2xl font-semibold text-teal-950">
+                Related & popular journeys
+              </h2>
+              <p className="mt-1 text-sm text-stone-600">
+                Handpicked options you can customise for {displayQuery}.
+              </p>
+              <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10">
+                {relatedPackages.map((pkg) => (
+                  <PackageCard key={pkg.id} pkg={pkg} />
+                ))}
+              </div>
+            </section>
+          ) : null}
         </div>
       ) : (
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10">
           {packages.map((pkg) => (
             <PackageCard key={pkg.id} pkg={pkg} />
           ))}

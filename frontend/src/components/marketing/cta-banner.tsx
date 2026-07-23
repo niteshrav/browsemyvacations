@@ -20,7 +20,10 @@ export function CtaBanner({ heading, image, imageAlt, primaryCta, secondaryCta }
 
       <div className="site-container relative py-20 text-center sm:py-24">
         <FadeUp>
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{heading}</h2>
+          <h2 className="font-serif text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            {heading}
+          </h2>
+          <div className="mx-auto mt-4 h-px w-20 bg-white/40" aria-hidden />
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href={primaryCta.href} className="btn-primary min-w-[200px] px-6 py-3.5 text-base">
               {primaryCta.label}

@@ -55,10 +55,24 @@ describe("resolveSearchQuery", () => {
   });
 });
 
+const ranthamborePackage = {
+  title: "2D/1N Ranthambore: The Quick Wildlife Safari",
+  slug: "standalone-single-city-ranthambore-the-quick-wildlife-safari",
+  destinationSlugs: ["sawai-madhopur"],
+  itineraryCities: ["Sawai Madhopur"],
+};
+
 describe("packageMatchesCityFilter", () => {
   it("matches packages featured for the selected city", () => {
     expect(packageMatchesCityFilter(udaipurPackage, "udaipur", "Udaipur")).toBe(true);
     expect(packageMatchesCityFilter(jaipurPackage, "jaipur", "Jaipur")).toBe(true);
+  });
+
+  it("matches primary destination packages even when title uses a marketing alias", () => {
+    expect(packageMatchesCityFilter(ranthamborePackage, "sawai-madhopur", "Sawai Madhopur")).toBe(
+      true,
+    );
+    expect(packageMatchesSearchQuery(ranthamborePackage, "Sawai Madhopur")).toBe(true);
   });
 
   it("excludes packages that only list the city as a transfer hub", () => {

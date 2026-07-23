@@ -7,15 +7,12 @@ import { ADMIN_DEFAULT_REDIRECT } from "@/lib/admin-routes";
 import {
   ADMIN_LOGIN_DIALOG_TITLE,
   ADMIN_LOGIN_TRIGGER_LABEL,
-  ADMIN_SEED_CREDENTIALS_LABEL,
-  getAdminSeedCredentialsForDisplay,
 } from "@/lib/admin-login-ui";
 
 export function AdminLoginDialog() {
   const router = useRouter();
   const titleId = useId();
   const [open, setOpen] = useState(false);
-  const seedCredentials = getAdminSeedCredentialsForDisplay();
 
   useEffect(() => {
     if (!open) return;
@@ -78,19 +75,6 @@ export function AdminLoginDialog() {
             <p className="mt-2 text-sm text-stone-600">
               Sign in to manage destinations, packages, and leads.
             </p>
-
-            <div
-              className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950"
-              data-testid="admin-seed-credentials"
-            >
-              <p className="font-semibold">{ADMIN_SEED_CREDENTIALS_LABEL}</p>
-              <p className="mt-1">
-                Email: <span className="font-mono">{seedCredentials.email}</span>
-              </p>
-              <p>
-                Password: <span className="font-mono">{seedCredentials.password}</span>
-              </p>
-            </div>
 
             <div className="mt-6">
               <AdminLoginForm formIdPrefix="admin-dialog" onSuccess={handleSuccess} />

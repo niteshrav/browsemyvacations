@@ -52,16 +52,34 @@ describe("catalog-api", () => {
 
   it("fetchPackages filters by destination slug", async () => {
     vi.stubEnv("NEXT_PUBLIC_API_URL", "");
+    const packages = [
+      { id: "p1", title: "Udaipur Escape", slug: "udaipur-escape", destinationSlugs: ["udaipur"] },
+    ];
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => packages,
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchPackages("udaipur")).resolves.toEqual(packages);
+    expect(fetchMock).toHaveBeenCalledWith(getApiUrl("/packages?destination=udaipur"), {
+      cache: "no-store",
+    });
+  });
+
+  it("fetchPackages falls back to Package Bible when API returns an empty list", async () => {
+    vi.stubEnv("NEXT_PUBLIC_API_URL", "");
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => [],
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    await fetchPackages("udaipur");
-    expect(fetchMock).toHaveBeenCalledWith(getApiUrl("/packages?destination=udaipur"), {
-      cache: "no-store",
-    });
+    const packages = await fetchPackages();
+    expect(packages.length).toBeGreaterThan(0);
+    expect(packages.some((pkg) => /udaipur/i.test(pkg.title) || pkg.destinationSlugs.includes("udaipur"))).toBe(
+      true,
+    );
   });
 
   it("isCatalogApiReachable checks the health endpoint", async () => {

@@ -10,16 +10,16 @@ describe("hero search layout", () => {
     expect(HERO_SEARCH_ARIA_LABEL).toBe("Search by city or package");
   });
 
-  it("uses inline flex form layout on larger screens", () => {
-    expect(heroSearchFormClassName()).toContain("max-w-2xl");
-    expect(heroSearchFormClassName()).toContain("sm:flex-row");
-    expect(heroSearchFormClassName()).toContain("sm:items-center");
-    expect(heroSearchFormClassName()).not.toContain("items-stretch");
+  it("uses a unified pill search shell", () => {
+    expect(heroSearchFormClassName()).toContain("rounded-full");
+    expect(heroSearchFormClassName()).toContain("max-w-xl");
+    expect(heroSearchFormClassName()).toContain("items-center");
+    expect(heroSearchFormClassName()).toContain("backdrop-blur-sm");
   });
 
-  it("styles the search button as a primary action without stretching", () => {
-    expect(heroSearchButtonClassName()).toContain("btn-primary");
-    expect(heroSearchButtonClassName()).toContain("sm:w-auto");
+  it("styles the search button as a compact pill action", () => {
+    expect(heroSearchButtonClassName()).toContain("rounded-full");
+    expect(heroSearchButtonClassName()).toContain("bg-teal-800");
     expect(heroSearchButtonClassName()).not.toContain("self-stretch");
   });
 });

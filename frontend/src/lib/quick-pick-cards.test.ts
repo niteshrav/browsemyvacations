@@ -4,6 +4,7 @@ import {
   quickPickImageAlt,
   quickPickLabelClassName,
   quickPickScrollerClassName,
+  quickPickShellClassName,
   quickPickThumbClassName,
   resolveQuickPickForSuggestion,
 } from "./quick-pick-cards";
@@ -25,6 +26,10 @@ describe("quick-pick-cards", () => {
     expect(quickPickThumbClassName()).toContain("rounded-full");
     expect(quickPickThumbClassName()).toContain("h-20");
     expect(quickPickLabelClassName()).toContain("text-teal-900");
+  });
+
+  it("uses a glass shell for the premium carousel", () => {
+    expect(quickPickShellClassName()).toContain("backdrop-blur");
   });
 
   it("resolves quick pick metadata from suggestions", () => {

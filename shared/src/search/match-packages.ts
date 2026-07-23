@@ -13,13 +13,26 @@ export type ResolvedSearchQuery =
   | { mode: "city"; term: string; citySlug: string; cityName: string }
   | { mode: "keyword"; term: string };
 
+/** Alternate marketing names used in titles/slugs for a destination slug. */
+export const CITY_SEARCH_ALIASES: Record<string, string[]> = {
+  "sawai-madhopur": ["ranthambore", "ranthambor"],
+  alwar: ["sariska"],
+  "mount-abu": ["abu"],
+  nathdwara: ["shrinathji", "eklingji"],
+  pushkar: ["ajmer"],
+};
+
 export function normalizeSearchTerm(term: string): string {
   return term.trim().toLowerCase();
 }
 
 export function resolveSearchQuery(rawTerm: string): ResolvedSearchQuery {
   const term = rawTerm.trim();
-  const cityName = findRajasthanCityBySlug(term) ?? findRajasthanCityByName(term);
+  const spaced = term.replace(/-/g, " ");
+  const cityName =
+    findRajasthanCityBySlug(term) ??
+    findRajasthanCityByName(term) ??
+    findRajasthanCityByName(spaced);
   if (cityName) {
     return {
       mode: "city",
@@ -41,6 +54,19 @@ export function packageSlugIncludesCitySlug(packageSlug: string, citySlug: strin
   );
 }
 
+function packageMentionsCityLabel(pkg: SearchablePackage, citySlug: string, cityName: string): boolean {
+  const name = cityName.toLowerCase();
+  const aliases = CITY_SEARCH_ALIASES[normalizeSearchTerm(citySlug)] ?? [];
+  const labels = [name, ...aliases];
+
+  if (labels.some((label) => pkg.title.toLowerCase().includes(label))) return true;
+  if (packageSlugIncludesCitySlug(pkg.slug, citySlug)) return true;
+  if (aliases.some((alias) => packageSlugIncludesCitySlug(pkg.slug, alias.replace(/\s+/g, "-")))) {
+    return true;
+  }
+  return false;
+}
+
 /** Strict filter for quick picks and city searches — excludes transfer-hub-only links. */
 export function packageMatchesCityFilter(
   pkg: SearchablePackage,
@@ -48,25 +74,36 @@ export function packageMatchesCityFilter(
   cityName: string,
 ): boolean {
   const slug = normalizeSearchTerm(citySlug);
-  const name = cityName.toLowerCase();
+  const hasDestination = pkg.destinationSlugs.some(
+    (destinationSlug) => normalizeSearchTerm(destinationSlug) === slug,
+  );
+  if (!hasDestination) return false;
 
-  if (!pkg.destinationSlugs.some((destinationSlug) => normalizeSearchTerm(destinationSlug) === slug)) {
-    return false;
+  // Sole or primary destination is always a featured match (e.g. Ranthambore → Sawai Madhopur).
+  if (pkg.destinationSlugs.length === 1 || normalizeSearchTerm(pkg.destinationSlugs[0] ?? "") === slug) {
+    return true;
   }
 
-  if (pkg.title.toLowerCase().includes(name)) return true;
-  return packageSlugIncludesCitySlug(pkg.slug, slug);
+  // Multi-city packages: keep only when the city is clearly featured in title/slug.
+  return packageMentionsCityLabel(pkg, slug, cityName);
 }
 
 export function packageMatchesKeyword(pkg: SearchablePackage, rawTerm: string): boolean {
   const term = normalizeSearchTerm(rawTerm);
   if (!term) return false;
+  const compact = term.replace(/\s+/g, "-");
+  const spaced = term.replace(/-/g, " ");
 
-  if (pkg.title.toLowerCase().includes(term)) return true;
-  if (pkg.slug.includes(term.replace(/\s+/g, "-"))) return true;
-  if (pkg.destinationSlugs.some((s) => s.includes(term) || term.includes(s))) return true;
+  if (pkg.title.toLowerCase().includes(term) || pkg.title.toLowerCase().includes(spaced)) return true;
+  if (pkg.slug.includes(compact) || pkg.slug.includes(term.replace(/\s+/g, "-"))) return true;
+  if (pkg.destinationSlugs.some((s) => s.includes(term) || term.includes(s) || s.includes(compact))) {
+    return true;
+  }
 
-  return pkg.itineraryCities.some((city) => city.toLowerCase().includes(term));
+  return pkg.itineraryCities.some((city) => {
+    const lower = city.toLowerCase();
+    return lower.includes(term) || lower.includes(spaced);
+  });
 }
 
 export function packageMatchesSearchQuery(pkg: SearchablePackage, rawTerm: string): boolean {
@@ -75,6 +112,23 @@ export function packageMatchesSearchQuery(pkg: SearchablePackage, rawTerm: strin
     return packageMatchesCityFilter(pkg, query.citySlug, query.cityName);
   }
   return packageMatchesKeyword(pkg, query.term);
+}
+
+/** Broader related matches for empty-state suggestions (itinerary/transfer mentions allowed). */
+export function packageRelatedToCity(
+  pkg: SearchablePackage,
+  citySlug: string,
+  cityName: string,
+): boolean {
+  if (packageMatchesCityFilter(pkg, citySlug, cityName)) return true;
+  const name = cityName.toLowerCase();
+  const slug = normalizeSearchTerm(citySlug);
+  const aliases = CITY_SEARCH_ALIASES[slug] ?? [];
+  if (pkg.itineraryCities.some((city) => city.toLowerCase().includes(name))) return true;
+  if (aliases.some((alias) => pkg.itineraryCities.some((city) => city.toLowerCase().includes(alias)))) {
+    return true;
+  }
+  return pkg.destinationSlugs.some((destinationSlug) => normalizeSearchTerm(destinationSlug) === slug);
 }
 
 /** @deprecated Use packageMatchesSearchQuery — kept for direct keyword tests */

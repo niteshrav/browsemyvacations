@@ -17,10 +17,16 @@ test.describe("Public screens", () => {
 });
 
 test.describe("Home feasibility radar popup", () => {
-  test("TC-E2E-PUB-RADAR: home shows vacation feasibility radar popup", async ({ page }) => {
+  test("TC-E2E-PUB-RADAR: home shows vacation feasibility radar at bottom right", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/");
-    const popup = page.getByTestId("vacation-feasibility-radar-popup");
+    await page.evaluate(() => sessionStorage.removeItem("meter_popup_dismissed"));
+    await page.reload();
+    const popup = page.locator('[data-testid="vacation-feasibility-radar-popup"]:visible');
     await expect(popup).toBeVisible();
+    await expect(popup).toHaveCSS("position", "fixed");
     await expect(popup.getByText("VACATION FEASIBILITY RADAR")).toBeVisible();
     const routeStrip = popup.getByTestId("feasibility-radar-route-strip");
     await expect(routeStrip).toBeVisible();
@@ -30,21 +36,24 @@ test.describe("Home feasibility radar popup", () => {
     await expect(
       popup.getByRole("link", { name: "Submit Custom Request & Check Feasibility" }),
     ).toHaveAttribute("href", "/vacation-meter");
+
+    // Radar must not sit on the hero half-background photo.
+    const heroPhoto = page.getByTestId("hero-flank-right");
+    await expect(heroPhoto).toBeVisible();
+    await expect(heroPhoto.locator('[data-testid="vacation-feasibility-radar-popup"]')).toHaveCount(
+      0,
+    );
   });
 });
 
 test.describe("Home admin login", () => {
-  test("TC-E2E-PUB-ADMIN: header admin popup shows seeded credentials and signs in", async ({
-    page,
-  }) => {
+  test("TC-E2E-PUB-ADMIN: header admin popup signs in", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Admin" }).click();
     const dialog = page.getByTestId("admin-login-dialog");
     await expect(dialog).toBeVisible();
     await expect(dialog.getByRole("heading", { name: "Admin login" })).toBeVisible();
-    await expect(page.getByTestId("admin-seed-credentials")).toContainText(
-      "admin@browsemyvacations.com",
-    );
+    await expect(page.getByTestId("admin-seed-credentials")).toHaveCount(0);
     await dialog.getByLabel("Email").fill("admin@browsemyvacations.com");
     await dialog.getByLabel("Password").fill("changeme123");
     await dialog.getByRole("button", { name: "Sign in" }).click();

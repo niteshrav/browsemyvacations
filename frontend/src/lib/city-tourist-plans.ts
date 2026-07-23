@@ -1,4 +1,4 @@
-import { findRajasthanCityByName } from "@bmv/shared";
+import { findRajasthanCityByName, findRajasthanCityBySlug } from "@bmv/shared";
 import { getCityPlanImageUrls } from "./city-plan-images";
 
 export type CityTouristPlan = {
@@ -10,7 +10,12 @@ export type CityTouristPlan = {
 };
 
 export function findRajasthanCity(query: string): string | null {
-  return findRajasthanCityByName(query);
+  const trimmed = query.trim();
+  return (
+    findRajasthanCityBySlug(trimmed) ??
+    findRajasthanCityByName(trimmed) ??
+    findRajasthanCityByName(trimmed.replace(/-/g, " "))
+  );
 }
 
 export function getCityTouristPlans(query: string): CityTouristPlan[] {

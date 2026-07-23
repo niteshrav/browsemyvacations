@@ -28,6 +28,10 @@
     line-height: 1.25;
   }
 
+  .font-serif {
+    font-family: var(--font-display), "Source Serif 4", Georgia, "Times New Roman", serif;
+  }
+
   a {
     text-decoration: none;
   }
@@ -43,11 +47,26 @@
   }
 
   .nav-link {
-    @apply rounded-md px-3 py-2 text-sm font-medium text-stone-600 no-underline transition-colors hover:bg-teal-50 hover:text-teal-800;
+    @apply rounded-md px-2.5 py-1.5 text-sm font-medium text-stone-600 no-underline transition-colors hover:bg-teal-50 hover:text-teal-800;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600;
+    @apply relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600;
+  }
+
+  .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.35), transparent 65%);
+    opacity: 0;
+    transform: scale(0.2);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .btn-primary:active::after {
+    opacity: 1;
+    transform: scale(1.8);
   }
 
   .btn-secondary {

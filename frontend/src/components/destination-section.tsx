@@ -16,7 +16,7 @@ export function DestinationSection({ destination, packages }: Props) {
           {destination.name}
         </h2>
       </div>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10">
         {packages.map((pkg) => (
           <PackageCard key={pkg.id} pkg={pkg} />
         ))}
