@@ -9,30 +9,30 @@ type Props = {
 
 export function PackageCard({ pkg }: Props) {
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-[0_10px_28px_rgba(28,25,23,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(15,118,110,0.14)]">
-      <div className="aspect-[4/3] overflow-hidden bg-stone-100 sm:aspect-square">
+    <article className="group mx-auto flex h-full w-full max-w-[22rem] flex-col overflow-hidden rounded-xl border border-stone-200/80 bg-white shadow-[0_8px_22px_rgba(28,25,23,0.05)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(15,118,110,0.12)] sm:max-w-none">
+      <div className="aspect-[5/4] overflow-hidden bg-stone-100">
         <div className="h-full w-full transition duration-700 ease-out group-hover:scale-105">
           <PackageCardImage pkg={pkg} alt={`${pkg.title} preview`} />
         </div>
       </div>
-      <div className="flex flex-1 flex-col p-3.5 sm:p-4">
-        <h3 className="text-[0.95rem] font-semibold leading-snug text-stone-900 sm:text-base">
+      <div className="flex flex-1 flex-col p-3 sm:p-3.5">
+        <h3 className="text-[0.875rem] font-semibold leading-snug text-stone-900 sm:text-[0.925rem]">
           {pkg.title}
         </h3>
-        <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-stone-600">
+        <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-stone-600 sm:text-[13px]">
           {pkg.shortDescription}
         </p>
-        <p className="mt-2.5 text-xs text-stone-500 sm:text-sm">
+        <p className="mt-2 text-[11px] text-stone-500 sm:text-xs">
           {pkg.duration.nights} nights / {pkg.duration.days} days
         </p>
-        <p className="mt-1.5 text-base font-bold text-teal-800 sm:text-lg">
+        <p className="mt-1 text-[0.95rem] font-bold text-teal-800 sm:text-base">
           {formatInrPrice(pkg.price.display, pkg.price.isFixed)}
         </p>
-        <div className="mt-auto flex flex-col gap-2 pt-3.5 sm:flex-row">
-          <Link href={`/packages/${pkg.slug}`} className="btn-secondary flex-1 px-3 py-2 text-center text-xs sm:text-sm">
+        <div className="mt-auto flex flex-col gap-1.5 pt-3 sm:flex-row sm:gap-2">
+          <Link href={`/packages/${pkg.slug}`} className="btn-secondary flex-1 px-2.5 py-1.5 text-center text-[11px] sm:text-xs">
             View Details
           </Link>
-          <Link href={`/packages/${pkg.slug}?quote=1`} className="btn-primary flex-1 px-3 py-2 text-center text-xs sm:text-sm">
+          <Link href={`/packages/${pkg.slug}?quote=1`} className="btn-primary flex-1 px-2.5 py-1.5 text-center text-[11px] sm:text-xs">
             Customise &amp; Quote
           </Link>
         </div>

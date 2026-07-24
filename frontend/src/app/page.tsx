@@ -6,46 +6,45 @@ import { HeroTrustRibbon } from "@/components/hero-trust-ribbon";
 import { HeroValueProps } from "@/components/hero-value-props";
 import { SuggestionBar } from "@/components/suggestion-bar";
 import { resolveCatalogEmptyMessage } from "@/lib/catalog-empty-state";
-import {
-  HERO_HEADLINE_ACCENT,
-  HERO_HEADLINE_PRIMARY,
-  HERO_SUPPORT,
-} from "@/lib/hero-home-content";
 import { loadHomePageData } from "@/lib/home-catalog";
+import { loadHomeHeroCopy } from "@/lib/site-content-api";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const { suggestions, packagesByDest, catalogAvailable } = await loadHomePageData();
+  const [{ suggestions, packagesByDest, catalogAvailable }, heroCopy] = await Promise.all([
+    loadHomePageData(),
+    loadHomeHeroCopy(),
+  ]);
   const heroImageAnchor = new Date().toISOString().slice(0, 10);
   const packageCount = packagesByDest.reduce((total, section) => total + section.packages.length, 0);
   const emptyMessage = resolveCatalogEmptyMessage({ catalogAvailable, packageCount });
 
   return (
     <div>
-      <section className="relative overflow-hidden bg-white">
+      <section className="relative overflow-hidden">
         <HeroStage anchor={heroImageAnchor}>
           <section
-            className="mx-auto w-full max-w-xl text-center lg:mx-0 lg:max-w-none lg:text-left"
+            className="relative mx-auto w-full max-w-xl text-center lg:mx-0 lg:max-w-[34rem] lg:text-left xl:max-w-[38rem]"
             data-testid="hero-copy"
           >
-            <h1 className="font-serif text-[2rem] font-bold leading-[1.15] tracking-tight text-teal-950 sm:text-4xl md:text-[2.75rem] md:leading-[1.1]">
-              <span className="block">{HERO_HEADLINE_PRIMARY}</span>
-              <span className="mt-1.5 block text-teal-700">{HERO_HEADLINE_ACCENT}</span>
+            <h1 className="font-serif text-[2.35rem] font-extrabold leading-[1.1] tracking-[-0.02em] text-[#0a1628] sm:text-[2.75rem] md:text-[3.15rem] md:leading-[1.06]">
+              <span className="block">{heroCopy.headlinePrimary}</span>
+              <span className="mt-1 block font-extrabold text-[#0a4f4a]">{heroCopy.headlineAccent}</span>
             </h1>
             <div className="mx-auto mt-5 flex items-center justify-center gap-3 lg:mx-0 lg:justify-start">
-              <span className="h-px w-10 bg-gradient-to-r from-transparent to-amber-500/80" aria-hidden />
-              <span className="h-1.5 w-1.5 rotate-45 bg-amber-500" aria-hidden />
-              <span className="h-px w-10 bg-gradient-to-l from-transparent to-amber-500/80" aria-hidden />
+              <span className="h-px w-10 bg-gradient-to-r from-transparent to-amber-600/80" aria-hidden />
+              <span className="h-1.5 w-1.5 rotate-45 bg-amber-600" aria-hidden />
+              <span className="h-px w-10 bg-gradient-to-l from-transparent to-amber-600/80" aria-hidden />
             </div>
-            <p className="mx-auto mt-4 max-w-lg text-[0.98rem] font-medium leading-relaxed text-stone-600 md:text-lg lg:mx-0">
-              {HERO_SUPPORT}
+            <p className="mx-auto mt-4 max-w-md text-base font-bold leading-relaxed text-[#0a1628] sm:text-lg lg:mx-0 lg:max-w-lg">
+              {heroCopy.support}
             </p>
             <HeroSearch />
             <HeroValueProps />
           </section>
         </HeroStage>
-        <div className="site-container pb-8 sm:pb-10">
+        <div className="site-container relative z-10">
           <HeroTrustRibbon />
         </div>
       </section>

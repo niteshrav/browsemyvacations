@@ -5,6 +5,7 @@ export * from "./schemas/search.schema";
 export * from "./schemas/suggestion.schema";
 export * from "./schemas/lead.schema";
 export * from "./schemas/meter.schema";
+export * from "./schemas/site-content.schema";
 export * from "./meter/calculator";
 export * from "./meter/feasibility";
 export * from "./meter/route-matrix";

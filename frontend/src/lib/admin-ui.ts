@@ -2,6 +2,8 @@ export const ADMIN_NAV_ITEMS = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/destinations", label: "Destinations" },
   { href: "/admin/packages", label: "Packages" },
+  { href: "/admin/suggestions", label: "Quick Picks" },
+  { href: "/admin/content", label: "Page Content" },
   { href: "/admin/leads", label: "Leads" },
   { href: "/admin/meter", label: "Meter" },
 ] as const;
@@ -94,5 +96,6 @@ export function adminStatusBadgeClassName(status: string, active?: boolean): str
 }
 
 export function isAdminNavActive(pathname: string, href: string): boolean {
+  if (href === "/admin") return pathname === "/admin";
   return pathname === href || pathname.startsWith(`${href}/`);
 }

@@ -3,9 +3,12 @@ import { ValidationPipe } from "@nestjs/common";
 import { BMV_DEV_API_PORT, BMV_DEV_SITE_URL } from "@bmv/shared";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
+import { copyFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { AppModule } from "./app.module";
 import { createCorsOriginDelegate } from "./common/cors-origin";
+
+const STATIC_ASSET_FILES = ["udaipur-city-palace.png"] as const;
 
 function applySecurityHeaders(
   _req: unknown,
@@ -19,7 +22,23 @@ function applySecurityHeaders(
   next();
 }
 
+async function syncBundledAssetsToUploads() {
+  const assetsDir = join(process.cwd(), "assets");
+  const uploadsDir = join(process.cwd(), "uploads");
+  await mkdir(uploadsDir, { recursive: true });
+  await Promise.all(
+    STATIC_ASSET_FILES.map(async (filename) => {
+      try {
+        await copyFile(join(assetsDir, filename), join(uploadsDir, filename));
+      } catch {
+        // Asset may be missing in some environments; uploads stay optional.
+      }
+    }),
+  );
+}
+
 async function bootstrap() {
+  await syncBundledAssetsToUploads();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(applySecurityHeaders);
   app.useStaticAssets(join(process.cwd(), "uploads"), { prefix: "/uploads" });

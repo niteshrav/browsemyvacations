@@ -2,11 +2,11 @@ export const HERO_SEARCH_ARIA_LABEL = "Search by city or package";
 
 /** Unified pill search: input + button in one shell. */
 export function heroSearchFormClassName(): string {
-  return "mx-auto mt-8 flex w-full max-w-xl items-center gap-1 rounded-full border border-stone-200/80 bg-white/95 p-1.5 shadow-[0_10px_36px_rgba(28,25,23,0.12)] backdrop-blur-sm focus-within:border-teal-600/45 focus-within:shadow-[0_12px_40px_rgba(15,118,110,0.14)] lg:mx-0";
+  return "mx-auto mt-7 flex w-full max-w-xl items-center gap-1 rounded-full border border-stone-300/70 bg-white p-1.5 shadow-[0_8px_28px_rgba(15,23,42,0.08)] focus-within:border-teal-700/40 focus-within:shadow-[0_10px_32px_rgba(15,118,110,0.12)] lg:mx-0";
 }
 
 export function heroSearchButtonClassName(): string {
-  return "shrink-0 rounded-full bg-teal-800 px-7 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700";
+  return "shrink-0 rounded-full bg-[#0b5c56] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700";
 }
 
 export function heroSearchInputShellClassName(): string {

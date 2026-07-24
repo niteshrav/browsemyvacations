@@ -3,6 +3,8 @@ import { adminNavLinkClassName, adminStatusBadgeClassName, isAdminNavActive } fr
 
 describe("admin-ui", () => {
   it("marks active admin nav links", () => {
+    expect(isAdminNavActive("/admin", "/admin")).toBe(true);
+    expect(isAdminNavActive("/admin/packages", "/admin")).toBe(false);
     expect(isAdminNavActive("/admin/leads/abc", "/admin/leads")).toBe(true);
     expect(isAdminNavActive("/admin/packages", "/admin/leads")).toBe(false);
   });

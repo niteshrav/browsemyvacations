@@ -14,12 +14,12 @@ describe("hero search layout", () => {
     expect(heroSearchFormClassName()).toContain("rounded-full");
     expect(heroSearchFormClassName()).toContain("max-w-xl");
     expect(heroSearchFormClassName()).toContain("items-center");
-    expect(heroSearchFormClassName()).toContain("backdrop-blur-sm");
+    expect(heroSearchFormClassName()).toContain("bg-white");
   });
 
   it("styles the search button as a compact pill action", () => {
     expect(heroSearchButtonClassName()).toContain("rounded-full");
-    expect(heroSearchButtonClassName()).toContain("bg-teal-800");
+    expect(heroSearchButtonClassName()).toContain("bg-[#0b5c56]");
     expect(heroSearchButtonClassName()).not.toContain("self-stretch");
   });
 });

@@ -2,7 +2,7 @@ import { buildUnsplashUrl } from "../city-tourism-images";
 
 /** Curated Unsplash tourism photos for marketing pages (https://unsplash.com/license). */
 export const MARKETING_IMAGES = {
-  /** Homepage half-bleed hero — City Palace / Lake Pichola at golden hour. */
+  /** Homepage full-bleed hero background — City Palace / Lake Pichola at golden hour. */
   heroHalfBackground: buildUnsplashUrl("1695956353120-54ce5e91632b"),
   aboutHero: buildUnsplashUrl("1695956353120-54ce5e91632b"),
   retailHolidays: buildUnsplashUrl("1477587458883-47145ed94245"),
@@ -14,7 +14,8 @@ export const MARKETING_IMAGES = {
   miceHero: buildUnsplashUrl("1600880292203-757bb62b4baf"),
   miceIntro: buildUnsplashUrl("1540575467063-178a50c2df87"),
   miceCtaBanner: buildUnsplashUrl("1506905925346-21bda4d32df4"),
-  contactHero: buildUnsplashUrl("1477587458883-47145ed94245"),
+  /** Luxury hotel lobby / travel reception — contact page hero. */
+  contactHero: buildUnsplashUrl("1564501049412-61c2a3083791"),
   contactCta: buildUnsplashUrl("1695956353120-54ce5e91632b"),
   destinations: {
     udaipur: buildUnsplashUrl("1695956353120-54ce5e91632b"),

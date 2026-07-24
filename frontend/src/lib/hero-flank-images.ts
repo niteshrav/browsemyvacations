@@ -1,7 +1,50 @@
-import { collectHeroTourismPhotoUrls, MARKETING_IMAGES } from "@bmv/shared";
+import { BMV_DEV_API_BASE_URL, collectHeroTourismPhotoUrls } from "@bmv/shared";
 
-/** Left collage tiles in the homepage hero. */
-export const HERO_COLLAGE_COUNT = 8;
+/** Left collage tiles — diamond 1-2-3-2-1 (reference toggle layout). */
+export const HERO_COLLAGE_COUNT = 9;
+
+/** Row index groups for the diamond collage (top → bottom). */
+export const HERO_COLLAGE_ROWS: readonly (readonly number[])[] = [
+  [0],
+  [1, 2],
+  [3, 4, 5],
+  [6, 7],
+  [8],
+];
+
+/**
+ * High-res Taj Lake Palace (Udaipur) — white palace on water with hills,
+ * matching the homepage hero reference.
+ */
+export const HERO_BACKGROUND_REMOTE =
+  "https://images.unsplash.com/photo-1703092289078-ff03b771237c?auto=format&fit=crop&w=2400&h=1400&q=85";
+
+/** Filename served from the Nest uploads static folder (offline fallback). */
+export const HERO_BACKGROUND_FILENAME = "udaipur-city-palace.png";
+
+/**
+ * Full-bleed hero background — Lake Palace by default.
+ * Optional override: NEXT_PUBLIC_HERO_BACKGROUND_URL
+ * Optional local: NEXT_PUBLIC_HERO_USE_LOCAL_BACKGROUND=1
+ */
+export function resolveHeroBackgroundSrc(
+  apiBase = process.env.NEXT_PUBLIC_API_URL,
+): string {
+  if (process.env.NEXT_PUBLIC_HERO_BACKGROUND_URL?.trim()) {
+    return process.env.NEXT_PUBLIC_HERO_BACKGROUND_URL.trim();
+  }
+  if (process.env.NEXT_PUBLIC_HERO_USE_LOCAL_BACKGROUND === "1") {
+    const origin = (apiBase?.trim() || BMV_DEV_API_BASE_URL).replace(/\/api\/v1\/?$/, "").replace(/\/$/, "");
+    if (origin) {
+      return `${origin}/uploads/${HERO_BACKGROUND_FILENAME}`;
+    }
+    return `/hero/${HERO_BACKGROUND_FILENAME}`;
+  }
+  return HERO_BACKGROUND_REMOTE;
+}
+
+/** Local/remote full-bleed hero background (City Palace, Udaipur). */
+export const HERO_BACKGROUND_SRC = resolveHeroBackgroundSrc();
 
 export type HeroFlankImages = {
   left: string[];
@@ -9,33 +52,68 @@ export type HeroFlankImages = {
 };
 
 export function heroStageClassName(): string {
-  return "relative w-full overflow-hidden bg-white";
+  return "relative w-full min-h-[34rem] overflow-hidden bg-[#f7f5f0] sm:min-h-[38rem] lg:min-h-[46rem]";
 }
 
-/** Right featured photo — short column only; never behind hero copy. */
+/** Full-bleed destination photo behind the entire hero. */
 export function heroHalfBackgroundClassName(): string {
-  return "relative hidden min-h-[28rem] overflow-hidden rounded-2xl lg:block xl:min-h-[32rem]";
+  return "pointer-events-none absolute inset-0 z-0";
+}
+
+/**
+ * Soft wash — photo stays visible full-bleed; light veil for text contrast.
+ */
+export function heroBackgroundOverlayClassName(): string {
+  return "absolute inset-0 bg-gradient-to-r from-white/45 via-white/20 to-white/10";
+}
+
+export function heroBackgroundBottomFadeClassName(): string {
+  return "absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white/70 via-white/30 to-transparent";
 }
 
 export function heroFlankPanelClassName(side: "left" | "right"): string {
   if (side === "left") {
-    return "hidden lg:flex min-h-[28rem] flex-col justify-center self-stretch";
+    return "relative z-20 hidden w-full max-w-[24rem] shrink-0 lg:block xl:max-w-[27rem]";
   }
-  return "relative hidden min-h-[28rem] overflow-hidden rounded-2xl lg:block";
+  return heroHalfBackgroundClassName();
 }
 
 export function heroFlankPanelHiddenClassName(): string {
   return "hidden";
 }
 
+/**
+ * Shared chrome for diamond collage tiles — rounded cards, soft shadow.
+ */
 export function heroCollageImageClassName(): string {
-  return "group relative aspect-[3/4] w-full overflow-hidden rounded-lg border border-stone-200/70 shadow-[0_4px_14px_rgba(28,25,23,0.08)] transition-all duration-500 hover:shadow-[0_8px_20px_rgba(28,25,23,0.12)]";
+  return "group relative shrink-0 overflow-hidden rounded-[1.25rem] border-2 border-white bg-stone-100 shadow-[0_12px_32px_rgba(15,23,42,0.18)] ring-1 ring-stone-900/5 transition-all duration-500 ease-out hover:z-20 hover:scale-[1.04] hover:shadow-[0_20px_44px_rgba(15,23,42,0.24)]";
 }
 
+/** Larger toggle tiles (~35% bigger than before). */
+export function heroCollageTileClassName(): string {
+  return "h-[7rem] w-[7.75rem] xl:h-[7.75rem] xl:w-[8.5rem]";
+}
 
+export function heroCollageRowClassName(): string {
+  return "relative z-[2] flex items-center justify-center gap-3 xl:gap-3.5";
+}
+
+export function heroCollageCanvasClassName(): string {
+  return "relative mx-auto flex w-full flex-col items-center gap-3 xl:gap-3.5";
+}
+
+export function heroCollageDecorClassName(): string {
+  return "pointer-events-none absolute inset-0 z-[1]";
+}
+
+/** @deprecated Absolute slots replaced by diamond flex rows — kept for older imports. */
+export function heroCollageSlotClassName(index: number): string {
+  void index;
+  return `absolute ${heroCollageTileClassName()}`;
+}
 
 export function heroFeaturedImageClassName(): string {
-  return "absolute inset-0 h-full w-full object-cover";
+  return "absolute inset-0 h-full w-full scale-[1.02] object-cover object-center opacity-100";
 }
 
 /** @deprecated Prefer heroCollageImageClassName — kept for older imports. */
@@ -52,13 +130,14 @@ export function hashString(input: string): number {
 }
 
 export function buildHeroFlankImageUrl(fullUrl: string): string {
-  return fullUrl.replace(/\?.*$/, "?auto=format&fit=crop&w=400&h=480&q=85");
+  return fullUrl.replace(/\?.*$/, "?auto=format&fit=crop&w=480&h=420&q=85");
 }
 
-
-
+/** Landscape-friendly crop for remote full-bleed backgrounds. */
 export function buildHeroFeaturedImageUrl(fullUrl: string): string {
-  return fullUrl.replace(/\?.*$/, "?auto=format&fit=crop&w=1600&h=2000&q=90");
+  if (fullUrl.startsWith("/") || fullUrl.includes("/uploads/")) return fullUrl;
+  if (fullUrl.includes("w=2400")) return fullUrl;
+  return fullUrl.replace(/\?.*$/, "?auto=format&fit=crop&w=2400&h=1400&q=85");
 }
 
 export function getHeroImagePool(): string[] {
@@ -77,20 +156,11 @@ export function pickNextHeroImage(
   return options[hashString(salt) % options.length] ?? current;
 }
 
-/** Stagger collage thumbnails like the reference layout. */
+/** Light stagger tilt like the reference masonry. */
 export function heroFlankImageOffsetClassName(index: number, side: "left" | "right"): string {
-  if (side === "right") return "";
-  const offsets = [
-    "translate-x-2",
-    "-translate-x-1",
-    "translate-x-3",
-    "translate-x-0",
-    "-translate-x-2",
-    "translate-x-1",
-    "translate-x-2",
-    "-translate-x-1",
-  ];
-  return offsets[index % offsets.length] ?? "";
+  void index;
+  void side;
+  return "";
 }
 
 export function selectHeroFlankImages(
@@ -99,7 +169,7 @@ export function selectHeroFlankImages(
 ): HeroFlankImages {
   const pool = urls.filter(Boolean);
   if (pool.length === 0) {
-    return { left: [], right: [] };
+    return { left: [], right: [HERO_BACKGROUND_SRC] };
   }
 
   const start = hashString(anchor) % pool.length;
@@ -109,10 +179,9 @@ export function selectHeroFlankImages(
     buildHeroFlankImageUrl(pick(index)),
   );
 
-  const featuredSource = MARKETING_IMAGES.heroHalfBackground || pick(HERO_COLLAGE_COUNT);
   return {
     left: collage,
-    right: [buildHeroFeaturedImageUrl(featuredSource)],
+    right: [buildHeroFeaturedImageUrl(HERO_BACKGROUND_SRC)],
   };
 }
 

@@ -25,7 +25,7 @@ export const CONTACT_PAGE = {
     primaryCta: { label: "Get Quote", href: "#contact-form" },
     secondaryCta: { label: "Call Us", href: BMV_CONTACT.telHref },
     image: MARKETING_IMAGES.contactHero,
-    imageAlt: "Amber Fort and Jaipur skyline at golden hour in Rajasthan",
+    imageAlt: "Luxury hotel lobby reception ready to welcome travelers",
   },
   contactInfo: {
     eyebrow: "Reach Us",

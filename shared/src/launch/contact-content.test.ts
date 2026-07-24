@@ -11,6 +11,11 @@ describe("CONTACT_PAGE", () => {
     expect(CONTACT_PAGE.cta.primaryCta.href).toBe("/packages");
   });
 
+  it("uses a luxury hotel reception image for the contact hero", () => {
+    expect(CONTACT_PAGE.hero.image).toContain("1564501049412");
+    expect(CONTACT_PAGE.hero.imageAlt.toLowerCase()).toMatch(/hotel|reception|lobby|travel/);
+  });
+
   it("lists all travel types for the inquiry form", () => {
     expect(CONTACT_TRAVEL_TYPES).toContain("MICE");
     expect(CONTACT_TRAVEL_TYPES).toContain("Honeymoon");

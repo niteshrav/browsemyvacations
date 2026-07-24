@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AdminErrorAlert } from "@/components/admin/admin-alerts";
+import { AdminErrorAlert, AdminSuccessAlert } from "@/components/admin/admin-alerts";
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminPanel } from "@/components/admin/admin-panel";
@@ -17,6 +17,11 @@ type AdminPackage = {
   slug: string;
   active: boolean;
   images: string[];
+  shortDescription?: string;
+  priceFrom?: string | number;
+  durationDays?: number;
+  durationNights?: number;
+  destinations?: Array<{ destination: { id: string; name: string } }>;
 };
 
 type DestinationOption = {
@@ -28,10 +33,12 @@ export default function AdminPackagesPage() {
   const [items, setItems] = useState<AdminPackage[]>([]);
   const [destinations, setDestinations] = useState<DestinationOption[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [creating, setCreating] = useState(false);
-  const [createMessage, setCreateMessage] = useState<string | null>(null);
+  const [editing, setEditing] = useState<AdminPackage | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -61,7 +68,7 @@ export default function AdminPackagesPage() {
   async function onCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
-    setCreateMessage(null);
+    setSuccess(null);
     setCreating(true);
 
     try {
@@ -101,13 +108,58 @@ export default function AdminPackagesPage() {
       }
 
       e.currentTarget.reset();
-      setCreateMessage("New package created successfully.");
+      setSuccess("New package created successfully.");
       await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create package");
     } finally {
       setCreating(false);
     }
+  }
+
+  async function onSaveEdit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!editing) return;
+    setSaving(true);
+    setError(null);
+    setSuccess(null);
+    const form = new FormData(e.currentTarget);
+    const destinationId = String(form.get("destinationId") ?? "");
+    const res = await adminFetch(`/admin/packages/${editing.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        title: String(form.get("title") ?? "").trim(),
+        slug: String(form.get("slug") ?? "").trim(),
+        shortDescription: String(form.get("shortDescription") ?? "").trim(),
+        priceFrom: Number(form.get("priceFrom") ?? 0),
+        durationDays: Number(form.get("durationDays") ?? 2),
+        durationNights: Number(form.get("durationNights") ?? 1),
+        ...(destinationId ? { destinationIds: [destinationId] } : {}),
+      }),
+    });
+    setSaving(false);
+    if (!res.ok) {
+      setError("Failed to update package");
+      return;
+    }
+    setEditing(null);
+    setSuccess("Package updated.");
+    await load();
+  }
+
+  async function toggleActive(pkg: AdminPackage) {
+    setError(null);
+    setSuccess(null);
+    const res = await adminFetch(`/admin/packages/${pkg.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ active: !pkg.active }),
+    });
+    if (!res.ok) {
+      setError("Failed to update package status");
+      return;
+    }
+    setSuccess(pkg.active ? "Package hidden from the website." : "Package published on the website.");
+    await load();
   }
 
   const filtered = useMemo(() => {
@@ -120,17 +172,13 @@ export default function AdminPackagesPage() {
     <div className="space-y-6">
       <AdminPageHeader
         title="Packages"
-        description="Upload hero and card images for each package. JPEG, PNG, or WebP up to 5MB."
+        description="Create, edit, hide, and upload images for package cards shown across the website."
       />
 
       {error ? <AdminErrorAlert message={error} /> : null}
-      {createMessage ? (
-        <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-800">
-          {createMessage}
-        </p>
-      ) : null}
+      {success ? <AdminSuccessAlert message={success} /> : null}
 
-      <AdminPanel title="Add new package" description="Create a basic package entry and then upload image/details.">
+      <AdminPanel title="Add new package" description="Create a package, then upload images and refine details.">
         <form onSubmit={onCreate} className="grid gap-4 md:grid-cols-2">
           <div>
             <label htmlFor="pkg-title" className={adminLabelClassName()}>
@@ -204,6 +252,85 @@ export default function AdminPackagesPage() {
         </form>
       </AdminPanel>
 
+      {editing ? (
+        <AdminPanel title={`Edit: ${editing.title}`} description="Update package details shown on the website.">
+          <form onSubmit={onSaveEdit} className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className={adminLabelClassName()}>Title</label>
+              <input name="title" required defaultValue={editing.title} className={adminInputClassName()} />
+            </div>
+            <div>
+              <label className={adminLabelClassName()}>Slug</label>
+              <input name="slug" required pattern="[a-z0-9-]+" defaultValue={editing.slug} className={adminInputClassName()} />
+            </div>
+            <div>
+              <label className={adminLabelClassName()}>Destination</label>
+              <select
+                name="destinationId"
+                className={adminInputClassName()}
+                defaultValue={editing.destinations?.[0]?.destination.id ?? ""}
+              >
+                <option value="">Keep current</option>
+                {destinations.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className={adminLabelClassName()}>Price from (INR)</label>
+              <input
+                name="priceFrom"
+                type="number"
+                min={1}
+                required
+                defaultValue={Number(editing.priceFrom ?? 0)}
+                className={adminInputClassName()}
+              />
+            </div>
+            <div>
+              <label className={adminLabelClassName()}>Duration days</label>
+              <input
+                name="durationDays"
+                type="number"
+                min={1}
+                defaultValue={editing.durationDays ?? 2}
+                className={adminInputClassName()}
+              />
+            </div>
+            <div>
+              <label className={adminLabelClassName()}>Duration nights</label>
+              <input
+                name="durationNights"
+                type="number"
+                min={0}
+                defaultValue={editing.durationNights ?? 1}
+                className={adminInputClassName()}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className={adminLabelClassName()}>Short description</label>
+              <textarea
+                name="shortDescription"
+                rows={3}
+                required
+                defaultValue={editing.shortDescription ?? ""}
+                className={adminInputClassName()}
+              />
+            </div>
+            <div className="flex flex-wrap gap-2 md:col-span-2">
+              <button type="submit" disabled={saving} className="btn-primary">
+                {saving ? "Saving…" : "Save changes"}
+              </button>
+              <button type="button" className="btn-secondary" onClick={() => setEditing(null)}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </AdminPanel>
+      ) : null}
+
       <AdminPanel>
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="w-full sm:max-w-md">
@@ -218,7 +345,9 @@ export default function AdminPackagesPage() {
               className={adminInputClassName()}
             />
           </div>
-          <p className="text-sm text-stone-500">{filtered.length} of {items.length} packages</p>
+          <p className="text-sm text-stone-500">
+            {filtered.length} of {items.length} packages
+          </p>
         </div>
 
         {loading ? (
@@ -239,6 +368,14 @@ export default function AdminPackagesPage() {
                     </div>
                     <p className="mt-1 text-sm text-stone-500">{p.slug}</p>
                     <p className="mt-2 text-sm text-stone-600">{p.images.length} image(s) uploaded</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <button type="button" className="btn-secondary px-3 py-1.5 text-xs" onClick={() => setEditing(p)}>
+                        Edit
+                      </button>
+                      <button type="button" className="btn-secondary px-3 py-1.5 text-xs" onClick={() => toggleActive(p)}>
+                        {p.active ? "Delete / Hide" : "Restore"}
+                      </button>
+                    </div>
                   </div>
                   {p.images[0] ? (
                     // eslint-disable-next-line @next/next/no-img-element

@@ -3,10 +3,36 @@ import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminPanel } from "@/components/admin/admin-panel";
 
 const QUICK_ACTIONS = [
-  { title: "Destinations", description: "Manage destination visibility, content, and ordering.", href: "/admin/destinations" },
-  { title: "Packages", description: "Create and update package cards, pricing, and metadata.", href: "/admin/packages" },
-  { title: "Leads", description: "Track incoming leads, statuses, and follow-up notes.", href: "/admin/leads" },
-  { title: "Vacation Meter", description: "Control disclaimer and pricing multipliers.", href: "/admin/meter" },
+  {
+    title: "Destinations",
+    description: "Add, edit, hide, or restore destination sections on the website.",
+    href: "/admin/destinations",
+  },
+  {
+    title: "Packages",
+    description: "Create packages, edit details, upload images, and publish/hide.",
+    href: "/admin/packages",
+  },
+  {
+    title: "Quick Picks",
+    description: "Manage homepage suggestion chips linked to destinations or packages.",
+    href: "/admin/suggestions",
+  },
+  {
+    title: "Page Content",
+    description: "Edit Home, About, Contact, and MICE hero copy from one place.",
+    href: "/admin/content",
+  },
+  {
+    title: "Leads",
+    description: "Track incoming leads, statuses, and follow-up notes.",
+    href: "/admin/leads",
+  },
+  {
+    title: "Vacation Meter",
+    description: "Control disclaimer, destination rates, and vehicle multipliers.",
+    href: "/admin/meter",
+  },
 ] as const;
 
 export default function AdminIndexPage() {
@@ -14,7 +40,7 @@ export default function AdminIndexPage() {
     <div className="space-y-6">
       <AdminPageHeader
         title="Super Admin Dashboard"
-        description="Control website content, catalog modules, and operational settings from a single command center."
+        description="Manage every public catalog surface and key page content from this panel — add, edit, and delete/hide."
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

@@ -9,22 +9,29 @@ const VALUE_ICONS = [
 export function HeroValueProps() {
   return (
     <ul
-      className="mx-auto mt-8 grid max-w-xl gap-5 text-left sm:grid-cols-3 sm:gap-5 lg:mx-0"
+      className="mx-auto mt-9 grid max-w-xl gap-3 text-left sm:grid-cols-3 sm:gap-4 lg:mx-0 lg:max-w-none"
       data-testid="hero-value-props"
     >
       {HERO_VALUE_PROPS.map((item, index) => (
-        <li key={item.title} className="flex min-w-0 gap-3 sm:flex-col sm:gap-2.5">
+        <li
+          key={item.title}
+          className="flex min-w-0 items-start gap-3 rounded-2xl bg-white/90 px-3 py-2.5 shadow-[0_4px_18px_rgba(15,23,42,0.08)] backdrop-blur-sm ring-1 ring-stone-900/5"
+        >
           <span
-            className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-teal-700/30 bg-white/80 text-teal-800 shadow-sm backdrop-blur-sm sm:mt-0"
+            className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0a4f4a] text-white shadow-sm"
             aria-hidden
           >
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6">
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
               <path d={VALUE_ICONS[index] ?? VALUE_ICONS[0]} strokeLinejoin="round" strokeLinecap="round" />
             </svg>
           </span>
-          <div>
-            <p className="text-sm font-semibold text-teal-950">{item.title}</p>
-            <p className="mt-0.5 text-sm leading-snug text-stone-600">{item.description}</p>
+          <div className="min-w-0">
+            <p className="text-sm font-extrabold leading-snug tracking-tight text-[#0a1628]">
+              {item.title}
+            </p>
+            <p className="mt-1 text-[13px] font-semibold leading-snug text-[#1c1917]">
+              {item.description}
+            </p>
           </div>
         </li>
       ))}
