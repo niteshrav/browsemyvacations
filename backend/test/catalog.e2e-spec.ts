@@ -71,6 +71,8 @@ describe("Catalog (e2e)", () => {
         durationNights: 2,
         shortDescription: "E2E test package",
         priceFrom: 12000,
+        status: "published",
+        active: true,
         destinationIds: [destinationId],
         itineraryDays: [
           { dayNumber: 1, title: "Day 1", cities: ["E2E City"], summary: "Explore." },

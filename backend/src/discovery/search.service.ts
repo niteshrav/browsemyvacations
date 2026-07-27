@@ -33,7 +33,7 @@ export class SearchService {
     const query = rawQuery.trim();
 
     const rows = await this.prisma.client.package.findMany({
-      where: { active: true },
+      where: { active: true, status: "published" },
       select: {
         ...packageCardSelect,
         destinations: { include: { destination: { select: { slug: true } } } },
