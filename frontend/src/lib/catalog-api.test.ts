@@ -67,7 +67,7 @@ describe("catalog-api", () => {
     });
   });
 
-  it("fetchPackages falls back to Package Bible when API returns an empty list", async () => {
+  it("fetchPackages returns empty list when API catalog is empty", async () => {
     vi.stubEnv("NEXT_PUBLIC_API_URL", "");
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
@@ -76,10 +76,7 @@ describe("catalog-api", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const packages = await fetchPackages();
-    expect(packages.length).toBeGreaterThan(0);
-    expect(packages.some((pkg) => /udaipur/i.test(pkg.title) || pkg.destinationSlugs.includes("udaipur"))).toBe(
-      true,
-    );
+    expect(packages).toEqual([]);
   });
 
   it("isCatalogApiReachable checks the health endpoint", async () => {

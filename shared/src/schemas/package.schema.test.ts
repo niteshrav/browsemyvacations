@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createPackageSchema, itineraryDaySchema } from "./package.schema";
+import { createPackageSchema, itineraryDaySchema, slugifyPackageTitle } from "./package.schema";
 
 describe("package schemas", () => {
   it("accepts valid package with itinerary", () => {
@@ -21,6 +21,9 @@ describe("package schemas", () => {
       ],
     });
     expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.status).toBe("draft");
+    }
   });
 
   it("rejects package without destinations", () => {
@@ -45,5 +48,9 @@ describe("package schemas", () => {
       summary: "",
     });
     expect(result.success).toBe(false);
+  });
+
+  it("slugifies package titles", () => {
+    expect(slugifyPackageTitle("Udaipur Lake Escape!")).toBe("udaipur-lake-escape");
   });
 });

@@ -90,8 +90,24 @@ export function PackageDetailSections({ pkg, onQuoteClick }: Props) {
           <div className="mt-8 rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
             <p className="text-sm text-stone-500">Starting from</p>
             <p className="mt-1 text-3xl font-bold text-teal-800">
-              {formatInrPrice(pkg.price.display, pkg.price.isFixed)}
+              {pkg.price.discount != null && pkg.price.discount > 0 ? (
+                <>
+                  <span className="mr-3 text-lg font-medium text-stone-400 line-through">
+                    {formatInrPrice(pkg.price.display, true)}
+                  </span>
+                  {formatInrPrice(pkg.price.discount, pkg.price.isFixed)}
+                </>
+              ) : (
+                formatInrPrice(pkg.price.display, pkg.price.isFixed)
+              )}
             </p>
+            {(pkg.details?.pickupLocation || pkg.details?.dropLocation) && (
+              <p className="mt-3 text-sm text-stone-600">
+                {pkg.details.pickupLocation ? `Pickup: ${pkg.details.pickupLocation}` : null}
+                {pkg.details.pickupLocation && pkg.details.dropLocation ? " · " : null}
+                {pkg.details.dropLocation ? `Drop: ${pkg.details.dropLocation}` : null}
+              </p>
+            )}
             <div className="mt-5">
               <button
                 type="button"
@@ -156,6 +172,88 @@ export function PackageDetailSections({ pkg, onQuoteClick }: Props) {
           ))}
         </ol>
       </section>
+
+      {pkg.details?.whyBook && pkg.details.whyBook.length > 0 ? (
+        <section className="mt-14">
+          <h2 className="text-2xl font-semibold text-stone-900">Why book this</h2>
+          <div className="mt-6">
+            <CheckList items={pkg.details.whyBook} />
+          </div>
+        </section>
+      ) : null}
+
+      {(pkg.details?.hotelDetails ||
+        pkg.details?.mealPlan ||
+        pkg.details?.transportDetails ||
+        (pkg.details?.activities && pkg.details.activities.length > 0)) && (
+        <section className="mt-14 rounded-2xl border border-stone-200 bg-white p-6 sm:p-8">
+          <h2 className="text-2xl font-semibold text-stone-900">Stay, meals & transport</h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            {pkg.details?.hotelDetails ? (
+              <div>
+                <h3 className="text-lg font-semibold text-teal-900">Hotels</h3>
+                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-stone-700">
+                  {pkg.details.hotelDetails}
+                </p>
+              </div>
+            ) : null}
+            {pkg.details?.mealPlan ? (
+              <div>
+                <h3 className="text-lg font-semibold text-teal-900">Meal plan</h3>
+                <p className="mt-2 text-sm leading-relaxed text-stone-700">{pkg.details.mealPlan}</p>
+              </div>
+            ) : null}
+            {pkg.details?.transportDetails ? (
+              <div>
+                <h3 className="text-lg font-semibold text-teal-900">Transport</h3>
+                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-stone-700">
+                  {pkg.details.transportDetails}
+                </p>
+              </div>
+            ) : null}
+            {pkg.details?.activities && pkg.details.activities.length > 0 ? (
+              <div>
+                <h3 className="text-lg font-semibold text-teal-900">Activities</h3>
+                <div className="mt-2">
+                  <CheckList items={pkg.details.activities} />
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </section>
+      )}
+
+      {pkg.details?.cancellationPolicy ? (
+        <section className="mt-14">
+          <h2 className="text-2xl font-semibold text-stone-900">Cancellation policy</h2>
+          <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-stone-700">
+            {pkg.details.cancellationPolicy}
+          </p>
+        </section>
+      ) : null}
+
+      {pkg.details?.termsAndConditions ? (
+        <section className="mt-14">
+          <h2 className="text-2xl font-semibold text-stone-900">Terms &amp; conditions</h2>
+          <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-stone-700">
+            {pkg.details.termsAndConditions}
+          </p>
+        </section>
+      ) : null}
+
+      {pkg.details?.faq && pkg.details.faq.length > 0 ? (
+        <section className="mt-14">
+          <h2 className="text-2xl font-semibold text-stone-900">FAQ</h2>
+          <ul className="mt-6 space-y-4">
+            {pkg.details.faq.map((item) => (
+              <li key={item.question} className="rounded-2xl border border-stone-200 bg-white p-5">
+                <p className="font-semibold text-stone-900">{item.question}</p>
+                <p className="mt-2 text-sm leading-relaxed text-stone-700">{item.answer}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section className="mt-14 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
         <h2 className="text-2xl font-semibold text-stone-900">Know before you go</h2>

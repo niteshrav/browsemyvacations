@@ -7,7 +7,14 @@ import { AdminEmptyState } from "@/components/admin/admin-empty-state";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminPanel } from "@/components/admin/admin-panel";
 import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
-import { PackageImageUpload } from "@/components/package-image-upload";
+import {
+  PackageEditorForm,
+  emptyPackageForm,
+  formValuesToPayload,
+  packageToFormValues,
+  type PackageFormValues,
+} from "@/components/admin/package-editor-form";
+import { PackageGalleryManager } from "@/components/admin/package-gallery-manager";
 import { adminFetch } from "@/lib/admin-auth";
 import { adminInputClassName, adminLabelClassName } from "@/lib/admin-ui";
 
@@ -15,19 +22,45 @@ type AdminPackage = {
   id: string;
   title: string;
   slug: string;
+  categorySlug?: string;
+  categoryName?: string;
   active: boolean;
+  status?: "draft" | "published";
+  featured?: boolean;
+  popular?: boolean;
   images: string[];
+  coverImage?: string | null;
   shortDescription?: string;
   priceFrom?: string | number;
+  discountPrice?: string | number | null;
   durationDays?: number;
   durationNights?: number;
-  destinations?: Array<{ destination: { id: string; name: string } }>;
+  pickupLocation?: string | null;
+  dropLocation?: string | null;
+  whyBook?: unknown;
+  inclusions?: unknown;
+  exclusions?: unknown;
+  hotelDetails?: string | null;
+  mealPlan?: string | null;
+  transportDetails?: string | null;
+  activities?: unknown;
+  cancellationPolicy?: string | null;
+  termsAndConditions?: string | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  faq?: unknown;
+  destinations?: Array<{ destination: { id: string; name: string; slug?: string } }>;
+  itineraryDays?: Array<{
+    dayNumber: number;
+    title: string;
+    cities: unknown;
+    summary: string;
+  }>;
 };
 
-type DestinationOption = {
-  id: string;
-  name: string;
-};
+type DestinationOption = { id: string; name: string };
+
+const PAGE_SIZE = 8;
 
 export default function AdminPackagesPage() {
   const [items, setItems] = useState<AdminPackage[]>([]);
@@ -36,9 +69,18 @@ export default function AdminPackagesPage() {
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [destinationFilter, setDestinationFilter] = useState("all");
+  const [durationFilter, setDurationFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [featuredFilter, setFeaturedFilter] = useState("all");
+  const [page, setPage] = useState(1);
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState<AdminPackage | null>(null);
+  const [viewing, setViewing] = useState<AdminPackage | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -60,55 +102,24 @@ export default function AdminPackagesPage() {
         const data = (await res.json()) as Array<{ id: string; name: string }>;
         setDestinations(data.map((d) => ({ id: d.id, name: d.name })));
       })
-      .catch(() => {
-        // keep package list usable even if destination options fail
-      });
+      .catch(() => undefined);
   }, [load]);
 
-  async function onCreate(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function onCreate(values: PackageFormValues) {
+    setCreating(true);
     setError(null);
     setSuccess(null);
-    setCreating(true);
-
     try {
-      const form = new FormData(e.currentTarget);
-      const destinationId = String(form.get("destinationId") ?? "");
-      const destinationName = destinations.find((d) => d.id === destinationId)?.name ?? "Destination";
-      const durationDays = Number(form.get("durationDays") ?? 2);
-      const durationNights = Number(form.get("durationNights") ?? Math.max(durationDays - 1, 1));
-      const shortDescription = String(form.get("shortDescription") ?? "").trim();
-
-      const payload = {
-        title: String(form.get("title") ?? "").trim(),
-        slug: String(form.get("slug") ?? "").trim(),
-        durationDays,
-        durationNights,
-        shortDescription,
-        priceFrom: Number(form.get("priceFrom") ?? 0),
-        destinationIds: [destinationId],
-        itineraryDays: [
-          {
-            dayNumber: 1,
-            title: "Arrival and local exploration",
-            cities: [destinationName],
-            summary: shortDescription,
-          },
-        ],
-      };
-
       const res = await adminFetch("/admin/packages", {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formValuesToPayload(values)),
       });
-
       if (!res.ok) {
         const err = (await res.json().catch(() => ({}))) as { message?: string };
         throw new Error(err.message ?? "Failed to create package");
       }
-
-      e.currentTarget.reset();
-      setSuccess("New package created successfully.");
+      setShowCreate(false);
+      setSuccess("Package created. Upload images and publish when ready.");
       await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create package");
@@ -117,96 +128,252 @@ export default function AdminPackagesPage() {
     }
   }
 
-  async function onSaveEdit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function onSaveEdit(values: PackageFormValues) {
     if (!editing) return;
     setSaving(true);
     setError(null);
     setSuccess(null);
-    const form = new FormData(e.currentTarget);
-    const destinationId = String(form.get("destinationId") ?? "");
-    const res = await adminFetch(`/admin/packages/${editing.id}`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        title: String(form.get("title") ?? "").trim(),
-        slug: String(form.get("slug") ?? "").trim(),
-        shortDescription: String(form.get("shortDescription") ?? "").trim(),
-        priceFrom: Number(form.get("priceFrom") ?? 0),
-        durationDays: Number(form.get("durationDays") ?? 2),
-        durationNights: Number(form.get("durationNights") ?? 1),
-        ...(destinationId ? { destinationIds: [destinationId] } : {}),
-      }),
-    });
-    setSaving(false);
-    if (!res.ok) {
-      setError("Failed to update package");
-      return;
+    try {
+      const res = await adminFetch(`/admin/packages/${editing.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(formValuesToPayload(values)),
+      });
+      if (!res.ok) {
+        const err = (await res.json().catch(() => ({}))) as { message?: string };
+        throw new Error(err.message ?? "Failed to update package");
+      }
+      setEditing(null);
+      setSuccess("Package updated.");
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update package");
+    } finally {
+      setSaving(false);
     }
-    setEditing(null);
-    setSuccess("Package updated.");
-    await load();
   }
 
   async function toggleActive(pkg: AdminPackage) {
+    setBusyId(pkg.id);
     setError(null);
-    setSuccess(null);
     const res = await adminFetch(`/admin/packages/${pkg.id}`, {
       method: "PATCH",
       body: JSON.stringify({ active: !pkg.active }),
     });
+    setBusyId(null);
     if (!res.ok) {
-      setError("Failed to update package status");
+      setError("Failed to update active status");
       return;
     }
-    setSuccess(pkg.active ? "Package hidden from the website." : "Package published on the website.");
+    setSuccess(pkg.active ? "Package set inactive." : "Package set active.");
     await load();
   }
 
+  async function setStatus(pkg: AdminPackage, status: "draft" | "published") {
+    setBusyId(pkg.id);
+    setError(null);
+    const res = await adminFetch(`/admin/packages/${pkg.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    });
+    setBusyId(null);
+    if (!res.ok) {
+      setError("Failed to change publish status");
+      return;
+    }
+    setSuccess(status === "published" ? "Package published." : "Package moved to draft.");
+    await load();
+  }
+
+  async function duplicatePackage(pkg: AdminPackage) {
+    setBusyId(pkg.id);
+    setError(null);
+    const res = await adminFetch(`/admin/packages/${pkg.id}/duplicate`, { method: "POST" });
+    setBusyId(null);
+    if (!res.ok) {
+      setError("Failed to duplicate package");
+      return;
+    }
+    setSuccess("Package duplicated as draft.");
+    await load();
+  }
+
+  const categories = useMemo(() => {
+    const names = new Set(items.map((p) => p.categoryName || "Custom Packages"));
+    return [...names].sort();
+  }, [items]);
+
+  const durations = useMemo(() => {
+    const values = new Set(
+      items.map((p) => `${p.durationNights ?? 0}N/${p.durationDays ?? 0}D`),
+    );
+    return [...values].sort();
+  }, [items]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((p) => p.title.toLowerCase().includes(q) || p.slug.toLowerCase().includes(q));
-  }, [items, query]);
+    return items.filter((p) => {
+      if (q && !p.title.toLowerCase().includes(q) && !p.slug.toLowerCase().includes(q)) return false;
+      if (categoryFilter !== "all" && (p.categoryName || "Custom Packages") !== categoryFilter) return false;
+      if (destinationFilter !== "all") {
+        const hasDest = (p.destinations ?? []).some((d) => d.destination.id === destinationFilter);
+        if (!hasDest) return false;
+      }
+      if (durationFilter !== "all") {
+        const label = `${p.durationNights ?? 0}N/${p.durationDays ?? 0}D`;
+        if (label !== durationFilter) return false;
+      }
+      if (statusFilter === "draft" && p.status !== "draft") return false;
+      if (statusFilter === "published" && p.status !== "published") return false;
+      if (statusFilter === "active" && !p.active) return false;
+      if (statusFilter === "inactive" && p.active) return false;
+      if (featuredFilter === "yes" && !p.featured) return false;
+      if (featuredFilter === "no" && p.featured) return false;
+      return true;
+    });
+  }, [items, query, categoryFilter, destinationFilter, durationFilter, statusFilter, featuredFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, categoryFilter, destinationFilter, durationFilter, statusFilter, featuredFilter]);
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
 
   return (
     <div className="space-y-6">
       <AdminPageHeader
         title="Packages"
-        description="Create, edit, hide, and upload images for package cards shown across the website."
+        description="Full package management — create, edit, duplicate, publish, and manage itineraries & images."
       />
 
       {error ? <AdminErrorAlert message={error} /> : null}
       {success ? <AdminSuccessAlert message={success} /> : null}
 
-      <AdminPanel title="Add new package" description="Create a package, then upload images and refine details.">
-        <form onSubmit={onCreate} className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label htmlFor="pkg-title" className={adminLabelClassName()}>
-              Title
-            </label>
-            <input id="pkg-title" name="title" required className={adminInputClassName()} />
+      <div className="flex flex-wrap gap-2">
+        <button type="button" className="btn-primary" onClick={() => setShowCreate((v) => !v)}>
+          {showCreate ? "Hide create form" : "Add package"}
+        </button>
+      </div>
+
+      {showCreate ? (
+        <AdminPanel title="Add new package" description="Fill all package details. Images can be uploaded after create.">
+          <PackageEditorForm
+            mode="create"
+            destinations={destinations}
+            initial={emptyPackageForm(destinations[0]?.id)}
+            submitting={creating}
+            onSubmit={onCreate}
+            onCancel={() => setShowCreate(false)}
+          />
+        </AdminPanel>
+      ) : null}
+
+      {editing ? (
+        <AdminPanel title={`Edit: ${editing.title}`} description="Update package content shown on the website.">
+          <PackageEditorForm
+            mode="edit"
+            destinations={destinations}
+            initial={packageToFormValues(editing)}
+            submitting={saving}
+            onSubmit={onSaveEdit}
+            onCancel={() => setEditing(null)}
+          />
+          <PackageGalleryManager
+            packageId={editing.id}
+            images={Array.isArray(editing.images) ? editing.images : []}
+            coverImage={editing.coverImage}
+            onChanged={async () => {
+              await load();
+              const res = await adminFetch(`/admin/packages/${editing.id}`);
+              if (res.ok) setEditing(await res.json());
+            }}
+          />
+        </AdminPanel>
+      ) : null}
+
+      {viewing ? (
+        <AdminPanel title={`Details: ${viewing.title}`} description="Read-only package overview.">
+          <div className="grid gap-3 text-sm text-stone-700 md:grid-cols-2">
+            <p>
+              <span className="font-medium text-stone-900">Slug:</span> {viewing.slug}
+            </p>
+            <p>
+              <span className="font-medium text-stone-900">Category:</span>{" "}
+              {viewing.categoryName ?? "Custom Packages"}
+            </p>
+            <p>
+              <span className="font-medium text-stone-900">Duration:</span>{" "}
+              {viewing.durationNights ?? 0}N / {viewing.durationDays ?? 0}D
+            </p>
+            <p>
+              <span className="font-medium text-stone-900">Price:</span> ₹{Number(viewing.priceFrom ?? 0)}
+              {viewing.discountPrice ? ` (discount ₹${Number(viewing.discountPrice)})` : ""}
+            </p>
+            <p>
+              <span className="font-medium text-stone-900">Status:</span> {viewing.status ?? "published"} /{" "}
+              {viewing.active ? "Active" : "Inactive"}
+            </p>
+            <p>
+              <span className="font-medium text-stone-900">Flags:</span>{" "}
+              {[viewing.featured ? "Featured" : null, viewing.popular ? "Popular" : null]
+                .filter(Boolean)
+                .join(", ") || "—"}
+            </p>
+            <p className="md:col-span-2">
+              <span className="font-medium text-stone-900">Destinations:</span>{" "}
+              {(viewing.destinations ?? []).map((d) => d.destination.name).join(", ") || "—"}
+            </p>
+            <p className="md:col-span-2">{viewing.shortDescription}</p>
           </div>
-          <div>
-            <label htmlFor="pkg-slug" className={adminLabelClassName()}>
-              Slug
+          <div className="mt-4">
+            <button type="button" className="btn-secondary" onClick={() => setViewing(null)}>
+              Close
+            </button>
+          </div>
+        </AdminPanel>
+      ) : null}
+
+      <AdminPanel>
+        <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="xl:col-span-2">
+            <label htmlFor="package-search" className={adminLabelClassName()}>
+              Search by name
             </label>
             <input
-              id="pkg-slug"
-              name="slug"
-              required
-              pattern="[a-z0-9-]+"
-              placeholder="new-package-slug"
+              id="package-search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Package title or slug…"
               className={adminInputClassName()}
             />
           </div>
           <div>
-            <label htmlFor="pkg-destination" className={adminLabelClassName()}>
-              Destination
-            </label>
-            <select id="pkg-destination" name="destinationId" required className={adminInputClassName()} defaultValue="">
-              <option value="" disabled>
-                Select destination
-              </option>
+            <label className={adminLabelClassName()}>Category</label>
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className={adminInputClassName()}
+            >
+              <option value="all">All</option>
+              {categories.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className={adminLabelClassName()}>Destination</label>
+            <select
+              value={destinationFilter}
+              onChange={(e) => setDestinationFilter(e.target.value)}
+              className={adminInputClassName()}
+            >
+              <option value="all">All</option>
               {destinations.map((d) => (
                 <option key={d.id} value={d.id}>
                   {d.name}
@@ -215,182 +382,161 @@ export default function AdminPackagesPage() {
             </select>
           </div>
           <div>
-            <label htmlFor="pkg-price" className={adminLabelClassName()}>
-              Price from (INR)
-            </label>
-            <input id="pkg-price" name="priceFrom" type="number" min={1} required className={adminInputClassName()} />
+            <label className={adminLabelClassName()}>Duration</label>
+            <select
+              value={durationFilter}
+              onChange={(e) => setDurationFilter(e.target.value)}
+              className={adminInputClassName()}
+            >
+              <option value="all">All</option>
+              {durations.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
-            <label htmlFor="pkg-days" className={adminLabelClassName()}>
-              Duration days
-            </label>
-            <input id="pkg-days" name="durationDays" type="number" min={1} defaultValue={2} required className={adminInputClassName()} />
+            <label className={adminLabelClassName()}>Status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className={adminInputClassName()}
+            >
+              <option value="all">All</option>
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
           </div>
           <div>
-            <label htmlFor="pkg-nights" className={adminLabelClassName()}>
-              Duration nights
-            </label>
-            <input id="pkg-nights" name="durationNights" type="number" min={0} defaultValue={1} required className={adminInputClassName()} />
-          </div>
-          <div className="md:col-span-2">
-            <label htmlFor="pkg-short-description" className={adminLabelClassName()}>
-              Short description
-            </label>
-            <textarea
-              id="pkg-short-description"
-              name="shortDescription"
-              rows={3}
-              required
+            <label className={adminLabelClassName()}>Featured</label>
+            <select
+              value={featuredFilter}
+              onChange={(e) => setFeaturedFilter(e.target.value)}
               className={adminInputClassName()}
-            />
+            >
+              <option value="all">All</option>
+              <option value="yes">Featured only</option>
+              <option value="no">Not featured</option>
+            </select>
           </div>
-          <div className="md:col-span-2">
-            <button type="submit" disabled={creating} className="btn-primary">
-              {creating ? "Creating…" : "Create package"}
-            </button>
-          </div>
-        </form>
-      </AdminPanel>
-
-      {editing ? (
-        <AdminPanel title={`Edit: ${editing.title}`} description="Update package details shown on the website.">
-          <form onSubmit={onSaveEdit} className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className={adminLabelClassName()}>Title</label>
-              <input name="title" required defaultValue={editing.title} className={adminInputClassName()} />
-            </div>
-            <div>
-              <label className={adminLabelClassName()}>Slug</label>
-              <input name="slug" required pattern="[a-z0-9-]+" defaultValue={editing.slug} className={adminInputClassName()} />
-            </div>
-            <div>
-              <label className={adminLabelClassName()}>Destination</label>
-              <select
-                name="destinationId"
-                className={adminInputClassName()}
-                defaultValue={editing.destinations?.[0]?.destination.id ?? ""}
-              >
-                <option value="">Keep current</option>
-                {destinations.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className={adminLabelClassName()}>Price from (INR)</label>
-              <input
-                name="priceFrom"
-                type="number"
-                min={1}
-                required
-                defaultValue={Number(editing.priceFrom ?? 0)}
-                className={adminInputClassName()}
-              />
-            </div>
-            <div>
-              <label className={adminLabelClassName()}>Duration days</label>
-              <input
-                name="durationDays"
-                type="number"
-                min={1}
-                defaultValue={editing.durationDays ?? 2}
-                className={adminInputClassName()}
-              />
-            </div>
-            <div>
-              <label className={adminLabelClassName()}>Duration nights</label>
-              <input
-                name="durationNights"
-                type="number"
-                min={0}
-                defaultValue={editing.durationNights ?? 1}
-                className={adminInputClassName()}
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className={adminLabelClassName()}>Short description</label>
-              <textarea
-                name="shortDescription"
-                rows={3}
-                required
-                defaultValue={editing.shortDescription ?? ""}
-                className={adminInputClassName()}
-              />
-            </div>
-            <div className="flex flex-wrap gap-2 md:col-span-2">
-              <button type="submit" disabled={saving} className="btn-primary">
-                {saving ? "Saving…" : "Save changes"}
-              </button>
-              <button type="button" className="btn-secondary" onClick={() => setEditing(null)}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        </AdminPanel>
-      ) : null}
-
-      <AdminPanel>
-        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="w-full sm:max-w-md">
-            <label htmlFor="package-search" className={adminLabelClassName()}>
-              Search packages
-            </label>
-            <input
-              id="package-search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by title or slug…"
-              className={adminInputClassName()}
-            />
-          </div>
-          <p className="text-sm text-stone-500">
-            {filtered.length} of {items.length} packages
-          </p>
         </div>
+
+        <p className="mb-4 text-sm text-stone-500">
+          {filtered.length} of {items.length} packages · page {page} / {totalPages}
+        </p>
 
         {loading ? (
           <p className="text-sm text-stone-500">Loading packages…</p>
         ) : filtered.length === 0 ? (
-          <AdminEmptyState title="No packages found" description="Try a different search term." />
+          <AdminEmptyState title="No packages found" description="Try different filters or create a new package." />
         ) : (
           <ul className="space-y-4">
-            {filtered.map((p) => (
-              <li key={p.id} className="rounded-xl border border-stone-200 bg-stone-50/60 p-4 sm:p-5">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Link href={`/packages/${p.slug}`} className="font-semibold text-teal-800 hover:underline">
-                        {p.title}
-                      </Link>
-                      <AdminStatusBadge label={p.active ? "Active" : "Inactive"} active={p.active} />
+            {pageItems.map((p) => {
+              const images = Array.isArray(p.images) ? p.images : [];
+              const busy = busyId === p.id;
+              return (
+                <li key={p.id} className="rounded-xl border border-stone-200 bg-stone-50/60 p-4 sm:p-5">
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Link href={`/packages/${p.slug}`} className="font-semibold text-teal-800 hover:underline">
+                          {p.title}
+                        </Link>
+                        <AdminStatusBadge
+                          label={p.status === "draft" ? "Draft" : "Published"}
+                          active={p.status !== "draft"}
+                        />
+                        <AdminStatusBadge label={p.active ? "Active" : "Inactive"} active={p.active} />
+                        {p.featured ? <AdminStatusBadge label="Featured" active /> : null}
+                        {p.popular ? <AdminStatusBadge label="Popular" active /> : null}
+                      </div>
+                      <p className="mt-1 text-sm text-stone-500">{p.slug}</p>
+                      <p className="mt-1 text-sm text-stone-600">
+                        {(p.categoryName ?? "Custom")} · {p.durationNights ?? 0}N/{p.durationDays ?? 0}D · ₹
+                        {Number(p.priceFrom ?? 0)} · {images.length} image(s)
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <button type="button" className="btn-secondary px-3 py-1.5 text-xs" onClick={() => setViewing(p)}>
+                          View
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary px-3 py-1.5 text-xs"
+                          onClick={() => {
+                            setEditing(p);
+                            setShowCreate(false);
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary px-3 py-1.5 text-xs"
+                          disabled={busy}
+                          onClick={() => duplicatePackage(p)}
+                        >
+                          Duplicate
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary px-3 py-1.5 text-xs"
+                          disabled={busy}
+                          onClick={() => setStatus(p, p.status === "published" ? "draft" : "published")}
+                        >
+                          {p.status === "published" ? "Unpublish" : "Publish"}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary px-3 py-1.5 text-xs"
+                          disabled={busy}
+                          onClick={() => toggleActive(p)}
+                        >
+                          {p.active ? "Deactivate" : "Activate"}
+                        </button>
+                      </div>
                     </div>
-                    <p className="mt-1 text-sm text-stone-500">{p.slug}</p>
-                    <p className="mt-2 text-sm text-stone-600">{p.images.length} image(s) uploaded</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <button type="button" className="btn-secondary px-3 py-1.5 text-xs" onClick={() => setEditing(p)}>
-                        Edit
-                      </button>
-                      <button type="button" className="btn-secondary px-3 py-1.5 text-xs" onClick={() => toggleActive(p)}>
-                        {p.active ? "Delete / Hide" : "Restore"}
-                      </button>
-                    </div>
+                    {images[0] ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={p.coverImage || images[0]}
+                        alt=""
+                        className="h-20 w-28 rounded-lg border border-stone-200 object-cover"
+                      />
+                    ) : null}
                   </div>
-                  {p.images[0] ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={p.images[0]}
-                      alt=""
-                      className="h-20 w-28 rounded-lg border border-stone-200 object-cover"
-                    />
-                  ) : null}
-                </div>
-                <PackageImageUpload packageId={p.id} onUploaded={load} />
-              </li>
-            ))}
+                  <PackageGalleryManager packageId={p.id} images={images} coverImage={p.coverImage} onChanged={load} />
+                </li>
+              );
+            })}
           </ul>
         )}
+
+        {totalPages > 1 ? (
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              className="btn-secondary px-3 py-1.5 text-xs"
+              disabled={page <= 1}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+            >
+              Previous
+            </button>
+            <span className="text-sm text-stone-500">
+              Page {page} of {totalPages}
+            </span>
+            <button
+              type="button"
+              className="btn-secondary px-3 py-1.5 text-xs"
+              disabled={page >= totalPages}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            >
+              Next
+            </button>
+          </div>
+        ) : null}
       </AdminPanel>
     </div>
   );

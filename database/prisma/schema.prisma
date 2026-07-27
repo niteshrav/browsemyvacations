@@ -37,6 +37,11 @@ enum SuggestionAction {
   scroll
 }
 
+enum PackageStatus {
+  draft
+  published
+}
+
 model Destination {
   id           String   @id @default(uuid())
   name         String
@@ -55,31 +60,50 @@ model Destination {
 }
 
 model Package {
-  id               String   @id @default(uuid())
-  title            String
-  slug             String   @unique
-  categorySlug     String   @default("custom") @map("category_slug")
-  categoryName     String   @default("Custom Packages") @map("category_name")
-  displayOrder     Int      @default(0) @map("display_order")
-  durationDays     Int      @map("duration_days")
-  durationNights   Int      @map("duration_nights")
-  shortDescription String   @map("short_description") @db.Text
-  priceFrom        Decimal  @map("price_from") @db.Decimal(12, 2)
-  priceIsFixed     Boolean  @default(false) @map("price_is_fixed")
-  currency         String   @default("INR")
-  images           Json     @default("[]")
-  highlights       Json     @default("[]")
-  inclusions       Json     @default("[]")
-  exclusions       Json     @default("[]")
-  active           Boolean  @default(true)
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
+  id                 String        @id @default(uuid())
+  title              String
+  slug               String        @unique
+  categorySlug       String        @default("custom") @map("category_slug")
+  categoryName       String        @default("Custom Packages") @map("category_name")
+  displayOrder       Int           @default(0) @map("display_order")
+  durationDays       Int           @map("duration_days")
+  durationNights     Int           @map("duration_nights")
+  shortDescription   String        @map("short_description") @db.Text
+  priceFrom          Decimal       @map("price_from") @db.Decimal(12, 2)
+  discountPrice      Decimal?      @map("discount_price") @db.Decimal(12, 2)
+  priceIsFixed       Boolean       @default(false) @map("price_is_fixed")
+  currency           String        @default("INR")
+  images             Json          @default("[]")
+  coverImage         String?       @map("cover_image")
+  highlights         Json          @default("[]")
+  inclusions         Json          @default("[]")
+  exclusions         Json          @default("[]")
+  whyBook            Json          @default("[]") @map("why_book")
+  hotelDetails       String?       @map("hotel_details") @db.Text
+  mealPlan           String?       @map("meal_plan")
+  transportDetails   String?       @map("transport_details") @db.Text
+  activities         Json          @default("[]")
+  cancellationPolicy String?       @map("cancellation_policy") @db.Text
+  termsAndConditions String?       @map("terms_and_conditions") @db.Text
+  faq                Json          @default("[]")
+  pickupLocation     String?       @map("pickup_location")
+  dropLocation       String?       @map("drop_location")
+  seoTitle           String?       @map("seo_title")
+  seoDescription     String?       @map("seo_description") @db.Text
+  status             PackageStatus @default(published)
+  featured           Boolean       @default(false)
+  popular            Boolean       @default(false)
+  active             Boolean       @default(true)
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
 
   destinations PackageDestination[]
   itineraryDays ItineraryDay[]
   leads         Lead[]
   suggestions   Suggestion[]
 
+  @@index([status, active])
+  @@index([featured])
   @@map("packages")
 }
 

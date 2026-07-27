@@ -16,13 +16,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!pkg) return { title: "Package not found" };
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}/packages/${pkg.slug}`;
+  const title = pkg.seo?.title?.trim() || pkg.title;
+  const description = pkg.seo?.description?.trim() || pkg.shortDescription;
   return {
-    title: pkg.title,
-    description: pkg.shortDescription,
+    title,
+    description,
     alternates: { canonical: url },
     openGraph: {
-      title: pkg.title,
-      description: pkg.shortDescription,
+      title,
+      description,
       url,
       images: pkg.images[0] ? [{ url: pkg.images[0] }] : undefined,
     },

@@ -83,8 +83,8 @@ export async function fetchPackages(destinationSlug?: string): Promise<PackageCa
     const res = await fetch(url, { cache: CATALOG_FETCH_CACHE });
     if (!res.ok) return fallback;
     const data = (await res.json()) as PackageCard[];
-    // API up but catalog empty (unseeded DB) — still show Package Bible packages.
-    if (!Array.isArray(data) || data.length === 0) return fallback;
+    // Prefer live API catalog (including empty) so admin changes reflect immediately.
+    if (!Array.isArray(data)) return fallback;
     return data;
   } catch {
     return fallback;

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -15,10 +16,15 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { createPackageSchema, updatePackageSchema } from "@bmv/shared";
 import { memoryStorage } from "multer";
+import { z } from "zod";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { ZodValidationPipe } from "../common/zod-validation.pipe";
 import { MediaService } from "../discovery/media.service";
 import { PackagesService } from "./packages.service";
+
+const removeImageSchema = z.object({
+  url: z.string().url(),
+});
 
 @Controller("admin/packages")
 @UseGuards(JwtAuthGuard)
@@ -33,6 +39,11 @@ export class AdminPackagesController {
     return this.packages.listAdmin();
   }
 
+  @Get("stats")
+  stats(): Promise<unknown> {
+    return this.packages.adminStats();
+  }
+
   @Get(":id")
   get(@Param("id") id: string): Promise<unknown> {
     return this.packages.findByIdOrThrow(id);
@@ -42,6 +53,12 @@ export class AdminPackagesController {
   @UsePipes(new ZodValidationPipe(createPackageSchema))
   create(@Body() body: ReturnType<typeof createPackageSchema.parse>): Promise<unknown> {
     return this.packages.create(body);
+  }
+
+  @Post(":id/duplicate")
+  @HttpCode(HttpStatus.CREATED)
+  duplicate(@Param("id") id: string): Promise<unknown> {
+    return this.packages.duplicate(id);
   }
 
   @Patch(":id")
@@ -67,5 +84,13 @@ export class AdminPackagesController {
   ): Promise<unknown> {
     const url = await this.media.uploadPackageImage(file);
     return this.packages.addImage(id, url);
+  }
+
+  @Delete(":id/images")
+  removeImage(
+    @Param("id") id: string,
+    @Body(new ZodValidationPipe(removeImageSchema)) body: { url: string },
+  ): Promise<unknown> {
+    return this.packages.removeImage(id, body.url);
   }
 }

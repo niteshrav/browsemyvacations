@@ -26,7 +26,16 @@ export function PackageCard({ pkg }: Props) {
           {pkg.duration.nights} nights / {pkg.duration.days} days
         </p>
         <p className="mt-1 text-[0.95rem] font-bold text-teal-800 sm:text-base">
-          {formatInrPrice(pkg.price.display, pkg.price.isFixed)}
+          {pkg.price.discount != null && pkg.price.discount > 0 ? (
+            <>
+              <span className="mr-2 text-[0.8rem] font-medium text-stone-400 line-through">
+                {formatInrPrice(pkg.price.display, true)}
+              </span>
+              {formatInrPrice(pkg.price.discount, pkg.price.isFixed)}
+            </>
+          ) : (
+            formatInrPrice(pkg.price.display, pkg.price.isFixed)
+          )}
         </p>
         <div className="mt-auto flex flex-col gap-1.5 pt-3 sm:flex-row sm:gap-2">
           <Link href={`/packages/${pkg.slug}`} className="btn-secondary flex-1 px-2.5 py-1.5 text-center text-[11px] sm:text-xs">
