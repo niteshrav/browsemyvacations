@@ -9,7 +9,19 @@ export class SuggestionsService {
   listPublic() {
     return this.prisma.client.suggestion
       .findMany({
-        where: { active: true },
+        where: {
+          active: true,
+          OR: [
+            {
+              type: "destination",
+              destination: { is: { active: true } },
+            },
+            {
+              type: "package",
+              package: { is: { active: true, status: "published" } },
+            },
+          ],
+        },
         orderBy: { displayOrder: "asc" },
         include: {
           destination: { select: { slug: true } },
@@ -55,6 +67,7 @@ export class SuggestionsService {
     label: string;
     type: string;
     action: string;
+    imageUrl: string | null;
     destination: { slug: string } | null;
     package: { slug: string } | null;
   }) {
@@ -63,6 +76,7 @@ export class SuggestionsService {
       label: row.label,
       type: row.type,
       action: row.action,
+      imageUrl: row.imageUrl,
       destinationSlug: row.destination?.slug ?? null,
       packageSlug: row.package?.slug ?? null,
     };

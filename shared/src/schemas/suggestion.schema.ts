@@ -4,6 +4,7 @@ const suggestionBaseSchema = z.object({
   label: z.string().min(1).max(80),
   type: z.enum(["destination", "package"]),
   action: z.enum(["filter", "scroll"]).optional().default("filter"),
+  imageUrl: z.string().url().nullable().optional(),
   destinationId: z.string().uuid().optional(),
   packageId: z.string().uuid().optional(),
   displayOrder: z.number().int().min(0).optional().default(0),

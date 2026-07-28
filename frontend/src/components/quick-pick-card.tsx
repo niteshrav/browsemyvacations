@@ -16,6 +16,25 @@ type Props = {
 
 export function QuickPickCard({ suggestion }: Props) {
   const pick = resolveQuickPickForSuggestion(suggestion);
+  const imageSrc = suggestion.imageUrl ?? pick?.imageUrl ?? null;
+  const label = pick?.city ?? suggestion.label;
+
+  if (imageSrc) {
+    return (
+      <Link
+        href={suggestionHref(suggestion)}
+        className={quickPickCardClassName()}
+        data-testid={pick ? `quick-pick-${pick.slug}` : undefined}
+        aria-label={label}
+      >
+        <div className={quickPickThumbClassName()}>
+          <TourismImage src={imageSrc} alt={quickPickImageAlt(label)} />
+        </div>
+        <span className={quickPickLabelClassName()}>{label}</span>
+      </Link>
+    );
+  }
+
   if (!pick) {
     return (
       <Link href={suggestionHref(suggestion)} className={quickPickCardClassName()}>

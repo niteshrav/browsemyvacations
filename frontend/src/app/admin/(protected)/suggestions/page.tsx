@@ -20,6 +20,7 @@ type SuggestionRow = {
   label: string;
   type: "destination" | "package";
   action: "filter" | "scroll";
+  imageUrl?: string | null;
   displayOrder: number;
   active: boolean;
   destinationId: string | null;
@@ -35,6 +36,8 @@ export default function AdminSuggestionsPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [type, setType] = useState<"destination" | "package">("destination");
 
   const load = useCallback(() => {
@@ -68,12 +71,15 @@ export default function AdminSuggestionsPage() {
 
   async function onCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const formEl = e.currentTarget;
+    setError(null);
     setSuccess(null);
-    const form = new FormData(e.currentTarget);
+    const form = new FormData(formEl);
     const payload = {
       label: String(form.get("label") ?? "").trim(),
       type,
       action: String(form.get("action") ?? "filter"),
+      imageUrl: imageUrl.trim() || null,
       displayOrder: Number(form.get("displayOrder") ?? 0),
       active: true,
       destinationId: type === "destination" ? String(form.get("destinationId") ?? "") : undefined,
@@ -87,9 +93,31 @@ export default function AdminSuggestionsPage() {
       setError("Failed to create quick pick");
       return;
     }
-    e.currentTarget.reset();
+    formEl.reset();
+    setImageUrl("");
     setSuccess("Quick pick created.");
     await load();
+  }
+
+  async function uploadSuggestionImage(file: File | null) {
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await adminFetch("/admin/suggestions/images", { method: "POST", body });
+      if (!res.ok) {
+        throw new Error("upload failed");
+      }
+      const data = (await res.json()) as { url: string };
+      setImageUrl(data.url);
+      setSuccess("Image uploaded. Now create quick pick.");
+    } catch {
+      setError("Failed to upload image");
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function toggleActive(row: SuggestionRow) {
@@ -176,6 +204,25 @@ export default function AdminSuggestionsPage() {
               </div>
             )}
             <div>
+              <label className={adminLabelClassName()}>Quick pick image (file upload)</label>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={(e) => void uploadSuggestionImage(e.target.files?.[0] ?? null)}
+                disabled={uploading}
+                className={`${adminInputClassName()} file:mr-3 file:rounded-md file:border-0 file:bg-teal-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-teal-800`}
+              />
+              <p className="mt-1 text-xs text-stone-500">
+                {uploading ? "Uploading..." : "Optional. If not uploaded, default city image will be used."}
+              </p>
+              {imageUrl ? (
+                <div className="mt-2 overflow-hidden rounded-lg border border-stone-200">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={imageUrl} alt="Quick pick preview" className="h-20 w-full object-cover" />
+                </div>
+              ) : null}
+            </div>
+            <div>
               <label className={adminLabelClassName()}>Action</label>
               <select name="action" className={adminInputClassName()} defaultValue="filter">
                 <option value="filter">Filter / search</option>
@@ -203,6 +250,7 @@ export default function AdminSuggestionsPage() {
                 <thead className={adminTableHeadClassName()}>
                   <tr>
                     <th className="px-4 py-3">Label</th>
+                    <th className="px-4 py-3">Image</th>
                     <th className="px-4 py-3">Type</th>
                     <th className="px-4 py-3">Linked</th>
                     <th className="px-4 py-3">Order</th>
@@ -214,6 +262,14 @@ export default function AdminSuggestionsPage() {
                   {items.map((row) => (
                     <tr key={row.id} className="hover:bg-stone-50/80">
                       <td className="px-4 py-3 font-medium text-stone-900">{row.label}</td>
+                      <td className="px-4 py-3">
+                        {row.imageUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={row.imageUrl} alt="" className="h-10 w-14 rounded border border-stone-200 object-cover" />
+                        ) : (
+                          <span className="text-xs text-stone-400">Default</span>
+                        )}
+                      </td>
                       <td className="px-4 py-3 capitalize text-stone-600">{row.type}</td>
                       <td className="px-4 py-3 text-stone-500">
                         {row.destination?.name ?? row.package?.title ?? "—"}

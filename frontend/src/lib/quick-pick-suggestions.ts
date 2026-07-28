@@ -13,8 +13,15 @@ export function buildCatalogQuickPickSuggestions(): Suggestion[] {
 }
 
 export function resolveHomeQuickPickSuggestions(apiSuggestions: Suggestion[]): Suggestion[] {
-  if (apiSuggestions.length > 0) {
-    return apiSuggestions;
+  const usableSuggestions = apiSuggestions.filter((item) => {
+    if (item.type === "package") {
+      return Boolean(item.packageSlug);
+    }
+    return Boolean(item.destinationSlug);
+  });
+
+  if (usableSuggestions.length > 0) {
+    return usableSuggestions;
   }
   return buildCatalogQuickPickSuggestions();
 }

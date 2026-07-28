@@ -27,4 +27,28 @@ describe("quick-pick-suggestions", () => {
     expect(resolveHomeQuickPickSuggestions(apiSuggestions)).toEqual(apiSuggestions);
     expect(resolveHomeQuickPickSuggestions([])).toHaveLength(HOME_QUICK_PICK_CITIES.length);
   });
+
+  it("drops broken API suggestions without target slugs", () => {
+    const suggestions = resolveHomeQuickPickSuggestions([
+      {
+        id: "broken-destination",
+        label: "Broken destination",
+        type: "destination",
+        action: "filter",
+        destinationSlug: null,
+        packageSlug: null,
+      },
+      {
+        id: "good-package",
+        label: "Featured package",
+        type: "package",
+        action: "filter",
+        destinationSlug: null,
+        packageSlug: "udaipur-escape",
+      },
+    ]);
+
+    expect(suggestions).toHaveLength(1);
+    expect(suggestions[0]?.id).toBe("good-package");
+  });
 });
