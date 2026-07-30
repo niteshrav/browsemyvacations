@@ -52,8 +52,17 @@ pnpm seed   # optional
 
 Example config: [`deploy/nginx-browsemyvacations.conf.example`](../deploy/nginx-browsemyvacations.conf.example)
 
-- `/` → `127.0.0.1:3100` (Next / `bmv-web`)
-- `/api/` → `127.0.0.1:3101` (Nest / `bmv-api`)
+Copy to the server:
+
+```bash
+cp deploy/nginx-browsemyvacations.conf.example /etc/nginx/conf.d/browsemyvacations.conf
+nginx -t && systemctl reload nginx
+```
+
+- `/` → `127.0.0.1:3100` (`bmv-web`) — **not** `:3000`
+- `/api/` → `127.0.0.1:3101` (`bmv-api`)
+- `/uploads/` → `127.0.0.1:3101` (local package images)
+- `client_max_body_size 10m` (avoids upload HTTP 413)
 
 SSL:
 
