@@ -19,6 +19,9 @@ server {
     listen 80;
     server_name browsemyvacations.com www.browsemyvacations.com;
 
+    # Package/admin image uploads (default nginx limit is 1m)
+    client_max_body_size 10m;
+
     # Certbot will add SSL + redirect; keep this for ACME / initial setup
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;

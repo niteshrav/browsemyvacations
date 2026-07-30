@@ -32,14 +32,19 @@ export class MediaService {
       throw new BadRequestException("Image must be 5MB or smaller");
     }
 
-    const cloudName = this.config.get<string>("CLOUDINARY_CLOUD_NAME");
+    const cloudName = this.config.get<string>("CLOUDINARY_CLOUD_NAME")?.trim();
     if (cloudName) {
       return this.uploadToCloudinary(file);
     }
 
-    if (this.config.get("NODE_ENV") === "production") {
+    // VPS / self-host: store under backend/uploads and serve via nginx /uploads → :3101
+    const allowLocal =
+      this.config.get("NODE_ENV") !== "production" ||
+      this.config.get<string>("ALLOW_LOCAL_UPLOADS") === "true";
+
+    if (!allowLocal) {
       throw new ServiceUnavailableException(
-        "Image upload requires Cloudinary configuration in production",
+        "Image upload requires Cloudinary (CLOUDINARY_*) or ALLOW_LOCAL_UPLOADS=true on the API host",
       );
     }
 

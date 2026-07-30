@@ -31,8 +31,13 @@ export function PackageGalleryManager({ packageId, images, coverImage, onChanged
           body,
         });
         if (!res.ok) {
-          const data = (await res.json().catch(() => ({}))) as { message?: string };
-          throw new Error(data.message ?? "Upload failed");
+          const data = (await res.json().catch(() => ({}))) as {
+            message?: string | string[];
+          };
+          const message = Array.isArray(data.message)
+            ? data.message.join(", ")
+            : data.message;
+          throw new Error(message ?? `Upload failed (${res.status})`);
         }
       }
       onChanged();

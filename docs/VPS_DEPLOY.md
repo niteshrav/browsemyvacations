@@ -86,3 +86,22 @@ curl -sI https://browsemyvacations.com | head
 ```
 
 Admin login after HTTPS: use the email in `admin_users` (not an old HTTP-baked frontend). Hard-refresh or Incognito after each deploy.
+
+## Image uploads
+
+Prefer Cloudinary (`CLOUDINARY_*` in `backend/.env`).
+
+Without Cloudinary on VPS:
+
+```env
+ALLOW_LOCAL_UPLOADS=true
+PUBLIC_API_BASE_URL="https://browsemyvacations.com"
+```
+
+Nginx must proxy `/uploads/` → `:3101` and allow larger bodies:
+
+```nginx
+client_max_body_size 10m;
+```
+
+`scripts/vps-deploy.sh` sets `ALLOW_LOCAL_UPLOADS` / `PUBLIC_API_BASE_URL` when missing.

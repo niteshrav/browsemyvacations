@@ -42,10 +42,20 @@ fi
 echo "frontend/.env.local:"
 grep -E 'NEXT_PUBLIC_(SITE|API)_URL' frontend/.env.local || true
 
-echo "==> Ensure backend CORS includes HTTPS origin"
+echo "==> Ensure backend allows local image uploads when Cloudinary is unset"
 if [[ -f backend/.env ]]; then
   if ! grep -q "https://browsemyvacations.com" backend/.env 2>/dev/null; then
     echo "!! Tip: set CORS_ORIGIN=\"https://browsemyvacations.com,https://www.browsemyvacations.com\" in backend/.env"
+  fi
+  if ! grep -q '^ALLOW_LOCAL_UPLOADS=' backend/.env 2>/dev/null; then
+    echo 'ALLOW_LOCAL_UPLOADS=true' >> backend/.env
+  fi
+  if ! grep -q '^PUBLIC_API_BASE_URL=.*https://browsemyvacations.com' backend/.env 2>/dev/null; then
+    if grep -q '^PUBLIC_API_BASE_URL=' backend/.env 2>/dev/null; then
+      sed -i 's|^PUBLIC_API_BASE_URL=.*|PUBLIC_API_BASE_URL="https://browsemyvacations.com"|' backend/.env
+    else
+      echo 'PUBLIC_API_BASE_URL="https://browsemyvacations.com"' >> backend/.env
+    fi
   fi
 fi
 

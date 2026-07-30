@@ -41,4 +41,23 @@ describe("MediaService", () => {
     } as Express.Multer.File);
     expect(url).toMatch(new RegExp(`^http:\\/\\/localhost:${BMV_DEV_API_PORT}\\/uploads\\/[a-f0-9]+\\.jpg$`));
   });
+
+  it("allows local uploads in production when ALLOW_LOCAL_UPLOADS=true", async () => {
+    configMock.get.mockImplementation((key: string, defaultValue?: string) => {
+      const map: Record<string, string> = {
+        NODE_ENV: "production",
+        ALLOW_LOCAL_UPLOADS: "true",
+        PORT: String(BMV_DEV_API_PORT),
+        PUBLIC_API_BASE_URL: "https://browsemyvacations.com",
+      };
+      return map[key] ?? defaultValue;
+    });
+
+    const url = await service.uploadPackageImage({
+      buffer: Buffer.from("prod-image"),
+      mimetype: "image/png",
+      size: 10,
+    } as Express.Multer.File);
+    expect(url).toMatch(/^https:\/\/browsemyvacations\.com\/uploads\/[a-f0-9]+\.png$/);
+  });
 });
