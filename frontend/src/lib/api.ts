@@ -1,7 +1,11 @@
-import { resolveApiBaseUrl } from "./api-config";
+import { resolveClientApiBaseUrl, resolveServerApiBaseUrl } from "./api-config";
 
 export function getApiBaseUrl(): string {
-  return resolveApiBaseUrl(process.env.NEXT_PUBLIC_API_URL);
+  const env = process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== "undefined") {
+    return resolveClientApiBaseUrl(env);
+  }
+  return resolveServerApiBaseUrl(env);
 }
 
 export function getApiUrl(path: string, apiBase?: string): string {
@@ -29,3 +33,5 @@ export async function apiFetch<T>(
 
   return res.json() as Promise<T>;
 }
+
+export { resolveApiBaseUrl } from "./api-config";

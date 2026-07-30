@@ -1,4 +1,4 @@
-import { BMV_DEV_API_V1_URL } from "@bmv/shared";
+import { getApiBaseUrl } from "./api";
 import { adminLogin } from "./admin-api";
 import { ADMIN_LOGIN_PATH } from "./admin-routes";
 
@@ -41,7 +41,7 @@ export function getAdminProfileFromToken(): { email: string; role: string } | nu
 
 export async function adminFetch(path: string, init?: RequestInit): Promise<Response> {
   const token = getAdminToken();
-  const base = process.env.NEXT_PUBLIC_API_URL ?? BMV_DEV_API_V1_URL;
+  const base = getApiBaseUrl();
   const isFormData = typeof FormData !== "undefined" && init?.body instanceof FormData;
 
   const res = await fetch(

@@ -1,5 +1,4 @@
-import { BMV_DEV_API_V1_URL } from "@bmv/shared";
-import { getApiUrl } from "./api";
+import { getApiBaseUrl, getApiUrl } from "./api";
 
 export type AdminLoginResponse = {
   accessToken: string;
@@ -8,10 +7,11 @@ export type AdminLoginResponse = {
 export function buildAdminLoginRequest(
   email: string,
   password: string,
-  apiBase = process.env.NEXT_PUBLIC_API_URL ?? BMV_DEV_API_V1_URL,
+  apiBase?: string,
 ) {
+  const base = apiBase ?? getApiBaseUrl();
   return {
-    url: getApiUrl("/admin/auth/login", apiBase),
+    url: getApiUrl("/admin/auth/login", base),
     init: {
       method: "POST" as const,
       headers: { "Content-Type": "application/json" },
@@ -31,9 +31,8 @@ export async function adminLogin(
     res = await fetch(url, init);
   } catch (error) {
     if (error instanceof TypeError) {
-      const endpoint = new URL(url);
       throw new Error(
-        `Unable to reach admin API (${endpoint.origin}). Please start backend server and check database connectivity.`,
+        `Unable to reach admin API (${url}). Ensure backend is running on :3101 and nginx proxies /api to it.`,
       );
     }
     throw error;
