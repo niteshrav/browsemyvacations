@@ -1,0 +1,57 @@
+# Example Nginx site for browsemyvacations.com
+# Copy to: /etc/nginx/conf.d/browsemyvacations.conf
+# Then: nginx -t && systemctl reload nginx
+#
+# After first HTTP-only setup, run:
+#   certbot --nginx -d browsemyvacations.com -d www.browsemyvacations.com
+
+upstream bmv_web {
+    server 127.0.0.1:3100;
+    keepalive 32;
+}
+
+upstream bmv_api {
+    server 127.0.0.1:3101;
+    keepalive 32;
+}
+
+server {
+    listen 80;
+    server_name browsemyvacations.com www.browsemyvacations.com;
+
+    # Certbot will add SSL + redirect; keep this for ACME / initial setup
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    # API — NestJS
+    location /api/ {
+        proxy_pass http://bmv_api;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+    }
+
+    # Uploads served by API (if used)
+    location /uploads/ {
+        proxy_pass http://bmv_api;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Next.js frontend
+    location / {
+        proxy_pass http://bmv_web;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}

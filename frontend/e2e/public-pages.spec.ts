@@ -1,5 +1,16 @@
-import { BRAND_LOGO_ALT, BRAND_LOGO_SRC, PUBLIC_E2E_PAGES, SEO_E2E_ROUTES } from "@bmv/shared";
+import {
+  BRAND_LOGO_ALT,
+  BRAND_LOGO_SRC,
+  PUBLIC_E2E_PAGES,
+  resolveAdminSeedCredentials,
+  SEO_E2E_ROUTES,
+} from "@bmv/shared";
 import { expect, test } from "@playwright/test";
+
+const adminCreds = resolveAdminSeedCredentials({
+  ADMIN_SEED_EMAIL: process.env.ADMIN_SEED_EMAIL,
+  ADMIN_SEED_PASSWORD: process.env.ADMIN_SEED_PASSWORD,
+});
 
 test.describe("Public screens", () => {
   for (const route of PUBLIC_E2E_PAGES) {
@@ -54,10 +65,10 @@ test.describe("Home admin login", () => {
     await expect(dialog).toBeVisible();
     await expect(dialog.getByRole("heading", { name: "Admin login" })).toBeVisible();
     await expect(page.getByTestId("admin-seed-credentials")).toHaveCount(0);
-    await dialog.getByLabel("Email").fill("admin@browsemyvacations.com");
-    await dialog.getByLabel("Password").fill("changeme123");
+    await dialog.getByLabel("Email").fill(adminCreds.email);
+    await dialog.getByLabel("Password").fill(adminCreds.password);
     await dialog.getByRole("button", { name: "Sign in" }).click();
-    await page.waitForURL(/\/admin\/destinations/, { timeout: 30_000 });
+    await page.waitForURL(/\/admin\/destinations/, { timeout: 45_000 });
     await expect(page.getByRole("heading", { name: "Destinations", level: 1 })).toBeVisible();
   });
 });

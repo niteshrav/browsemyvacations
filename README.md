@@ -125,6 +125,19 @@ Environment files (already created for local Docker — **copy `.env.example` fo
 
 ## Deployment
 
+### VPS (ResellerClub / Hostinger Linux KVM) — recommended for this repo
+
+Full guide: [`docs/VPS_DEPLOY.md`](./docs/VPS_DEPLOY.md)
+
+```bash
+cd /var/www/browsemyvacations
+bash scripts/vps-deploy.sh
+```
+
+- Frontend must use `NEXT_PUBLIC_API_URL=/api/v1` (same-origin; avoids HTTPS mixed-content).
+- PM2 apps: `bmv-api` (:3101) + `bmv-web` (:3100) via `ecosystem.config.cjs`.
+- Nginx example: `deploy/nginx-browsemyvacations.conf.example` (`/` → 3100, `/api/` → 3101).
+
 ### Frontend → Vercel
 
 1. Import repo; set **Root Directory** to `frontend`.
