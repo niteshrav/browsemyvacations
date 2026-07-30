@@ -70,12 +70,23 @@ if grep -R "http://browsemyvacations.com/api" frontend/.next/static 2>/dev/null 
 fi
 echo "OK: no http://browsemyvacations.com/api in .next/static"
 
-echo "==> Remove duplicate legacy PM2 web apps (prevents ChunkLoadError / 502)"
+echo "==> Remove duplicate / broken legacy PM2 web apps (prevents ChunkLoadError / 502 / npm-help loops)"
 pm2 delete browsemyvacations 2>/dev/null || true
 pm2 delete bmv-frontend 2>/dev/null || true
+pm2 delete bmv-web 2>/dev/null || true
+
+echo "==> Verify Next binary exists (pnpm workspace)"
+if [[ ! -f frontend/node_modules/next/dist/bin/next ]]; then
+  echo "ERROR: frontend/node_modules/next missing — run: pnpm install --ignore-scripts"
+  exit 1
+fi
+if [[ ! -f backend/dist/main.js ]]; then
+  echo "ERROR: backend/dist/main.js missing after build"
+  exit 1
+fi
 
 echo "==> Start/reload PM2 apps from ecosystem.config.cjs"
-pm2 startOrReload ecosystem.config.cjs --update-env
+pm2 start ecosystem.config.cjs --update-env
 pm2 save
 
 echo "==> Health checks"
