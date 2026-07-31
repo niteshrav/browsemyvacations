@@ -77,6 +77,15 @@ export class MeterService {
       });
 
       if (input.destinationRates) {
+        const keepIds = input.destinationRates.map((rate) => rate.destinationId);
+        await tx.meterDestinationRate.deleteMany({
+          where: {
+            meterConfigId: config.id,
+            ...(keepIds.length > 0
+              ? { destinationId: { notIn: keepIds } }
+              : {}),
+          },
+        });
         for (const rate of input.destinationRates) {
           await tx.meterDestinationRate.upsert({
             where: {

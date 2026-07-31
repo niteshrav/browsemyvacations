@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BMV_CONTACT } from "../launch/contact-info";
 
 export const SITE_CONTENT_KEYS = [
   "home.hero.headline_primary",
@@ -10,6 +11,8 @@ export const SITE_CONTENT_KEYS = [
   "contact.hero.description",
   "mice.hero.heading",
   "mice.hero.description",
+  "settings.whatsapp.number",
+  "settings.whatsapp.default_message",
 ] as const;
 
 export type SiteContentKey = (typeof SITE_CONTENT_KEYS)[number];
@@ -35,6 +38,14 @@ export const SITE_CONTENT_DEFAULTS: Record<SiteContentKey, { title: string; body
   "mice.hero.description": {
     title: "MICE — hero description",
     body: "Offsites, incentives, conferences, and dealer meets across Rajasthan and beyond — planned with hotel-grade precision.",
+  },
+  "settings.whatsapp.number": {
+    title: "WhatsApp number (digits / +91…)",
+    body: BMV_CONTACT.whatsappNumber,
+  },
+  "settings.whatsapp.default_message": {
+    title: "WhatsApp default message",
+    body: "Hi Browse My Vacations, I'd like to know more about your packages.",
   },
 };
 

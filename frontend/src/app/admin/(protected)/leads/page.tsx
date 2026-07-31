@@ -9,7 +9,7 @@ import { AdminPanel } from "@/components/admin/admin-panel";
 import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
 import { adminFetch } from "@/lib/admin-auth";
 import { adminLeadsPipelineNote } from "@/lib/admin-leads-ui";
-import { adminInputClassName, adminTableClassName, adminTableHeadClassName, adminTableWrapClassName, type AdminLeadStatus } from "@/lib/admin-ui";
+import { adminInputClassName, type AdminLeadStatus } from "@/lib/admin-ui";
 
 type LeadRow = {
   id: string;
@@ -107,55 +107,72 @@ export default function AdminLeadsPage() {
         ) : items.length === 0 ? (
           <AdminEmptyState title="No leads yet" description="New quote and contact requests will appear here." />
         ) : (
-          <div className={adminTableWrapClassName()}>
-            <table className={adminTableClassName()}>
-              <thead className={adminTableHeadClassName()}>
-                <tr>
-                  <th className="px-4 py-3">Lead</th>
-                  <th className="px-4 py-3">Contact</th>
-                  <th className="px-4 py-3">Source</th>
-                  <th className="px-4 py-3">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-100">
-                {items.map((lead) => (
-                  <tr key={lead.id} className="align-top hover:bg-stone-50/80">
-                    <td className="px-4 py-4">
-                      <Link href={`/admin/leads/${lead.id}`} className="font-semibold text-teal-800 hover:underline">
-                        {lead.fullName}
-                      </Link>
-                      {lead.package ? (
-                        <p className="mt-1 text-xs text-stone-500">{lead.package.title}</p>
-                      ) : null}
-                      <p className="mt-1 text-xs text-stone-400">{new Date(lead.createdAt).toLocaleString()}</p>
-                    </td>
-                    <td className="px-4 py-4 text-stone-600">
-                      <p>{lead.email}</p>
-                      <p className="mt-1">{lead.phone}</p>
-                    </td>
-                    <td className="px-4 py-4 capitalize text-stone-600">{lead.source.replace(/_/g, " ")}</td>
-                    <td className="px-4 py-4">
-                      <div className="space-y-2">
-                        <AdminStatusBadge label={lead.status} />
-                        <select
-                          value={lead.status}
-                          onChange={(e) => updateStatus(lead.id, e.target.value)}
-                          className={adminInputClassName()}
-                          aria-label={`Update status for ${lead.fullName}`}
-                        >
-                          {STATUSES.map((s) => (
-                            <option key={s} value={s}>
-                              {s}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {items.map((lead) => (
+              <li
+                key={lead.id}
+                className="flex flex-col rounded-2xl border border-stone-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <Link
+                    href={`/admin/leads/${lead.id}`}
+                    className="text-lg font-semibold text-teal-900 hover:underline"
+                  >
+                    {lead.fullName}
+                  </Link>
+                  <AdminStatusBadge label={lead.status} />
+                </div>
+
+                <dl className="mt-4 space-y-2 text-sm">
+                  <div>
+                    <dt className="text-xs font-medium uppercase tracking-wide text-stone-400">Email</dt>
+                    <dd className="mt-0.5 break-all text-stone-700">{lead.email}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-medium uppercase tracking-wide text-stone-400">Phone</dt>
+                    <dd className="mt-0.5 text-stone-700">{lead.phone}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-medium uppercase tracking-wide text-stone-400">Source</dt>
+                    <dd className="mt-0.5 capitalize text-stone-700">{lead.source.replace(/_/g, " ")}</dd>
+                  </div>
+                  {lead.package ? (
+                    <div>
+                      <dt className="text-xs font-medium uppercase tracking-wide text-stone-400">Package</dt>
+                      <dd className="mt-0.5 text-stone-700">{lead.package.title}</dd>
+                    </div>
+                  ) : null}
+                  <div>
+                    <dt className="text-xs font-medium uppercase tracking-wide text-stone-400">Date & time</dt>
+                    <dd className="mt-0.5 text-stone-700">{new Date(lead.createdAt).toLocaleString()}</dd>
+                  </div>
+                </dl>
+
+                <label className="mt-4 block text-xs font-medium uppercase tracking-wide text-stone-400">
+                  Status
+                  <select
+                    value={lead.status}
+                    onChange={(e) => updateStatus(lead.id, e.target.value)}
+                    className={adminInputClassName()}
+                    aria-label={`Update status for ${lead.fullName}`}
+                  >
+                    {STATUSES.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <Link
+                  href={`/admin/leads/${lead.id}`}
+                  className="mt-4 text-sm font-medium text-teal-800 hover:underline"
+                >
+                  Open details →
+                </Link>
+              </li>
+            ))}
+          </ul>
         )}
       </AdminPanel>
     </div>

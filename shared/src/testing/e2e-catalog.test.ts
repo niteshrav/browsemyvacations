@@ -31,6 +31,7 @@ describe("e2e catalog", () => {
       "/admin/packages",
       "/admin/leads",
       "/admin/meter",
+      "/admin/whatsapp",
     ]);
   });
 

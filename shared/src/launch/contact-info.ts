@@ -11,8 +11,28 @@ export const BMV_CONTACT = {
   brandLine: "Browse My Vacations — curated by Browser Hotels",
 } as const;
 
-export function buildWhatsAppHref(message: string, phone = BMV_CONTACT.whatsappNumber): string {
-  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+/**
+ * Normalize a WhatsApp number to digits-only form for wa.me.
+ * Accepts +91…, 0-prefixed local, or bare 10-digit Indian mobiles.
+ * Returns null when invalid.
+ */
+export function normalizeWhatsAppNumber(input: string): string | null {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  let digits = trimmed.replace(/\D/g, "");
+  if (digits.startsWith("0") && digits.length === 11) {
+    digits = digits.slice(1);
+  }
+  if (digits.length === 10) {
+    digits = `91${digits}`;
+  }
+  if (digits.length < 11 || digits.length > 15) return null;
+  return digits;
+}
+
+export function buildWhatsAppHref(message: string, phone: string = BMV_CONTACT.whatsappNumber): string {
+  const normalized = normalizeWhatsAppNumber(phone) ?? BMV_CONTACT.whatsappNumber;
+  return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
 }
 
 export function buildPackageWhatsAppMessage(input: {

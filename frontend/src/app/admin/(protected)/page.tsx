@@ -37,6 +37,11 @@ const QUICK_ACTIONS = [
     description: "Control disclaimer, destination rates, and vehicle multipliers.",
     href: "/admin/meter",
   },
+  {
+    title: "WhatsApp",
+    description: "Update the floating WhatsApp button number and default message.",
+    href: "/admin/whatsapp",
+  },
 ] as const;
 
 type PackageStats = {

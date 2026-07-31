@@ -2,7 +2,12 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getGeneralWhatsAppHref, getPackageWhatsAppHref } from "@/lib/whatsapp";
+import {
+  getGeneralWhatsAppHref,
+  getPackageWhatsAppHref,
+  loadWhatsAppSettings,
+  type WhatsAppSettings,
+} from "@/lib/whatsapp";
 
 function slugToTitle(slug: string): string {
   return slug
@@ -13,19 +18,30 @@ function slugToTitle(slug: string): string {
 
 export function WhatsAppGlobalFab() {
   const pathname = usePathname();
+  const [settings, setSettings] = useState<WhatsAppSettings | null>(null);
   const [href, setHref] = useState(getGeneralWhatsAppHref);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadWhatsAppSettings().then((next) => {
+      if (!cancelled) setSettings(next);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const match = pathname.match(/^\/packages\/([^/]+)$/);
     if (!match) {
-      setHref(getGeneralWhatsAppHref());
+      setHref(getGeneralWhatsAppHref(settings ?? undefined));
       return;
     }
 
     const slug = match[1];
     const title = document.querySelector("main h1")?.textContent?.trim();
-    setHref(getPackageWhatsAppHref(title || slugToTitle(slug), slug));
-  }, [pathname]);
+    setHref(getPackageWhatsAppHref(title || slugToTitle(slug), slug, settings ?? undefined));
+  }, [pathname, settings]);
 
   const isContactPage = pathname === "/contact";
 

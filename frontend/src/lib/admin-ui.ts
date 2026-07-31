@@ -6,6 +6,7 @@ export const ADMIN_NAV_ITEMS = [
   { href: "/admin/content", label: "Page Content" },
   { href: "/admin/leads", label: "Leads" },
   { href: "/admin/meter", label: "Meter" },
+  { href: "/admin/whatsapp", label: "WhatsApp" },
 ] as const;
 
 export type AdminLeadStatus = "new" | "contacted" | "quoted" | "won" | "lost";

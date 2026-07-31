@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { BMV_CONTACT, buildPackageWhatsAppMessage, buildWhatsAppHref } from "./contact-info";
+import {
+  BMV_CONTACT,
+  buildPackageWhatsAppMessage,
+  buildWhatsAppHref,
+  normalizeWhatsAppNumber,
+} from "./contact-info";
 
 describe("BMV contact info", () => {
   it("exposes phone, email, address, and hours for the contact page", () => {
@@ -17,6 +22,13 @@ describe("BMV contact info", () => {
     const href = buildWhatsAppHref("Hello");
     expect(href).toContain("https://wa.me/");
     expect(href).toContain(encodeURIComponent("Hello"));
+  });
+
+  it("normalizes Indian WhatsApp numbers", () => {
+    expect(normalizeWhatsAppNumber("+91 98765 43210")).toBe("919876543210");
+    expect(normalizeWhatsAppNumber("9876543210")).toBe("919876543210");
+    expect(normalizeWhatsAppNumber("09876543210")).toBe("919876543210");
+    expect(normalizeWhatsAppNumber("123")).toBeNull();
   });
 
   it("builds a package inquiry message with title and link", () => {

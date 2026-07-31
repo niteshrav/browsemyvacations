@@ -5,7 +5,13 @@ import { AdminErrorAlert, AdminSuccessAlert } from "@/components/admin/admin-ale
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminPanel } from "@/components/admin/admin-panel";
 import { adminFetch } from "@/lib/admin-auth";
-import { adminInputClassName, adminLabelClassName, adminTableClassName, adminTableHeadClassName, adminTableWrapClassName } from "@/lib/admin-ui";
+import {
+  adminInputClassName,
+  adminLabelClassName,
+  adminTableClassName,
+  adminTableHeadClassName,
+  adminTableWrapClassName,
+} from "@/lib/admin-ui";
 
 type MeterConfig = {
   id: string;
@@ -29,6 +35,8 @@ export default function AdminMeterPage() {
   const [newRate, setNewRate] = useState("");
   const [newTierName, setNewTierName] = useState("");
   const [newTierMultiplier, setNewTierMultiplier] = useState("1.00");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editRate, setEditRate] = useState("");
 
   const load = useCallback(() => {
     adminFetch("/admin/meter-config")
@@ -55,6 +63,23 @@ export default function AdminMeterPage() {
       });
   }, [load]);
 
+  async function saveDestinationRates(
+    rates: Array<{ destinationId: string; baseRatePerNight: number }>,
+  ) {
+    const res = await adminFetch("/admin/meter-config", {
+      method: "PATCH",
+      body: JSON.stringify({ destinationRates: rates }),
+    });
+    if (!res.ok) {
+      setError("Failed to update destination rates");
+      return false;
+    }
+    setSaved(true);
+    setError(null);
+    load();
+    return true;
+  }
+
   async function saveDisclaimer(e: React.FormEvent) {
     e.preventDefault();
     setSaved(false);
@@ -78,18 +103,39 @@ export default function AdminMeterPage() {
       })),
       { destinationId: newDestinationId, baseRatePerNight: Number(newRate) },
     ];
-    const res = await adminFetch("/admin/meter-config", {
-      method: "PATCH",
-      body: JSON.stringify({ destinationRates }),
-    });
-    if (!res.ok) {
-      setError("Failed to add destination rate");
-      return;
-    }
-    setSaved(true);
+    const ok = await saveDestinationRates(destinationRates);
+    if (!ok) return;
     setNewDestinationId("");
     setNewRate("");
-    load();
+  }
+
+  async function saveEditedRate(destinationId: string) {
+    if (!config || !editRate) return;
+    const destinationRates = config.destinationRates.map((r) => ({
+      destinationId: r.destinationId,
+      baseRatePerNight:
+        r.destinationId === destinationId ? Number(editRate) : Number(r.baseRatePerNight),
+    }));
+    const ok = await saveDestinationRates(destinationRates);
+    if (!ok) return;
+    setEditingId(null);
+    setEditRate("");
+  }
+
+  async function deleteRate(destinationId: string) {
+    if (!config) return;
+    if (!window.confirm("Remove this destination nightly rate?")) return;
+    const destinationRates = config.destinationRates
+      .filter((r) => r.destinationId !== destinationId)
+      .map((r) => ({
+        destinationId: r.destinationId,
+        baseRatePerNight: Number(r.baseRatePerNight),
+      }));
+    await saveDestinationRates(destinationRates);
+    if (editingId === destinationId) {
+      setEditingId(null);
+      setEditRate("");
+    }
   }
 
   async function addVehicleTier(e: React.FormEvent) {
@@ -123,7 +169,7 @@ export default function AdminMeterPage() {
     load();
   }
 
-  if (error) {
+  if (error && !config) {
     return <AdminErrorAlert message={error} />;
   }
 
@@ -141,7 +187,8 @@ export default function AdminMeterPage() {
         description={`Configure calculator disclaimer and review seeded rates. Output mode: ${config.outputMode}.`}
       />
 
-      {saved ? <AdminSuccessAlert message="Disclaimer saved successfully." /> : null}
+      {error ? <AdminErrorAlert message={error} /> : null}
+      {saved ? <AdminSuccessAlert message="Meter settings saved successfully." /> : null}
 
       <AdminPanel title="Disclaimer text" description="Shown on the vacation meter results screen.">
         <form onSubmit={saveDisclaimer} className="space-y-4">
@@ -163,103 +210,169 @@ export default function AdminMeterPage() {
         </form>
       </AdminPanel>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <AdminPanel title="Destination nightly rates" description="Indicative INR rates per night.">
-          <form onSubmit={addDestinationRate} className="mb-4 grid gap-3 rounded-xl border border-stone-200 bg-stone-50 p-3 sm:grid-cols-[1fr_12rem_auto]">
-            <select
-              value={newDestinationId}
-              onChange={(e) => setNewDestinationId(e.target.value)}
-              className={adminInputClassName()}
-              required
-            >
-              <option value="" disabled>
-                Select destination
+      <AdminPanel
+        title="Destination nightly rates"
+        description="Indicative INR rates per night — card layout for quick edits."
+      >
+        <form
+          onSubmit={addDestinationRate}
+          className="mb-5 grid gap-3 rounded-xl border border-stone-200 bg-stone-50 p-3 sm:grid-cols-[1fr_12rem_auto]"
+        >
+          <select
+            value={newDestinationId}
+            onChange={(e) => setNewDestinationId(e.target.value)}
+            className={adminInputClassName()}
+            required
+          >
+            <option value="" disabled>
+              Select destination
+            </option>
+            {remainingDestinations.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
               </option>
-              {remainingDestinations.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
-            <input
-              type="number"
-              min={1}
-              placeholder="Rate (INR)"
-              value={newRate}
-              onChange={(e) => setNewRate(e.target.value)}
-              className={adminInputClassName()}
-              required
-            />
-            <button type="submit" className="btn-secondary">
-              Add rate
-            </button>
-          </form>
-          <div className={adminTableWrapClassName()}>
-            <table className={adminTableClassName()}>
-              <thead className={adminTableHeadClassName()}>
-                <tr>
-                  <th className="px-4 py-3">Destination</th>
-                  <th className="px-4 py-3">Rate</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-100">
-                {config.destinationRates.map((r) => (
-                  <tr key={r.destinationId} className="hover:bg-stone-50/80">
-                    <td className="px-4 py-3 text-stone-800">{r.destination.name}</td>
-                    <td className="px-4 py-3 font-medium text-stone-900">
-                      ₹{Number(r.baseRatePerNight).toLocaleString("en-IN")}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </AdminPanel>
+            ))}
+          </select>
+          <input
+            type="number"
+            min={1}
+            placeholder="Rate (INR)"
+            value={newRate}
+            onChange={(e) => setNewRate(e.target.value)}
+            className={adminInputClassName()}
+            required
+          />
+          <button type="submit" className="btn-secondary">
+            Add rate
+          </button>
+        </form>
 
-        <AdminPanel title="Vehicle tiers" description="Multipliers applied to route estimates.">
-          <form onSubmit={addVehicleTier} className="mb-4 grid gap-3 rounded-xl border border-stone-200 bg-stone-50 p-3 sm:grid-cols-[1fr_10rem_auto]">
-            <input
-              placeholder="Tier name"
-              value={newTierName}
-              onChange={(e) => setNewTierName(e.target.value)}
-              className={adminInputClassName()}
-              required
-            />
-            <input
-              type="number"
-              step="0.01"
-              min="0.1"
-              max="10"
-              placeholder="Multiplier"
-              value={newTierMultiplier}
-              onChange={(e) => setNewTierMultiplier(e.target.value)}
-              className={adminInputClassName()}
-              required
-            />
-            <button type="submit" className="btn-secondary">
-              Add tier
-            </button>
-          </form>
-          <div className={adminTableWrapClassName()}>
-            <table className={adminTableClassName()}>
-              <thead className={adminTableHeadClassName()}>
-                <tr>
-                  <th className="px-4 py-3">Tier</th>
-                  <th className="px-4 py-3">Multiplier</th>
+        {config.destinationRates.length === 0 ? (
+          <p className="text-sm text-stone-500">No destination rates yet. Add one above.</p>
+        ) : (
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {config.destinationRates.map((r) => {
+              const isEditing = editingId === r.destinationId;
+              return (
+                <li
+                  key={r.destinationId}
+                  className="flex flex-col rounded-2xl border border-stone-200 bg-white p-4 shadow-sm"
+                >
+                  <p className="text-sm font-semibold text-stone-900">{r.destination.name}</p>
+                  {isEditing ? (
+                    <div className="mt-3 space-y-3">
+                      <label className={adminLabelClassName()}>
+                        Nightly rate (INR)
+                        <input
+                          type="number"
+                          min={1}
+                          value={editRate}
+                          onChange={(e) => setEditRate(e.target.value)}
+                          className={adminInputClassName()}
+                        />
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          className="btn-primary text-sm"
+                          onClick={() => saveEditedRate(r.destinationId)}
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary text-sm"
+                          onClick={() => {
+                            setEditingId(null);
+                            setEditRate("");
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="mt-2 text-2xl font-bold tracking-tight text-teal-900">
+                        ₹{Number(r.baseRatePerNight).toLocaleString("en-IN")}
+                        <span className="ml-1 text-sm font-medium text-stone-500">/ night</span>
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          className="btn-secondary text-sm"
+                          onClick={() => {
+                            setEditingId(r.destinationId);
+                            setEditRate(String(Number(r.baseRatePerNight)));
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-lg px-3 py-2 text-sm font-medium text-red-700 ring-1 ring-red-200 transition hover:bg-red-50"
+                          onClick={() => deleteRate(r.destinationId)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </AdminPanel>
+
+      <AdminPanel title="Vehicle tiers" description="Multipliers applied to route estimates.">
+        <form
+          onSubmit={addVehicleTier}
+          className="mb-4 grid gap-3 rounded-xl border border-stone-200 bg-stone-50 p-3 sm:grid-cols-[1fr_10rem_auto]"
+        >
+          <input
+            placeholder="Tier name"
+            value={newTierName}
+            onChange={(e) => setNewTierName(e.target.value)}
+            className={adminInputClassName()}
+            required
+          />
+          <input
+            type="number"
+            step="0.01"
+            min="0.1"
+            max="10"
+            placeholder="Multiplier"
+            value={newTierMultiplier}
+            onChange={(e) => setNewTierMultiplier(e.target.value)}
+            className={adminInputClassName()}
+            required
+          />
+          <button type="submit" className="btn-secondary">
+            Add tier
+          </button>
+        </form>
+        <div className={adminTableWrapClassName()}>
+          <table className={adminTableClassName()}>
+            <thead className={adminTableHeadClassName()}>
+              <tr>
+                <th className="px-4 py-3">Tier</th>
+                <th className="px-4 py-3">Multiplier</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-stone-100">
+              {config.vehicleTiers.map((t) => (
+                <tr key={t.id} className="hover:bg-stone-50/80">
+                  <td className="px-4 py-3 text-stone-800">{t.name}</td>
+                  <td className="px-4 py-3 font-medium text-stone-900">
+                    ×{Number(t.multiplier).toFixed(2)}
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-100">
-                {config.vehicleTiers.map((t) => (
-                  <tr key={t.id} className="hover:bg-stone-50/80">
-                    <td className="px-4 py-3 text-stone-800">{t.name}</td>
-                    <td className="px-4 py-3 font-medium text-stone-900">×{Number(t.multiplier).toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </AdminPanel>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </AdminPanel>
     </div>
   );
 }
