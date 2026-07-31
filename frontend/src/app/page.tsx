@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { DestinationSection } from "@/components/destination-section";
 import { CatalogEmptyState } from "@/components/catalog-empty-state";
 import { HeroSearch } from "@/components/hero-search";
@@ -7,7 +8,10 @@ import { HeroValueProps } from "@/components/hero-value-props";
 import { SuggestionBar } from "@/components/suggestion-bar";
 import { resolveCatalogEmptyMessage } from "@/lib/catalog-empty-state";
 import { loadHomePageData } from "@/lib/home-catalog";
+import { buildPageMetadata, PUBLIC_PAGE_SEO } from "@/lib/seo";
 import { loadHomeHeroCopy } from "@/lib/site-content-api";
+
+export const metadata: Metadata = buildPageMetadata(PUBLIC_PAGE_SEO.home);
 
 export const dynamic = "force-dynamic";
 

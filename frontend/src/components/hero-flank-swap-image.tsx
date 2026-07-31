@@ -6,9 +6,15 @@ import { resolveTourismImageSrc, tourismImageClassName } from "@/lib/tourism-ima
 type Props = {
   src: string;
   zoomed?: boolean;
+  /** Descriptive alt for SEO; decorative parents may still set aria-hidden. */
+  alt?: string;
 };
 
-export function HeroFlankSwapImage({ src, zoomed = false }: Props) {
+export function HeroFlankSwapImage({
+  src,
+  zoomed = false,
+  alt = "Rajasthan travel inspiration photo",
+}: Props) {
   const cdnSrc = resolveTourismImageSrc(src);
   const [shown, setShown] = useState(cdnSrc);
   const [leaving, setLeaving] = useState<string | null>(null);
@@ -30,16 +36,20 @@ export function HeroFlankSwapImage({ src, zoomed = false }: Props) {
           alt=""
           aria-hidden
           className={`${tourismImageClassName()} absolute inset-0 transition-opacity duration-500`}
+          loading="lazy"
+          decoding="async"
         />
       ) : null}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         key={shown}
         src={shown}
-        alt=""
+        alt={alt}
         className={`${tourismImageClassName()} absolute inset-0 transition-transform duration-700 ease-out ${
           leaving ? "hero-image-reveal" : ""
         } ${zoomed ? "scale-110" : "scale-100 group-hover:scale-105"}`}
+        loading="lazy"
+        decoding="async"
       />
     </div>
   );

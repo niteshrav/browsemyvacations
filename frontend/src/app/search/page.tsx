@@ -7,12 +7,15 @@ import { SearchAnalytics } from "@/components/search-analytics";
 import { PackageCard } from "@/components/package-card";
 import { getCityTouristPlans } from "@/lib/city-tourist-plans";
 import { fetchSearch, formatSearchQueryLabel } from "@/lib/discovery-api";
+import { buildPageMetadata, PUBLIC_PAGE_SEO } from "@/lib/seo";
 import { resolveTourismImageSrc } from "@/lib/tourism-image";
 
-export const metadata: Metadata = {
-  title: "Search packages",
-  description: "Find vacation packages by city or keyword.",
-};
+/** Search result URLs are utility pages — keep out of the primary index. */
+export const metadata: Metadata = buildPageMetadata({
+  ...PUBLIC_PAGE_SEO.search,
+  index: false,
+  follow: true,
+});
 
 export const dynamic = "force-dynamic";
 

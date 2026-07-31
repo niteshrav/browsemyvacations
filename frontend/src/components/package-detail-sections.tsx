@@ -49,7 +49,14 @@ export function PackageDetailSections({ pkg, onQuoteClick }: Props) {
         <div className="overflow-hidden rounded-2xl bg-stone-100 shadow-sm">
           {image ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={image} alt={pkg.title} className="aspect-[4/3] w-full object-cover lg:aspect-square" />
+            <img
+              src={image}
+              alt={`${pkg.title} — ${pkg.duration.nights}N/${pkg.duration.days}D vacation package`}
+              className="aspect-[4/3] w-full object-cover lg:aspect-square"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
           ) : null}
         </div>
 

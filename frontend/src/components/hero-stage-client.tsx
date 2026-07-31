@@ -125,9 +125,10 @@ function HeroFullBleedBackground({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
-        alt=""
+        alt="Lake Palace on Lake Pichola in Udaipur, Rajasthan"
         className={heroFeaturedImageClassName()}
         fetchPriority="high"
+        loading="eager"
         decoding="async"
       />
       <div className={heroBackgroundOverlayClassName()} />

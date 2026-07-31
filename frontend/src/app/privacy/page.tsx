@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { buildPageMetadata, PUBLIC_PAGE_SEO } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "How Browse My Vacations collects, uses, and protects your personal information.",
-};
+export const metadata: Metadata = buildPageMetadata(PUBLIC_PAGE_SEO.privacy);
 
 export default function PrivacyPage() {
   return (

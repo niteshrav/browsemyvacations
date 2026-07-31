@@ -7,6 +7,8 @@ type Props = {
   src: string;
   alt: string;
   className?: string;
+  /** Prefer for above-the-fold heroes (eager + high fetch priority). */
+  priority?: boolean;
 };
 
 function TourismImagePlaceholder({ alt }: { alt: string }) {
@@ -19,7 +21,7 @@ function TourismImagePlaceholder({ alt }: { alt: string }) {
   );
 }
 
-export function TourismImage({ src, alt, className }: Props) {
+export function TourismImage({ src, alt, className, priority = false }: Props) {
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -32,8 +34,9 @@ export function TourismImage({ src, alt, className }: Props) {
       src={resolveTourismImageSrc(src)}
       alt={alt}
       className={className ?? tourismImageClassName()}
-      loading="lazy"
+      loading={priority ? "eager" : "lazy"}
       decoding="async"
+      fetchPriority={priority ? "high" : "auto"}
       onError={() => setFailed(true)}
     />
   );

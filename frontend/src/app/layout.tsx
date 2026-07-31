@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { VacationFeasibilityRadarPopup } from "@/components/vacation-feasibility-radar-popup";
 import { WhatsAppGlobalFab } from "@/components/whatsapp-global-fab";
 import { ROOT_LAYOUT_SUPPRESS_HYDRATION_WARNING, rootBodyClassName } from "@/lib/root-layout";
-import { getSiteUrl } from "@/lib/site-url";
+import { buildRootMetadata } from "@/lib/seo";
 import "./globals.css";
 
 const sourceSerif = Source_Serif_4({
@@ -15,20 +15,7 @@ const sourceSerif = Source_Serif_4({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getSiteUrl()),
-  title: {
-    default: "Browse My Vacations",
-    template: "%s | Browse My Vacations",
-  },
-  description:
-    "Curated vacation packages. Vacations You'll Love. Memories You'll Keep.",
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    siteName: "Browse My Vacations",
-  },
-};
+export const metadata: Metadata = buildRootMetadata();
 
 export default function RootLayout({
   children,

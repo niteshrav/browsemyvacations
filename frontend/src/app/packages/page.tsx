@@ -6,11 +6,9 @@ import { PackageCard } from "@/components/package-card";
 import { resolveCatalogEmptyMessage } from "@/lib/catalog-empty-state";
 import { fetchPackages, isCatalogApiReachable } from "@/lib/catalog-api";
 import { groupPackagesByCategory } from "@/lib/package-categories";
+import { buildPageMetadata, PUBLIC_PAGE_SEO } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Packages",
-  description: "Browse all vacation packages from Browse My Vacations.",
-};
+export const metadata: Metadata = buildPageMetadata(PUBLIC_PAGE_SEO.packages);
 
 export const dynamic = "force-dynamic";
 

@@ -51,6 +51,8 @@ export function PackageCardImage({ pkg, alt }: Props) {
       src={src}
       alt={alt}
       className="h-full w-full object-cover"
+      loading="lazy"
+      decoding="async"
       onError={() => {
         if (src !== fallback) {
           setSrc(fallback);

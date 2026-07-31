@@ -1,13 +1,21 @@
 import type { MetadataRoute } from "next";
 import { getSiteUrl } from "@/lib/site-url";
 
+/**
+ * Public crawl rules:
+ * - Allow all public marketing and catalog pages
+ * - Block admin (auth) surfaces
+ * Search result pages set noindex via page metadata and are omitted from the sitemap
+ */
 export default function robots(): MetadataRoute.Robots {
+  const siteUrl = getSiteUrl();
   return {
     rules: {
       userAgent: "*",
       allow: "/",
       disallow: ["/admin/"],
     },
-    sitemap: `${getSiteUrl()}/sitemap.xml`,
+    sitemap: `${siteUrl}/sitemap.xml`,
+    host: siteUrl.replace(/^https?:\/\//, ""),
   };
 }

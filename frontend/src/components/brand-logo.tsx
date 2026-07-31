@@ -24,6 +24,7 @@ export function BrandLogo({ priority = false, className }: BrandLogoProps) {
       height={BRAND_LOGO_DISPLAY_HEIGHT}
       width={displayWidth}
       decoding="async"
+      loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
     />
   );

@@ -57,7 +57,7 @@ export function MarketingHero({
 
           <FadeUp delay={0.08} className="relative mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none">
             <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] border border-white/80 shadow-[0_22px_50px_rgba(28,25,23,0.16)] ring-1 ring-stone-900/5 sm:aspect-[5/4]">
-              <TourismImage src={image} alt={imageAlt} className="h-full w-full object-cover" />
+              <TourismImage src={image} alt={imageAlt} priority className="h-full w-full object-cover" />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-teal-950/20 via-transparent to-transparent" />
             </div>
           </FadeUp>
@@ -69,7 +69,7 @@ export function MarketingHero({
   return (
     <section className="relative isolate overflow-hidden">
       <div className="absolute inset-0">
-        <TourismImage src={image} alt={imageAlt} className="h-full w-full object-cover" />
+        <TourismImage src={image} alt={imageAlt} priority className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-teal-950/85 via-teal-900/70 to-teal-900/40" />
       </div>
 

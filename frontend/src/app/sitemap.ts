@@ -6,7 +6,6 @@ import { getSiteUrl } from "@/lib/site-url";
 const STATIC_ROUTES: SitemapEntryInput[] = [
   { path: "/", changeFrequency: "daily", priority: 1 },
   { path: "/packages", changeFrequency: "daily", priority: 0.9 },
-  { path: "/search", changeFrequency: "weekly", priority: 0.5 },
   { path: "/vacation-meter", changeFrequency: "weekly", priority: 0.8 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.6 },
   { path: "/about", changeFrequency: "monthly", priority: 0.6 },
