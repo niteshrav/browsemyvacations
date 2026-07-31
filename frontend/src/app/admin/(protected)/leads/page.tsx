@@ -55,6 +55,13 @@ export default function AdminLeadsPage() {
     if (res.ok) load();
   }
 
+  async function deleteLead(id: string, name: string) {
+    if (!window.confirm(`Delete lead “${name}”? This cannot be undone.`)) return;
+    const res = await adminFetch(`/admin/leads/${id}`, { method: "DELETE" });
+    if (res.ok) load();
+    else setError("Failed to delete lead");
+  }
+
   async function exportCsv() {
     const res = await adminFetch("/admin/leads/export");
     if (!res.ok) return;
@@ -164,12 +171,21 @@ export default function AdminLeadsPage() {
                   </select>
                 </label>
 
-                <Link
-                  href={`/admin/leads/${lead.id}`}
-                  className="mt-4 text-sm font-medium text-teal-800 hover:underline"
-                >
-                  Open details →
-                </Link>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                  <Link
+                    href={`/admin/leads/${lead.id}`}
+                    className="text-sm font-medium text-teal-800 hover:underline"
+                  >
+                    Open details →
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => deleteLead(lead.id, lead.fullName)}
+                    className="rounded-lg px-3 py-2 text-sm font-medium text-red-700 ring-1 ring-red-200 transition hover:bg-red-50"
+                  >
+                    Delete
+                  </button>
+                </div>
               </li>
             ))}
           </ul>

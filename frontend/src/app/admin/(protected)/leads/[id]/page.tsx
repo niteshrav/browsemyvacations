@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AdminErrorAlert } from "@/components/admin/admin-alerts";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
@@ -31,11 +31,13 @@ type LeadDetail = {
 
 export default function AdminLeadDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
   const [lead, setLead] = useState<LeadDetail | null>(null);
   const [noteAuthor, setNoteAuthor] = useState("Sales");
   const [noteContent, setNoteContent] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(() => {
     adminFetch(`/admin/leads/${id}`)
@@ -63,11 +65,22 @@ export default function AdminLeadDetailPage() {
     }
   }
 
-  if (error) {
-    return <AdminErrorAlert message={error} />;
+  async function deleteLead() {
+    if (!lead) return;
+    if (!window.confirm(`Delete lead “${lead.fullName}”? This cannot be undone.`)) return;
+    setDeleting(true);
+    try {
+      const res = await adminFetch(`/admin/leads/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("delete failed");
+      router.push("/admin/leads");
+    } catch {
+      setError("Failed to delete lead");
+      setDeleting(false);
+    }
   }
 
   if (!lead) {
+    if (error) return <AdminErrorAlert message={error} />;
     return <p className="text-sm text-stone-500">Loading lead…</p>;
   }
 
@@ -90,10 +103,24 @@ export default function AdminLeadDetailPage() {
         ← Back to leads
       </Link>
 
+      {error ? <AdminErrorAlert message={error} /> : null}
+
       <AdminPageHeader
         title={lead.fullName}
         description="Review inquiry details and add internal follow-up notes."
-        actions={<AdminStatusBadge label={lead.status} />}
+        actions={
+          <div className="flex flex-wrap items-center gap-2">
+            <AdminStatusBadge label={lead.status} />
+            <button
+              type="button"
+              onClick={deleteLead}
+              disabled={deleting}
+              className="rounded-lg px-3 py-2 text-sm font-medium text-red-700 ring-1 ring-red-200 transition hover:bg-red-50 disabled:opacity-50"
+            >
+              {deleting ? "Deleting…" : "Delete lead"}
+            </button>
+          </div>
+        }
       />
 
       <div className="grid gap-6 lg:grid-cols-2">

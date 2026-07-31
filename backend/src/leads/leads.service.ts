@@ -97,6 +97,12 @@ export class LeadsService {
     });
   }
 
+  async remove(id: string) {
+    await this.findByIdOrThrow(id);
+    await this.prisma.client.lead.delete({ where: { id } });
+    return { ok: true as const };
+  }
+
   async addNote(id: string, input: CreateLeadNoteInput) {
     await this.findByIdOrThrow(id);
     return this.prisma.client.leadNote.create({

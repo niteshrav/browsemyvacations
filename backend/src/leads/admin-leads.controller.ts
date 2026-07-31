@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Header,
   Param,
@@ -45,6 +46,11 @@ export class AdminLeadsController {
     body: ReturnType<typeof updateLeadStatusSchema.parse>,
   ): Promise<unknown> {
     return this.leads.updateStatus(id, body);
+  }
+
+  @Delete(":id")
+  remove(@Param("id") id: string): Promise<{ ok: true }> {
+    return this.leads.remove(id);
   }
 
   @Post(":id/notes")
