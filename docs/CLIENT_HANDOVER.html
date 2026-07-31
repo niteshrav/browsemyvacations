@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/>
+<title>Browse My Vacations — Client Handover</title>
+<style>
+@page { size: A4; margin: 16mm; }
+body { font-family: Segoe UI, Calibri, Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #1c1917; }
+h1 { font-size: 18pt; color: #0f766e; border-bottom: 2px solid #0f766e; padding-bottom: 6px; }
+h2 { font-size: 13pt; color: #115e59; margin-top: 1.3em; border-bottom: 1px solid #d6d3d1; padding-bottom: 3px; page-break-after: avoid; }
+h3 { font-size: 11.5pt; color: #134e4a; margin-top: 1em; page-break-after: avoid; }
+table { border-collapse: collapse; width: 100%; margin: 0.7em 0 1em; font-size: 9.5pt; page-break-inside: avoid; }
+th, td { border: 1px solid #d6d3d1; padding: 5px 7px; text-align: left; vertical-align: top; }
+th { background: #f0fdfa; }
+code { background: #f5f5f4; padding: 1px 4px; border-radius: 3px; font-size: 9pt; }
+pre { background: #f5f5f4; padding: 10px; border-radius: 6px; font-size: 8.5pt; white-space: pre-wrap; }
+blockquote { border-left: 4px solid #0f766e; margin: 0.8em 0; padding: 6px 12px; background: #f0fdfa; }
+a { color: #0f766e; word-break: break-all; }
+hr { border: none; border-top: 1px solid #d6d3d1; margin: 1.4em 0; }
+ul { padding-left: 1.2em; }
+</style></head><body>
+<h1>Browse My Vacations — Client Handover Document</h1>
+
+<table><thead><tr><th>Field</th><th>Detail</th></tr></thead><tbody>
+<tr><td><strong>Product</strong></td><td>Browse My Vacations (BMV)</td></tr>
+<tr><td><strong>Brand parent</strong></td><td>Browser Hotels</td></tr>
+<tr><td><strong>Document date</strong></td><td>31 July 2026</td></tr>
+<tr><td><strong>Status</strong></td><td>Live — production handover</td></tr>
+<tr><td><strong>Primary site</strong></td><td>https://browsemyvacations.com</td></tr>
+<tr><td><strong>Source code</strong></td><td>https://github.com/niteshrav/browsemyvacations</td></tr>
+</tbody></table>
+
+<hr/>
+
+<h2>1. Executive summary</h2>
+
+<p>Browse My Vacations is a <strong>curated vacation packages</strong> website focused on:</p>
+
+<ul>
+<li>Simple <strong>city / keyword discovery</strong> (no dates or passenger counts required to browse)</li>
+<li>Transparent <strong>package detail</strong> pages with itinerary and pricing cues</li>
+<li><strong>Custom quote</strong> lead capture (sales fulfills offline)</li>
+<li><strong>Vacation Feasibility Radar</strong> (Vacation Meter) for route / cost estimates</li>
+<li><strong>MICE / corporate</strong> inquiry flows</li>
+<li>A full <strong>admin CMS</strong> for catalog, leads, meter rates, content, and WhatsApp</li>
+</ul>
+
+<p><strong>Business model (MVP):</strong> Operator-led lead generation. There is <strong>no online payment</strong>, <strong>no customer login</strong>, and <strong>no instant booking</strong>. Quote submissions create sales leads only.</p>
+
+<hr/>
+
+<h2>2. Live URLs</h2>
+
+<table><thead><tr><th>Surface</th><th>URL</th></tr></thead><tbody>
+<tr><td>Website</td><td>https://browsemyvacations.com</td></tr>
+<tr><td>www (same site)</td><td>https://www.browsemyvacations.com</td></tr>
+<tr><td>Admin</td><td>https://browsemyvacations.com/admin</td></tr>
+<tr><td>API health</td><td>https://browsemyvacations.com/api/v1/health</td></tr>
+<tr><td>Sitemap</td><td>https://browsemyvacations.com/sitemap.xml</td></tr>
+<tr><td>Robots</td><td>https://browsemyvacations.com/robots.txt</td></tr>
+<tr><td>Privacy</td><td>https://browsemyvacations.com/privacy</td></tr>
+<tr><td>Google verification file</td><td>https://browsemyvacations.com/google990190344b1517ae.html</td></tr>
+</tbody></table>
+
+<h3>Public pages</h3>
+
+<table><thead><tr><th>Page</th><th>Path</th></tr></thead><tbody>
+<tr><td>Home</td><td><code>/</code></td></tr>
+<tr><td>Packages</td><td><code>/packages</code></td></tr>
+<tr><td>Package detail</td><td><code>/packages/{slug}</code></td></tr>
+<tr><td>Search</td><td><code>/search?q=…</code></td></tr>
+<tr><td>Vacation Meter</td><td><code>/vacation-meter</code></td></tr>
+<tr><td>MICE</td><td><code>/mice</code></td></tr>
+<tr><td>About</td><td><code>/about</code></td></tr>
+<tr><td>Contact</td><td><code>/contact</code></td></tr>
+<tr><td>Privacy Policy</td><td><code>/privacy</code></td></tr>
+</tbody></table>
+
+<hr/>
+
+<h2>3. What was delivered</h2>
+
+<h3>3.1 Visitor experience</h3>
+
+<ul>
+<li>Home hero with search, suggestion / quick picks, destination-grouped packages</li>
+<li>Packages list (with optional destination filter) and SEO-friendly detail pages</li>
+<li>Search by city or keyword</li>
+<li>Quote / inquiry forms (package detail, contact, meter, MICE)</li>
+<li>Floating <strong>WhatsApp</strong> button (number configurable in admin)</li>
+<li>Vacation Meter popup on home + full meter page with quote CTA</li>
+<li>Responsive layout for desktop and mobile</li>
+</ul>
+
+<h3>3.2 Admin CMS (<code>/admin</code>)</h3>
+
+<table><thead><tr><th>Module</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><strong>Dashboard</strong></td><td>Admin home / shortcuts</td></tr>
+<tr><td><strong>Destinations</strong></td><td>Manage destination catalog</td></tr>
+<tr><td><strong>Packages</strong></td><td>Create / edit packages, itinerary, gallery, SEO title &amp; description</td></tr>
+<tr><td><strong>Quick Picks</strong></td><td>Home suggestion / quick-pick chips</td></tr>
+<tr><td><strong>Page Content</strong></td><td>Editable site content blocks (e.g. hero copy)</td></tr>
+<tr><td><strong>Leads</strong></td><td>Lead pipeline cards, status updates, notes, CSV export, <strong>delete</strong></td></tr>
+<tr><td><strong>Meter</strong></td><td>Destination nightly rates &amp; vehicle tiers for Vacation Meter</td></tr>
+<tr><td><strong>WhatsApp</strong></td><td>Floating button phone number + default message</td></tr>
+</tbody></table>
+
+<p>Lead statuses: <code>new</code> → <code>contacted</code> → <code>quoted</code> → <code>won</code> / <code>lost</code>.</p>
+
+<h3>3.3 SEO (completed July 2026)</h3>
+
+<ul>
+<li>Unique titles, meta descriptions, keywords per public page</li>
+<li>Canonical URLs, Open Graph, and Twitter cards</li>
+<li>Favicon / site icons from brand logo</li>
+<li><code>robots.txt</code> (public allowed; <code>/admin/</code> blocked)</li>
+<li>Dynamic <code>sitemap.xml</code> (static pages + package URLs)</li>
+<li>Image alt text + lazy loading (heroes load eagerly for performance)</li>
+<li>Package detail JSON-LD (<code>TouristTrip</code>)</li>
+<li>Google Search Console: <strong>ownership verified</strong> (HTML file method)</li>
+<li>Sitemap submitted in GSC (status may show “Couldn't fetch” briefly after submit — recheck after deploy; live sitemap returns HTTP 200)</li>
+</ul>
+
+<h3>3.4 Out of scope (deferred / not in MVP)</h3>
+
+<ul>
+<li>Online payments / Razorpay booking</li>
+<li>Customer accounts / login</li>
+<li>Reviews &amp; ratings marketplace</li>
+<li>Multi-agent marketplace</li>
+<li>Advanced search filters (price, theme, duration)</li>
+<li>Full CRM sync (leads stay in BMV admin + optional email alerts)</li>
+</ul>
+
+<hr/>
+
+<h2>4. Access &amp; credentials</h2>
+
+<blockquote><strong>Security:</strong> Change the admin password immediately after handover. Do not share production credentials in public chat or email threads longer than necessary.</blockquote>
+
+<h3>4.1 Admin login</h3>
+
+<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>URL</td><td>https://browsemyvacations.com/admin</td></tr>
+<tr><td>Typical seed email</td><td><code>admin@browsemyvacations.com</code></td></tr>
+<tr><td>Typical seed password</td><td><code>changeme123</code></td></tr>
+<tr><td>Production account (as configured at launch)</td><td>Confirm in admin DB / with delivery team — may be a client Gmail such as the Browser Hotels ops mailbox</td></tr>
+</tbody></table>
+
+<p>Override seed credentials locally via <code>ADMIN_SEED_EMAIL</code> / <code>ADMIN_SEED_PASSWORD</code> in <code>database/.env</code>.</p>
+
+<p><strong>How to sign in:</strong> Open site → <strong>Admin</strong> in header, or go directly to <code>/admin</code>.</p>
+
+<h3>4.2 Source code</h3>
+
+<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>GitHub</td><td>https://github.com/niteshrav/browsemyvacations</td></tr>
+<tr><td>Default branch</td><td><code>main</code></td></tr>
+<tr><td>Deploy trigger</td><td>Manual pull + <code>scripts/vps-deploy.sh</code> on VPS</td></tr>
+</tbody></table>
+
+<p>Ensure the client (or appointed agency) has GitHub collaborator access.</p>
+
+<h3>4.3 Server (production)</h3>
+
+<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Hosting style</td><td>Contabo / Hostinger-class Linux KVM VPS</td></tr>
+<tr><td>App path</td><td><code>/var/www/browsemyvacations</code></td></tr>
+<tr><td>Process manager</td><td>PM2 (<code>bmv-web</code>, <code>bmv-api</code>)</td></tr>
+<tr><td>Web port</td><td><code>3100</code> (nginx proxies HTTPS → this)</td></tr>
+<tr><td>API port</td><td><code>3101</code></td></tr>
+<tr><td>Database</td><td>PostgreSQL (local on VPS; often mapped as port <code>5434</code> in compose-style setups)</td></tr>
+<tr><td>Reverse proxy</td><td>Nginx + Let’s Encrypt (certbot)</td></tr>
+</tbody></table>
+
+<p>SSH access, panel login, and DNS registrar credentials should be transferred separately by the hosting owner (not stored in this repo).</p>
+
+<hr/>
+
+<h2>5. Day-to-day operations (for the client team)</h2>
+
+<h3>5.1 Sales / leads</h3>
+
+<p>1. Open <strong>Admin → Leads</strong></p>
+<p>2. Filter by status (All / new / contacted / quoted / won / lost)</p>
+<p>3. Update status from the card dropdown</p>
+<p>4. Open details for notes and full inquiry fields</p>
+<p>5. Export CSV when needed</p>
+<p>6. Delete spam / test leads with <strong>Delete</strong> (confirm dialog)</p>
+
+<p><strong>Important:</strong> A quote request is <strong>not</strong> a confirmed booking. Final pricing is sent offline (email / phone / WhatsApp).</p>
+
+<h3>5.2 Publishing packages</h3>
+
+<p>1. <strong>Admin → Packages</strong> — create or edit</p>
+<p>2. Set destinations, duration, price display, itinerary, inclusions / exclusions</p>
+<p>3. Upload gallery images</p>
+<p>4. Fill optional <strong>SEO title / description</strong></p>
+<p>5. Keep package <strong>active</strong> to appear on the public site and sitemap</p>
+
+<h3>5.3 Vacation Meter rates</h3>
+
+<p>1. <strong>Admin → Meter</strong></p>
+<p>2. Add / edit / delete destination nightly rates</p>
+<p>3. Adjust vehicle tier multipliers as needed  </p>
+<p>Changes apply without a code deploy.</p>
+
+<h3>5.4 WhatsApp floating button</h3>
+
+<p>1. <strong>Admin → WhatsApp</strong></p>
+<p>2. Set phone number (India format supported) and default message  </p>
+<p>Public FAB reads this from site content settings.</p>
+
+<h3>5.5 Contact details shown on the site</h3>
+
+<p>Defaults in code (<code>shared</code> contact info) currently include:</p>
+
+<table><thead><tr><th>Field</th><th>Default</th></tr></thead><tbody>
+<tr><td>Phone / WhatsApp display</td><td>+91 141 400 1234</td></tr>
+<tr><td>Email</td><td>hello@browsemyvacations.com</td></tr>
+<tr><td>Address</td><td>C-Scheme, Jaipur, Rajasthan 302001, India</td></tr>
+<tr><td>Hours</td><td>Monday – Saturday, 10:00 AM – 7:00 PM IST</td></tr>
+</tbody></table>
+
+<p>Update these in the codebase / content settings if real business numbers differ, then redeploy.</p>
+
+<hr/>
+
+<h2>6. Technology stack</h2>
+
+<table><thead><tr><th>Layer</th><th>Technology</th></tr></thead><tbody>
+<tr><td>Frontend</td><td>Next.js 15 (App Router), React, TypeScript</td></tr>
+<tr><td>Backend</td><td>NestJS (REST API under <code>/api/v1</code>)</td></tr>
+<tr><td>Database</td><td>PostgreSQL + Prisma (<code>@bmv/database</code>)</td></tr>
+<tr><td>Shared package</td><td><code>@bmv/shared</code> (content, validation, CDN helpers)</td></tr>
+<tr><td>Monorepo</td><td>pnpm workspaces</td></tr>
+<tr><td>Images</td><td>Cloudinary (preferred) or local <code>/uploads</code> on VPS</td></tr>
+<tr><td>Email (optional)</td><td>Resend (<code>RESEND_API_KEY</code>) → ops inbox</td></tr>
+<tr><td>Analytics (optional)</td><td>GA4 via <code>NEXT_PUBLIC_GA_MEASUREMENT_ID</code></td></tr>
+<tr><td>Process manager</td><td>PM2</td></tr>
+<tr><td>Web server</td><td>Nginx</td></tr>
+</tbody></table>
+
+<hr/>
+
+<h2>7. Environment variables (production checklist)</h2>
+
+<h3>Frontend — <code>frontend/.env.local</code></h3>
+
+<pre><code>NEXT_PUBLIC_SITE_URL="https://browsemyvacations.com"
+NEXT_PUBLIC_API_URL="/api/v1"
+NEXT_PUBLIC_GA_MEASUREMENT_ID=""          # optional — GA4 measurement ID
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=""      # optional if using Cloudinary</code></pre>
+
+<h3>Backend — <code>backend/.env</code></h3>
+
+<pre><code>PORT=3101
+NODE_ENV=production
+CORS_ORIGIN="https://browsemyvacations.com,https://www.browsemyvacations.com"
+DATABASE_URL="postgresql://…/browsemyvacations?schema=public"
+JWT_SECRET="use-a-long-random-secret"
+RESEND_API_KEY=""                         # optional lead emails
+OPS_EMAIL_TO="sales@browsemyvacations.com"
+OPS_EMAIL_FROM="Browse My Vacations &lt;noreply@browsemyvacations.com&gt;"
+CLOUDINARY_CLOUD_NAME=""                  # preferred for uploads
+CLOUDINARY_API_KEY=""
+CLOUDINARY_API_SECRET=""
+ALLOW_LOCAL_UPLOADS=true                  # if not using Cloudinary
+PUBLIC_API_BASE_URL="https://browsemyvacations.com"</code></pre>
+
+<hr/>
+
+<h2>8. Deploy &amp; maintenance</h2>
+
+<h3>8.1 Standard deploy (after code is on <code>main</code>)</h3>
+
+<pre><code>cd /var/www/browsemyvacations
+git pull origin main
+bash scripts/vps-deploy.sh</code></pre>
+
+<p>This script pulls, builds backend + frontend, reloads PM2, and health-checks ports <code>3100</code> / <code>3101</code>.</p>
+
+<p>Full notes: <a href="./VPS_DEPLOY.md"><code>docs/VPS_DEPLOY.md</code></a></p>
+
+<h3>8.2 Useful PM2 commands</h3>
+
+<pre><code>pm2 status
+pm2 logs bmv-api --lines 50 --nostream
+pm2 logs bmv-web --lines 50 --nostream
+pm2 restart bmv-api bmv-web</code></pre>
+
+<p>Keep <strong>only</strong> <code>bmv-api</code> and <code>bmv-web</code>. Extra PM2 web apps cause 502 / chunk errors after rebuilds.</p>
+
+<h3>8.3 Smoke checks after deploy</h3>
+
+<pre><code>curl -s https://browsemyvacations.com/api/v1/health
+curl -sI https://browsemyvacations.com | head
+curl -s https://browsemyvacations.com/sitemap.xml | head</code></pre>
+
+<h3>8.4 Database migrations</h3>
+
+<pre><code>cd /var/www/browsemyvacations/database
+pnpm exec prisma migrate deploy</code></pre>
+
+<hr/>
+
+<h2>9. SEO &amp; marketing accounts (manual)</h2>
+
+<table><thead><tr><th>Item</th><th>Status / action</th></tr></thead><tbody>
+<tr><td>Google Search Console</td><td>Property verified (HTML file). <strong>Do not delete</strong> <code>google990190344b1517ae.html</code></td></tr>
+<tr><td>Sitemap in GSC</td><td>Submitted <code>/sitemap.xml</code> — refresh if status shows temporary fetch errors</td></tr>
+<tr><td>Google Analytics (GA4)</td><td>Set <code>NEXT_PUBLIC_GA_MEASUREMENT_ID</code> and redeploy when ready</td></tr>
+<tr><td>Bing Webmaster</td><td>Optional — submit same sitemap</td></tr>
+<tr><td>Social sharing</td><td>OG image uses Udaipur Lake Palace asset; test with Facebook / LinkedIn debuggers after content changes</td></tr>
+</tbody></table>
+
+<hr/>
+
+<h2>10. Support runbook (common issues)</h2>
+
+<table><thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Site 502 / blank</td><td>PM2 web down or nginx pointing at wrong port</td><td><code>pm2 status</code>; ensure nginx → <code>:3100</code></td></tr>
+<tr><td>Admin login fails after HTTPS</td><td>Stale build / wrong API origin</td><td>Redeploy; confirm <code>NEXT_PUBLIC_API_URL=/api/v1</code></td></tr>
+<tr><td>Image upload 413</td><td>Nginx body size limit</td><td><code>client_max_body_size 10m;</code> then reload nginx</td></tr>
+<tr><td>Upload blocked</td><td>No Cloudinary and local uploads disabled</td><td>Set <code>ALLOW_LOCAL_UPLOADS=true</code> + <code>PUBLIC_API_BASE_URL</code></td></tr>
+<tr><td>Mixed content / API errors on HTTPS</td><td>Frontend calling <code>http://</code> API</td><td>Must use same-origin <code>/api/v1</code></td></tr>
+<tr><td>Leads not emailing ops</td><td>Resend not configured</td><td>Set <code>RESEND_API_KEY</code> + <code>OPS_EMAIL_TO</code> (leads still save in admin)</td></tr>
+<tr><td>GSC “Couldn't fetch” sitemap</td><td>Transient Google crawl</td><td>Confirm live 200; wait / resubmit; ensure VPS deploy is current</td></tr>
+</tbody></table>
+
+<hr/>
+
+<h2>11. Local development (for developers)</h2>
+
+<pre><code>pnpm install
+pnpm docker:up          # Postgres (+ Redis if used)
+pnpm db:push &amp;&amp; pnpm db:seed
+pnpm dev                # API :3101, web :3100</code></pre>
+
+<p>Default local admin: <code>admin@browsemyvacations.com</code> / <code>changeme123</code>.</p>
+
+<p>Quality gates: <code>pnpm lint</code>, unit tests, Playwright E2E (see <code>docs/AUTO_TESTING_MANUAL.md</code>).</p>
+
+<hr/>
+
+<h2>12. Related project documents</h2>
+
+<table><thead><tr><th>Document</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><a href="./BUSINESS_REQUIREMENTS.md">BUSINESS_REQUIREMENTS.md</a></td><td>Business requirements</td></tr>
+<tr><td><a href="./ARCHITECTURE.md">ARCHITECTURE.md</a></td><td>Technical architecture</td></tr>
+<tr><td><a href="./USE_CASE_REQUIREMENTS.md">USE_CASE_REQUIREMENTS.md</a></td><td>Use cases</td></tr>
+<tr><td><a href="./USER_STORIES.md">USER_STORIES.md</a></td><td>User stories</td></tr>
+<tr><td><a href="./TEST_CASES.md">TEST_CASES.md</a></td><td>Test cases</td></tr>
+<tr><td><a href="./VPS_DEPLOY.md">VPS_DEPLOY.md</a></td><td>Production deploy guide</td></tr>
+<tr><td><a href="./AUTO_TESTING_MANUAL.md">AUTO_TESTING_MANUAL.md</a></td><td>Automated testing guide</td></tr>
+<tr><td>Root <a href="../README.md">README.md</a></td><td>Developer quick start</td></tr>
+</tbody></table>
+
+<hr/>
+
+<h2>13. Handover checklist</h2>
+
+<ul>
+<li>☑ Production site live on HTTPS</li>
+<li>☑ Admin CMS operational (catalog, leads, meter, WhatsApp, content)</li>
+<li>☑ Lead capture + CSV export + delete</li>
+<li>☑ SEO basics (meta, sitemap, robots, OG/Twitter, canonicals)</li>
+<li>☑ Google Search Console ownership verified</li>
+<li>☑ Sitemap submitted to Search Console</li>
+<li>☐ Client changes admin password</li>
+<li>☐ Client confirms real phone / email / WhatsApp on Contact + FAB</li>
+<li>☐ GA4 ID added (if analytics required)</li>
+<li>☐ Cloudinary (or confirmed local uploads) for production images</li>
+<li>☐ Resend (or alternate) for lead email alerts</li>
+<li>☐ GitHub + VPS SSH access transferred to client / agency</li>
+<li>☐ DNS / domain registrar access confirmed</li>
+<li>☐ SSL auto-renewal (certbot) confirmed on VPS</li>
+</ul>
+
+<hr/>
+
+<h2>14. Contacts</h2>
+
+<table><thead><tr><th>Role</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Product / brand</td><td>Browse My Vacations by Browser Hotels</td></tr>
+<tr><td>Public guest email (site default)</td><td>hello@browsemyvacations.com</td></tr>
+<tr><td>Ops / sales email (env default)</td><td>sales@browsemyvacations.com</td></tr>
+<tr><td>Development repository owner</td><td>GitHub: <code>niteshrav/browsemyvacations</code></td></tr>
+</tbody></table>
+
+<p>For post-handover feature work, open issues or PRs against <code>main</code>, or engage the delivery team with a scoped change request.</p>
+
+<hr/>
+
+<p><em>End of handover document. Keep this file with hosting credentials (stored separately) and update §4 / §13 when passwords, emails, or analytics IDs change.</em></p>
+
+</body></html>
