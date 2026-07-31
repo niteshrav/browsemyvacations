@@ -3,6 +3,9 @@ import { fetchPackages } from "@/lib/catalog-api";
 import { buildSitemapEntries, type SitemapEntryInput } from "@/lib/sitemap-entries";
 import { getSiteUrl } from "@/lib/site-url";
 
+/** Cache sitemap so Googlebot gets a fast, stable response. */
+export const revalidate = 3600;
+
 const STATIC_ROUTES: SitemapEntryInput[] = [
   { path: "/", changeFrequency: "daily", priority: 1 },
   { path: "/packages", changeFrequency: "daily", priority: 0.9 },
