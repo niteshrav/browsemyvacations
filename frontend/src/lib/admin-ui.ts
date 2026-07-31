@@ -4,6 +4,7 @@ export const ADMIN_NAV_ITEMS = [
   { href: "/admin/packages", label: "Packages" },
   { href: "/admin/suggestions", label: "Quick Picks" },
   { href: "/admin/content", label: "Page Content" },
+  { href: "/admin/contact", label: "Contact" },
   { href: "/admin/leads", label: "Leads" },
   { href: "/admin/meter", label: "Meter" },
   { href: "/admin/whatsapp", label: "WhatsApp" },

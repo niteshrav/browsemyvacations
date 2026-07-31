@@ -29,6 +29,7 @@ export const ADMIN_PROTECTED_E2E_PAGES: E2ePageRoute[] = [
   { id: "admin-destinations", path: "/admin/destinations", heading: "Destinations", module: "admin-protected" },
   { id: "admin-packages", path: "/admin/packages", heading: "Packages", module: "admin-protected" },
   { id: "admin-leads", path: "/admin/leads", heading: "Leads", module: "admin-protected" },
+  { id: "admin-contact", path: "/admin/contact", heading: "Contact Settings", module: "admin-protected" },
   { id: "admin-meter", path: "/admin/meter", heading: "Vacation Meter", module: "admin-protected" },
   { id: "admin-whatsapp", path: "/admin/whatsapp", heading: "WhatsApp Settings", module: "admin-protected" },
 ];

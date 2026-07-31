@@ -13,6 +13,11 @@ export const SITE_CONTENT_KEYS = [
   "mice.hero.description",
   "settings.whatsapp.number",
   "settings.whatsapp.default_message",
+  "settings.contact.address",
+  "settings.contact.phone",
+  "settings.contact.email",
+  "settings.contact.hours",
+  "settings.contact.website",
 ] as const;
 
 export type SiteContentKey = (typeof SITE_CONTENT_KEYS)[number];
@@ -46,6 +51,26 @@ export const SITE_CONTENT_DEFAULTS: Record<SiteContentKey, { title: string; body
   "settings.whatsapp.default_message": {
     title: "WhatsApp default message",
     body: "Hi Browse My Vacations, I'd like to know more about your packages.",
+  },
+  "settings.contact.address": {
+    title: "Contact — office address",
+    body: BMV_CONTACT.address,
+  },
+  "settings.contact.phone": {
+    title: "Contact — phone number",
+    body: BMV_CONTACT.phoneDisplay,
+  },
+  "settings.contact.email": {
+    title: "Contact — email address",
+    body: BMV_CONTACT.email,
+  },
+  "settings.contact.hours": {
+    title: "Contact — working hours",
+    body: BMV_CONTACT.hours,
+  },
+  "settings.contact.website": {
+    title: "Contact — website display",
+    body: BMV_CONTACT.websiteDisplay,
   },
 };
 

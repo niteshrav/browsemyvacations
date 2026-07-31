@@ -1,9 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { BMV_CONTACT, CONTACT_PAGE } from "@bmv/shared";
+import { CONTACT_PAGE } from "@bmv/shared";
+import type { EditableContactDetails } from "@/lib/site-content-api";
 
-export function ContactStickyCta() {
+type Props = {
+  contact: EditableContactDetails;
+};
+
+export function ContactStickyCta({ contact }: Props) {
   const { stickyCta } = CONTACT_PAGE;
 
   return (
@@ -12,7 +17,7 @@ export function ContactStickyCta() {
       data-testid="contact-sticky-cta"
     >
       <div className="mx-auto flex max-w-lg gap-3">
-        <a href={BMV_CONTACT.telHref} className="btn-secondary flex-1 py-3 text-center">
+        <a href={contact.telHref} className="btn-secondary flex-1 py-3 text-center">
           {stickyCta.callLabel}
         </a>
         <Link href={stickyCta.quoteHref} className="btn-primary flex-1 py-3 text-center">

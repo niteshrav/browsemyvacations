@@ -9,7 +9,41 @@ export const BMV_CONTACT = {
   address: "C-Scheme, Jaipur, Rajasthan 302001, India",
   hours: "Monday – Saturday, 10:00 AM – 7:00 PM IST",
   brandLine: "Browse My Vacations — curated by Browser Hotels",
+  websiteDisplay: "browsemyvacations.com",
 } as const;
+
+/** Build a tel: href from a display phone string. */
+export function buildTelHref(phone: string): string {
+  let digits = phone.replace(/\D/g, "");
+  if (digits.startsWith("0") && digits.length === 11) {
+    digits = digits.slice(1);
+  }
+  if (digits.length === 10) digits = `91${digits}`;
+  return digits ? `tel:+${digits}` : BMV_CONTACT.telHref;
+}
+
+export function buildMailtoHref(email: string): string {
+  const trimmed = email.trim();
+  return trimmed ? `mailto:${trimmed}` : BMV_CONTACT.mailtoHref;
+}
+
+/** Normalize website display + absolute href for contact cards. */
+export function resolveWebsiteLink(
+  input: string | undefined | null,
+  fallbackDisplay = BMV_CONTACT.websiteDisplay,
+): { display: string; href: string } {
+  const trimmed = (input ?? "").trim();
+  if (!trimmed) {
+    return { display: fallbackDisplay, href: `https://${fallbackDisplay}` };
+  }
+  if (/^https?:\/\//i.test(trimmed)) {
+    return {
+      display: trimmed.replace(/^https?:\/\//i, "").replace(/\/$/, ""),
+      href: trimmed,
+    };
+  }
+  return { display: trimmed.replace(/\/$/, ""), href: `https://${trimmed}` };
+}
 
 /**
  * Normalize a WhatsApp number to digits-only form for wa.me.

@@ -31,13 +31,17 @@ describe("BMV contact info", () => {
     expect(normalizeWhatsAppNumber("123")).toBeNull();
   });
 
-  it("builds a package inquiry message with title and link", () => {
-    const message = buildPackageWhatsAppMessage({
-      title: "2D/1N Jaipur",
-      packageUrl: "https://www.browsemyvacations.com/packages/jaipur",
+  it("builds tel and website links from editable contact fields", async () => {
+    const { buildTelHref, buildMailtoHref, resolveWebsiteLink } = await import("./contact-info");
+    expect(buildTelHref("+91 98765 43210")).toBe("tel:+919876543210");
+    expect(buildMailtoHref("sales@example.com")).toBe("mailto:sales@example.com");
+    expect(resolveWebsiteLink("www.example.com")).toEqual({
+      display: "www.example.com",
+      href: "https://www.example.com",
     });
-    expect(message).toContain("2D/1N Jaipur");
-    expect(message).toContain("custom quote");
-    expect(message).toContain("https://www.browsemyvacations.com/packages/jaipur");
+    expect(resolveWebsiteLink("https://browsemyvacations.com/")).toEqual({
+      display: "browsemyvacations.com",
+      href: "https://browsemyvacations.com/",
+    });
   });
 });

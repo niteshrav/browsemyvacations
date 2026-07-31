@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CONTACT_PAGE, CONTACT_TRAVEL_TYPES, LEAD_QUOTE_CONFIRMATION_MESSAGE, BMV_CONTACT } from "@bmv/shared";
+import { CONTACT_PAGE, CONTACT_TRAVEL_TYPES, LEAD_QUOTE_CONFIRMATION_MESSAGE } from "@bmv/shared";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { ANALYTICS_EVENTS, trackEvent } from "@/lib/analytics";
 import {
@@ -11,12 +11,17 @@ import {
   isValidContactPhone,
 } from "@/lib/contact-inquiry";
 import { submitLead, API_UNREACHABLE_MESSAGE } from "@/lib/leads-api";
+import type { EditableContactDetails } from "@/lib/site-content-api";
 import { ContactIcon, FormToast, LoadingSpinner } from "./contact-ui";
 
 const inputClassName =
   "mt-1.5 w-full rounded-xl border border-white/60 bg-white/70 px-4 py-2.5 text-stone-800 shadow-sm backdrop-blur-sm transition placeholder:text-stone-400 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20";
 
-export function ContactInquiryForm() {
+type Props = {
+  contact: EditableContactDetails;
+};
+
+export function ContactInquiryForm({ contact }: Props) {
   const { form } = CONTACT_PAGE;
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -245,8 +250,8 @@ export function ContactInquiryForm() {
                   {error === API_UNREACHABLE_MESSAGE ? (
                     <p className="mt-2">
                       Call{" "}
-                      <a href={BMV_CONTACT.telHref} className="font-semibold underline">
-                        {BMV_CONTACT.phoneDisplay}
+                      <a href={contact.telHref} className="font-semibold underline">
+                        {contact.phoneDisplay}
                       </a>{" "}
                       or use the WhatsApp button below.
                     </p>

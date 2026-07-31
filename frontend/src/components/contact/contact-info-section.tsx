@@ -1,8 +1,8 @@
-import { BMV_CONTACT, CONTACT_PAGE } from "@bmv/shared";
+import { CONTACT_PAGE } from "@bmv/shared";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { FadeUp } from "@/components/marketing/fade-up";
 import { ContactIcon } from "./contact-ui";
-import { getSiteUrl } from "@/lib/site-url";
+import type { EditableContactDetails } from "@/lib/site-content-api";
 
 const WHY_ICONS: Record<string, string> = {
   "expert-planning": "planning",
@@ -11,48 +11,50 @@ const WHY_ICONS: Record<string, string> = {
   assistance: "support",
 };
 
-export function ContactInfoCards() {
+type ContactInfoCardsProps = {
+  contact: EditableContactDetails;
+};
+
+export function ContactInfoCards({ contact }: ContactInfoCardsProps) {
   const { contactInfo } = CONTACT_PAGE;
-  const siteUrl = getSiteUrl();
-  const websiteDisplay = siteUrl.replace(/^https?:\/\//, "");
 
   const cards = [
     {
       id: "address",
       label: "Office Address",
-      value: BMV_CONTACT.address,
+      value: contact.address,
       icon: "location",
-      href: undefined,
+      href: undefined as string | undefined,
     },
     {
       id: "phone",
       label: "Phone Number",
-      value: BMV_CONTACT.phoneDisplay,
+      value: contact.phoneDisplay,
       icon: "phone",
-      href: BMV_CONTACT.telHref,
+      href: contact.telHref,
     },
     {
       id: "email",
       label: "Email Address",
-      value: BMV_CONTACT.email,
+      value: contact.email,
       icon: "email",
-      href: BMV_CONTACT.mailtoHref,
+      href: contact.mailtoHref,
     },
     {
       id: "hours",
       label: "Working Hours",
-      value: BMV_CONTACT.hours,
+      value: contact.hours,
       icon: "clock",
       href: undefined,
     },
     {
       id: "website",
       label: "Website",
-      value: websiteDisplay,
+      value: contact.websiteDisplay,
       icon: "globe",
-      href: siteUrl,
+      href: contact.websiteHref,
     },
-  ] as const;
+  ];
 
   return (
     <section className="bg-stone-50 py-16 sm:py-20" aria-labelledby="contact-info-heading">

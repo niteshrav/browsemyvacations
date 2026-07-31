@@ -1,16 +1,18 @@
-import { BMV_CONTACT, buildWhatsAppHref } from "@bmv/shared";
+import { buildWhatsAppHref } from "@bmv/shared";
+import type { EditableContactDetails } from "@/lib/site-content-api";
 
 type ContactDetailsProps = {
+  contact: EditableContactDetails;
   showFormHint?: boolean;
 };
 
-export function ContactDetails({ showFormHint = false }: ContactDetailsProps) {
+export function ContactDetails({ contact, showFormHint = false }: ContactDetailsProps) {
   return (
     <div className="space-y-3 text-stone-700" data-testid="contact-details">
       <p>
         Phone:{" "}
-        <a href={BMV_CONTACT.telHref} className="font-medium text-teal-800 hover:underline">
-          {BMV_CONTACT.phoneDisplay}
+        <a href={contact.telHref} className="font-medium text-teal-800 hover:underline">
+          {contact.phoneDisplay}
         </a>
       </p>
       <p>
@@ -21,18 +23,18 @@ export function ContactDetails({ showFormHint = false }: ContactDetailsProps) {
           rel="noopener noreferrer"
           className="font-medium text-teal-800 hover:underline"
         >
-          {BMV_CONTACT.whatsappDisplay}
+          {contact.phoneDisplay}
         </a>
       </p>
       <p>
         Email:{" "}
-        <a href={BMV_CONTACT.mailtoHref} className="font-medium text-teal-800 hover:underline">
-          {BMV_CONTACT.email}
+        <a href={contact.mailtoHref} className="font-medium text-teal-800 hover:underline">
+          {contact.email}
         </a>
       </p>
-      <p>Address: {BMV_CONTACT.address}</p>
-      <p>Hours: {BMV_CONTACT.hours}</p>
-      <p className="text-sm text-stone-500">{BMV_CONTACT.brandLine}</p>
+      <p>Address: {contact.address}</p>
+      <p>Hours: {contact.hours}</p>
+      <p className="text-sm text-stone-500">Browse My Vacations — curated by Browser Hotels</p>
       {showFormHint && (
         <p className="text-sm text-stone-600">
           Prefer a callback? Use the form below or call us directly — no form required.

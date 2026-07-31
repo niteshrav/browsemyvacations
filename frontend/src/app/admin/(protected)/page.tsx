@@ -28,6 +28,11 @@ const QUICK_ACTIONS = [
     href: "/admin/content",
   },
   {
+    title: "Contact",
+    description: "Update office address, phone, email, hours, and website on the Contact page.",
+    href: "/admin/contact",
+  },
+  {
     title: "Leads",
     description: "Track incoming leads, statuses, and follow-up notes.",
     href: "/admin/leads",
