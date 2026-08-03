@@ -12,25 +12,13 @@ describe("resolvePackageImage", () => {
     expect(image).toBe("https://example.com/custom.jpg");
   });
 
-  it("replaces soft local marketing PNG uploads with city tourism photos", () => {
+  it("keeps admin-uploaded package covers", () => {
     const image = resolvePackageImage({
       title: "2D/1N Udaipur: The Romantic Lake Escape",
       slug: "standalone-single-city-udaipur-the-romantic-lake-escape",
       images: ["https://browsemyvacations.com/uploads/5e181df2771670bd.png"],
     });
-    expect(image).toContain("images.unsplash.com");
-    expect(image).toContain("1599661046289");
-    expect(image).toContain("w=1600");
-    expect(image).not.toContain("/uploads/");
-  });
-
-  it("keeps sharp JPEG uploads", () => {
-    const image = resolvePackageImage({
-      title: "2D/1N Udaipur: The Romantic Lake Escape",
-      slug: "standalone-single-city-udaipur-the-romantic-lake-escape",
-      images: ["https://browsemyvacations.com/uploads/abcdef0123456789.jpg"],
-    });
-    expect(image).toContain("/uploads/abcdef0123456789.jpg");
+    expect(image).toContain("/uploads/5e181df2771670bd.png");
   });
 
   it("returns Udaipur tourism fallback for Udaipur packages", () => {

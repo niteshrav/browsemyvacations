@@ -26,18 +26,6 @@ export function buildUnsplashUrl(photoId: string): string {
   return deliverCdnImageUrl(buildUnsplashOriginUrl(photoId), { ...PACKAGE_COVER_IMAGE_OPTIONS });
 }
 
-/**
- * Soft AI / Canva collage covers saved as hashed PNGs under /uploads.
- * They ship with baked-in title text that looks muddy on retina package cards.
- */
-export function isSoftPackageUploadUrl(url: string): boolean {
-  try {
-    return /\/uploads\/[a-f0-9]+\.png$/i.test(new URL(url).pathname);
-  } catch {
-    return /\/uploads\/[a-f0-9]+\.png$/i.test(url);
-  }
-}
-
 export function deliverPackageCoverUrl(sourceUrl: string, env?: NodeJS.ProcessEnv): string {
   return deliverCdnImageUrl(sourceUrl, { ...PACKAGE_COVER_IMAGE_OPTIONS }, env);
 }
@@ -142,19 +130,14 @@ export function resolvePackageImageFallback(title: string, slug: string): string
   return deliverPackageCoverUrl(resolvePackageImageFallbackOrigin(title, slug));
 }
 
-/**
- * Prefer real destination photography over soft local marketing PNG collages.
- * JPEG/WebP uploads and remote CDN photos are kept as-is.
- */
+/** First package image when present; otherwise city tourism fallback origin. */
 export function resolvePackageImageSource(
   images: readonly string[],
   title: string,
   slug: string,
 ): string {
   const primary = images.find((image) => typeof image === "string" && image.trim().length > 0)?.trim();
-  if (primary && !isSoftPackageUploadUrl(primary)) {
-    return primary;
-  }
+  if (primary) return primary;
   return resolvePackageImageFallbackOrigin(title, slug);
 }
 
