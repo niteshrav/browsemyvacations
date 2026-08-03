@@ -1,6 +1,10 @@
 import {
   BMV_CONTACT,
+  buildContactInfoDescription,
+  buildGoogleMapsEmbedUrl,
   buildMailtoHref,
+  buildOfficeVisitDescription,
+  buildOfficeVisitHeading,
   buildTelHref,
   resolveWebsiteLink,
   SITE_CONTENT_DEFAULTS,
@@ -28,6 +32,7 @@ export type EditableContactDetails = {
   hours: string;
   websiteDisplay: string;
   websiteHref: string;
+  infoDescription: string;
 };
 
 export type ContactHeroCopy = {
@@ -53,6 +58,13 @@ function contentValue(
 ): string {
   return data[key]?.trim() || SITE_CONTENT_DEFAULTS[key].body;
 }
+
+/** Legacy Jaipur map copy — treat as unset so admin address drives the section. */
+const LEGACY_MAP_HEADINGS = new Set(["Visit Us In Jaipur", "Visit Our Office"]);
+const LEGACY_MAP_DESCRIPTIONS = new Set([
+  SITE_CONTENT_DEFAULTS["contact.map.description"].body,
+  "Stop by our C-Scheme office to discuss your travel plans in person. We recommend calling ahead to schedule a consultation with our team.",
+]);
 
 export async function loadHomeHeroCopy(): Promise<HomeHeroCopy> {
   const data = await fetchPublicContent();
@@ -83,6 +95,7 @@ export function resolveContactDetails(
     hours,
     websiteDisplay: website.display,
     websiteHref: website.href,
+    infoDescription: buildContactInfoDescription(address),
   };
 }
 
@@ -103,13 +116,34 @@ export type ContactMapCopy = {
   eyebrow: string;
   heading: string;
   description: string;
+  embedUrl: string;
 };
+
+export function resolveContactMapCopy(
+  data: Partial<Record<string, string>> = {},
+  address = resolveContactDetails(data).address,
+): ContactMapCopy {
+  const storedHeading = data["contact.map.heading"]?.trim() || "";
+  const storedDescription = data["contact.map.description"]?.trim() || "";
+  const heading =
+    storedHeading && !LEGACY_MAP_HEADINGS.has(storedHeading)
+      ? storedHeading
+      : buildOfficeVisitHeading(address);
+  const description =
+    storedDescription && !LEGACY_MAP_DESCRIPTIONS.has(storedDescription)
+      ? storedDescription
+      : buildOfficeVisitDescription(address);
+
+  return {
+    eyebrow: data["contact.map.eyebrow"]?.trim() || SITE_CONTENT_DEFAULTS["contact.map.eyebrow"].body,
+    heading,
+    description,
+    embedUrl: buildGoogleMapsEmbedUrl(address),
+  };
+}
 
 export async function loadContactMapCopy(): Promise<ContactMapCopy> {
   const data = await fetchPublicContent();
-  return {
-    eyebrow: contentValue(data, "contact.map.eyebrow"),
-    heading: contentValue(data, "contact.map.heading"),
-    description: contentValue(data, "contact.map.description"),
-  };
+  const contact = resolveContactDetails(data);
+  return resolveContactMapCopy(data, contact.address);
 }

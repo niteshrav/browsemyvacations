@@ -1,4 +1,4 @@
-import { BMV_CONTACT } from "./contact-info";
+import { BMV_CONTACT, buildGoogleMapsEmbedUrl } from "./contact-info";
 import { MARKETING_IMAGES } from "./marketing-images";
 
 export const CONTACT_TRAVEL_TYPES = [
@@ -31,7 +31,7 @@ export const CONTACT_PAGE = {
     eyebrow: "Reach Us",
     heading: "We're Here To Help You Travel Better",
     description:
-      "Call, email, or visit our Jaipur office — our team responds quickly with tailored recommendations and transparent pricing.",
+      "Call, email, or visit our office — our team responds quickly with tailored recommendations and transparent pricing.",
   },
   form: {
     eyebrow: "Plan With Us",
@@ -75,11 +75,10 @@ export const CONTACT_PAGE = {
   },
   map: {
     eyebrow: "Our Office",
-    heading: "Visit Us In Jaipur",
+    heading: "Visit Our Office",
     description:
-      "Stop by our C-Scheme office to discuss your travel plans in person. We recommend calling ahead to schedule a consultation with our team.",
-    embedUrl:
-      "https://maps.google.com/maps?q=C-Scheme,+Jaipur,+Rajasthan+302001&t=&z=15&ie=UTF8&iwloc=&output=embed",
+      "Stop by our office to discuss your travel plans in person. We recommend calling ahead to schedule a consultation with our team.",
+    embedUrl: buildGoogleMapsEmbedUrl(BMV_CONTACT.address),
     title: "Browse My Vacations office location on Google Maps",
   },
   faq: {

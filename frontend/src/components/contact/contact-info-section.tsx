@@ -62,7 +62,7 @@ export function ContactInfoCards({ contact }: ContactInfoCardsProps) {
         <SectionHeading
           eyebrow={contactInfo.eyebrow}
           title={contactInfo.heading}
-          description={contactInfo.description}
+          description={contact.infoDescription}
         />
 
         <div

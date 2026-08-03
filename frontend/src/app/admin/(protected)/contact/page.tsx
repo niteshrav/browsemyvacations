@@ -1,6 +1,6 @@
 "use client";
 
-import { BMV_CONTACT } from "@bmv/shared";
+import { BMV_CONTACT, buildOfficeVisitDescription, buildOfficeVisitHeading } from "@bmv/shared";
 import { FormEvent, useEffect, useState } from "react";
 import { AdminErrorAlert, AdminSuccessAlert } from "@/components/admin/admin-alerts";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
@@ -88,6 +88,9 @@ export default function AdminContactSettingsPage() {
         ["settings.contact.email", email],
         ["settings.contact.hours", hours],
         ["settings.contact.website", website],
+        // Keep the Visit Us / map copy in sync with Contact Settings address.
+        ["contact.map.heading", buildOfficeVisitHeading(address)],
+        ["contact.map.description", buildOfficeVisitDescription(address)],
       ] as const;
 
       const results = await Promise.all(
@@ -120,7 +123,7 @@ export default function AdminContactSettingsPage() {
 
       <AdminPanel
         title="Contact page details"
-        description="These values power the five info cards on /contact (and related call/email links)."
+        description="These values power the contact cards, Visit Us copy, and Google Map on /contact."
       >
         {loading ? (
           <p className="text-sm text-stone-500">Loading settings…</p>

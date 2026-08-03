@@ -1,8 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
   BMV_CONTACT,
+  buildContactInfoDescription,
+  buildGoogleMapsEmbedUrl,
+  buildOfficeVisitDescription,
+  buildOfficeVisitHeading,
   buildPackageWhatsAppMessage,
   buildWhatsAppHref,
+  inferOfficeCity,
   normalizeWhatsAppNumber,
 } from "./contact-info";
 
@@ -43,5 +48,18 @@ describe("BMV contact info", () => {
       display: "browsemyvacations.com",
       href: "https://browsemyvacations.com/",
     });
+  });
+
+  it("builds office visit copy and map embed from address", () => {
+    const address =
+      "Browser Hotels 109, HQ Workspace The Keys Hotel, E-263, MIA, Transport Nagar, Udaipur, Rajasthan 313003";
+    expect(inferOfficeCity(address)).toBe("Udaipur");
+    expect(buildOfficeVisitHeading(address)).toBe("Visit Us In Udaipur");
+    expect(buildOfficeVisitDescription(address)).toContain(address);
+    expect(buildContactInfoDescription(address)).toContain("Udaipur");
+    expect(buildGoogleMapsEmbedUrl(address)).toContain(encodeURIComponent(address));
+    expect(buildPackageWhatsAppMessage({ title: "Udaipur Escape", packageUrl: "https://x.test/p" })).toContain(
+      "Udaipur Escape",
+    );
   });
 });

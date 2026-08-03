@@ -81,11 +81,11 @@ export const SITE_CONTENT_DEFAULTS: Record<SiteContentKey, { title: string; body
   },
   "contact.map.heading": {
     title: "Contact — office section heading",
-    body: "Visit Us In Jaipur",
+    body: "Visit Our Office",
   },
   "contact.map.description": {
     title: "Contact — office section description",
-    body: "Stop by our C-Scheme office to discuss your travel plans in person. We recommend calling ahead to schedule a consultation with our team.",
+    body: "Stop by our office to discuss your travel plans in person. We recommend calling ahead to schedule a consultation with our team.",
   },
 };
 
