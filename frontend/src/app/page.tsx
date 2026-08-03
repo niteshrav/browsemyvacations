@@ -36,15 +36,15 @@ export default async function HomePage() {
               <span className="block">{heroCopy.headlinePrimary}</span>
               <span className="mt-1 block font-extrabold text-[#0a4f4a]">{heroCopy.headlineAccent}</span>
             </h1>
-            <div className="mx-auto mt-5 flex items-center justify-center gap-3 lg:mx-0 lg:justify-start">
+            <div className="mx-auto mt-2.5 flex items-center justify-center gap-3 lg:mx-0 lg:justify-start">
               <span className="h-px w-10 bg-gradient-to-r from-transparent to-amber-600/80" aria-hidden />
               <span className="h-1.5 w-1.5 rotate-45 bg-amber-600" aria-hidden />
               <span className="h-px w-10 bg-gradient-to-l from-transparent to-amber-600/80" aria-hidden />
             </div>
-            <p className="mx-auto mt-4 max-w-md text-base font-bold leading-relaxed text-[#0a1628] sm:text-lg lg:mx-0 lg:max-w-lg">
+            <HeroSearch />
+            <p className="mx-auto mt-3 max-w-md text-base font-bold leading-relaxed text-[#0a1628] sm:text-lg lg:mx-0 lg:max-w-lg">
               {heroCopy.support}
             </p>
-            <HeroSearch />
             <HeroValueProps />
           </section>
         </HeroStage>

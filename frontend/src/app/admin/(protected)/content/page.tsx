@@ -30,7 +30,13 @@ const PAGE_GROUPS = [
   {
     id: "contact",
     title: "Contact page",
-    keys: ["contact.hero.heading", "contact.hero.description"] as SiteContentKey[],
+    keys: [
+      "contact.hero.heading",
+      "contact.hero.description",
+      "contact.map.eyebrow",
+      "contact.map.heading",
+      "contact.map.description",
+    ] as SiteContentKey[],
   },
   {
     id: "mice",

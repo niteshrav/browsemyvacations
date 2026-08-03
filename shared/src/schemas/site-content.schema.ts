@@ -18,6 +18,9 @@ export const SITE_CONTENT_KEYS = [
   "settings.contact.email",
   "settings.contact.hours",
   "settings.contact.website",
+  "contact.map.eyebrow",
+  "contact.map.heading",
+  "contact.map.description",
 ] as const;
 
 export type SiteContentKey = (typeof SITE_CONTENT_KEYS)[number];
@@ -71,6 +74,18 @@ export const SITE_CONTENT_DEFAULTS: Record<SiteContentKey, { title: string; body
   "settings.contact.website": {
     title: "Contact — website display",
     body: BMV_CONTACT.websiteDisplay,
+  },
+  "contact.map.eyebrow": {
+    title: "Contact — office section eyebrow",
+    body: "Our Office",
+  },
+  "contact.map.heading": {
+    title: "Contact — office section heading",
+    body: "Visit Us In Jaipur",
+  },
+  "contact.map.description": {
+    title: "Contact — office section description",
+    body: "Stop by our C-Scheme office to discuss your travel plans in person. We recommend calling ahead to schedule a consultation with our team.",
   },
 };
 

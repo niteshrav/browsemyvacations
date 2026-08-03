@@ -233,7 +233,7 @@ export function HeroStageClient({ anchor, initialImages, children }: Props) {
         onResume={() => setIsPaused(false)}
       />
 
-      <div className="site-container relative z-10 grid w-full items-center gap-8 py-12 sm:py-14 lg:grid-cols-[minmax(20rem,27rem)_minmax(0,1fr)] lg:gap-10 lg:py-16 xl:grid-cols-[minmax(22rem,30rem)_minmax(0,1fr)] xl:gap-12">
+      <div className="site-container relative z-10 grid w-full items-start gap-8 pt-4 pb-8 sm:pt-5 sm:pb-10 lg:grid-cols-[minmax(20rem,27rem)_minmax(0,1fr)] lg:gap-10 lg:pt-6 lg:pb-12 xl:grid-cols-[minmax(22rem,30rem)_minmax(0,1fr)] xl:gap-12">
         <HeroCollagePanel
           images={images.left}
           activeIndex={desktopActiveIndex}
@@ -241,7 +241,7 @@ export function HeroStageClient({ anchor, initialImages, children }: Props) {
           onPause={() => setIsPaused(true)}
           onResume={() => setIsPaused(false)}
         />
-        <div className="relative z-10 flex min-w-0 flex-col justify-center">
+        <div className="relative z-10 flex min-w-0 flex-col justify-start pt-1 sm:pt-2 lg:pt-3">
           {children}
           <HeroMobileStrip
             images={mobileImages}

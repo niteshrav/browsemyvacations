@@ -58,9 +58,9 @@ describe("brand logo", () => {
     expect(BRAND_LOGO_USE_OPTIMIZER).toBe(false);
     expect(brandLogoIntegratedClassName()).not.toContain("mix-blend");
     expect(brandLogoIntegratedClassName()).not.toContain("bg-");
-    expect(siteHeaderClassName()).toContain("bg-stone-50");
+    expect(siteHeaderClassName()).toContain("bg-white/95");
     expect(rootBodyClassName()).toContain("bg-stone-50");
-    expect(siteHeaderClassName()).not.toContain("backdrop-blur");
+    expect(siteHeaderClassName()).toContain("backdrop-blur");
   });
 
   it("stores the transparent logo as a png with an alpha channel", () => {

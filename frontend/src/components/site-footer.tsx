@@ -9,8 +9,8 @@ const EXPLORE_LINKS = [
 ] as const;
 
 const PLAN_LINKS = [
-  { href: "/search?q=Jaipur", label: "Jaipur" },
   { href: "/search?q=Udaipur", label: "Udaipur" },
+  { href: "/search?q=Jaipur", label: "Jaipur" },
   { href: "/search?q=Jodhpur", label: "Jodhpur" },
   { href: "/search?q=Jaisalmer", label: "Jaisalmer" },
 ] as const;
@@ -30,8 +30,8 @@ export function SiteFooter() {
       <div className="site-container py-12 sm:py-14">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           <div className="md:col-span-2 lg:col-span-1">
-            <Link href="/" className="inline-flex rounded-md bg-white/95 px-2 py-1.5">
-              <BrandLogo className="h-10 w-auto max-w-[220px] object-contain object-left" />
+            <Link href="/" className="inline-flex rounded-md bg-white px-2.5 py-2 shadow-sm">
+              <BrandLogo className="h-16 w-auto max-w-[300px] object-contain object-left sm:h-20 sm:max-w-[360px]" />
             </Link>
             <p className="mt-4 font-serif text-lg font-medium text-white">
               Vacations You&apos;ll Love.

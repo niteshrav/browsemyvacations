@@ -64,6 +64,7 @@ describe("home-catalog", () => {
     ];
 
     const grouped = groupHomePackagesByDestination(destinations, packages);
+    expect(grouped.map((g) => g.destination.slug)).toEqual(["udaipur", "kumbhalgarh"]);
     expect(grouped[0]?.packages).toHaveLength(1);
     expect(grouped[0]?.packages[0]?.slug).toBe(
       "standalone-single-city-udaipur-the-romantic-lake-escape",
@@ -72,6 +73,16 @@ describe("home-catalog", () => {
     expect(grouped[1]?.packages[0]?.slug).toBe(
       "standalone-single-city-kumbhalgarh-the-great-wall-of-india-trek",
     );
+  });
+
+  it("orders destinations by popularity instead of alphabet", () => {
+    const mixed: Destination[] = [
+      { id: "a", name: "Alwar", slug: "alwar", imageUrl: null, displayOrder: 1, active: true },
+      { id: "u", name: "Udaipur", slug: "udaipur", imageUrl: null, displayOrder: 2, active: true },
+      { id: "j", name: "Jaipur", slug: "jaipur", imageUrl: null, displayOrder: 3, active: true },
+    ];
+    const grouped = groupHomePackagesByDestination(mixed, []);
+    expect(grouped.map((g) => g.destination.slug)).toEqual(["udaipur", "jaipur", "alwar"]);
   });
 });
 

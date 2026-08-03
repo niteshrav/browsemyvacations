@@ -14,7 +14,8 @@ describe("hero search layout", () => {
     expect(heroSearchFormClassName()).toContain("rounded-full");
     expect(heroSearchFormClassName()).toContain("max-w-xl");
     expect(heroSearchFormClassName()).toContain("items-center");
-    expect(heroSearchFormClassName()).toContain("bg-white");
+    expect(heroSearchFormClassName()).toContain("bg-[#eef7f5]");
+    expect(heroSearchFormClassName()).toContain("mt-3");
   });
 
   it("styles the search button as a compact pill action", () => {

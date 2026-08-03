@@ -98,3 +98,18 @@ export async function loadContactHeroCopy(): Promise<ContactHeroCopy> {
     description: contentValue(data, "contact.hero.description"),
   };
 }
+
+export type ContactMapCopy = {
+  eyebrow: string;
+  heading: string;
+  description: string;
+};
+
+export async function loadContactMapCopy(): Promise<ContactMapCopy> {
+  const data = await fetchPublicContent();
+  return {
+    eyebrow: contentValue(data, "contact.map.eyebrow"),
+    heading: contentValue(data, "contact.map.heading"),
+    description: contentValue(data, "contact.map.description"),
+  };
+}

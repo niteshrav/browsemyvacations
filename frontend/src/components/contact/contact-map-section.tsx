@@ -1,14 +1,23 @@
 import { CONTACT_PAGE } from "@bmv/shared";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { FadeUp } from "@/components/marketing/fade-up";
+import type { ContactMapCopy } from "@/lib/site-content-api";
 
-export function ContactMapSection() {
+type Props = {
+  mapCopy: ContactMapCopy;
+};
+
+export function ContactMapSection({ mapCopy }: Props) {
   const { map } = CONTACT_PAGE;
 
   return (
     <section className="bg-stone-50 py-16 sm:py-20" aria-labelledby="contact-map-heading">
       <div className="site-container">
-        <SectionHeading eyebrow={map.eyebrow} title={map.heading} description={map.description} />
+        <SectionHeading
+          eyebrow={mapCopy.eyebrow}
+          title={mapCopy.heading}
+          description={mapCopy.description}
+        />
 
         <FadeUp className="mt-12">
           <div className="overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-lg shadow-teal-900/5">

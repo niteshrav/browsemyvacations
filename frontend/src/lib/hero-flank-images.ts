@@ -52,7 +52,7 @@ export type HeroFlankImages = {
 };
 
 export function heroStageClassName(): string {
-  return "relative w-full min-h-[34rem] overflow-hidden bg-[#f7f5f0] sm:min-h-[38rem] lg:min-h-[46rem]";
+  return "relative w-full min-h-[30rem] overflow-hidden bg-[#f7f5f0] sm:min-h-[34rem] lg:min-h-[40rem]";
 }
 
 /** Full-bleed destination photo behind the entire hero. */

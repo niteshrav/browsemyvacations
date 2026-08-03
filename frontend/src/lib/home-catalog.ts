@@ -1,4 +1,4 @@
-import { RAJASTHAN_TOURIST_CITIES, cityNameToSlug, packageMatchesCityFilter } from "@bmv/shared";
+import { RAJASTHAN_TOURIST_CITIES, cityNameToSlug, packageMatchesCityFilter, rajasthanCityPopularityRank } from "@bmv/shared";
 import { fetchDestinations, fetchPackages, isCatalogApiReachable } from "./catalog-api";
 import { fetchSuggestions } from "./discovery-api";
 import { resolveHomeQuickPickSuggestions } from "./quick-pick-suggestions";
@@ -22,7 +22,10 @@ function resolveFallbackDestinationsFromPackages(packages: PackageCard[]): Desti
   );
   const slugSet = new Set(packages.flatMap((pkg) => pkg.destinationSlugs).filter(Boolean));
   return [...slugSet]
-    .sort((a, b) => a.localeCompare(b))
+    .sort(
+      (a, b) =>
+        rajasthanCityPopularityRank(a) - rajasthanCityPopularityRank(b) || a.localeCompare(b),
+    )
     .map((slug, index) => ({
       id: `fallback-${slug}`,
       name: knownCityNameBySlug.get(slug) ?? slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
@@ -33,11 +36,21 @@ function resolveFallbackDestinationsFromPackages(packages: PackageCard[]): Desti
     }));
 }
 
+/** Prefer popularity order over alphabetical / stale displayOrder. */
+export function sortDestinationsByPopularity(destinations: Destination[]): Destination[] {
+  return [...destinations].sort(
+    (left, right) =>
+      rajasthanCityPopularityRank(left.slug) - rajasthanCityPopularityRank(right.slug) ||
+      left.displayOrder - right.displayOrder ||
+      left.name.localeCompare(right.name),
+  );
+}
+
 export function groupHomePackagesByDestination(
   destinations: Destination[],
   packages: PackageCardWithDestinations[],
 ): HomeDestinationPackages[] {
-  return destinations.map((destination) => ({
+  return sortDestinationsByPopularity(destinations).map((destination) => ({
     destination,
     packages: packages
       .filter((pkg) =>
