@@ -1,9 +1,10 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import type { CreatePackageInput, UpdatePackageInput } from "@bmv/shared";
 import {
-  deliverCdnImageUrl,
+  deliverPackageCoverUrl,
   findRajasthanCityBySlug,
   packageMatchesCityFilter,
+  resolvePackageImageSource,
   resolvePackageOverviewContent,
   slugifyPackageTitle,
 } from "@bmv/shared";
@@ -11,11 +12,23 @@ import { Prisma } from "@bmv/database";
 import { PrismaService } from "../prisma/prisma.service";
 import { decimalToNumber } from "../common/serialize";
 
-function deliverPackageImages(images: Prisma.JsonValue): string[] {
-  if (!Array.isArray(images)) return [];
-  return images
-    .filter((image): image is string => typeof image === "string" && image.trim().length > 0)
-    .map((image) => deliverCdnImageUrl(image, { width: 1200, crop: "fill" }));
+function deliverPackageImages(
+  images: Prisma.JsonValue,
+  title: string,
+  slug: string,
+): string[] {
+  if (!Array.isArray(images)) {
+    return [deliverPackageCoverUrl(resolvePackageImageSource([], title, slug))];
+  }
+  const list = images.filter(
+    (image): image is string => typeof image === "string" && image.trim().length > 0,
+  );
+  if (list.length === 0) {
+    return [deliverPackageCoverUrl(resolvePackageImageSource([], title, slug))];
+  }
+  return list.map((image) =>
+    deliverPackageCoverUrl(resolvePackageImageSource([image], title, slug)),
+  );
 }
 
 function asStringArray(value: Prisma.JsonValue): string[] {
@@ -405,9 +418,9 @@ export class PackagesService {
     },
     destinationSlugs: string[] = [],
   ) {
-    const images = deliverPackageImages(row.images);
+    const images = deliverPackageImages(row.images, row.title, row.slug);
     const cover = row.coverImage
-      ? deliverCdnImageUrl(row.coverImage, { width: 1200, crop: "fill" })
+      ? deliverPackageCoverUrl(resolvePackageImageSource([row.coverImage], row.title, row.slug))
       : images[0];
     const orderedImages = cover
       ? [cover, ...images.filter((url) => url !== cover)]

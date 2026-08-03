@@ -8,14 +8,38 @@ import { deliverCdnImageUrl } from "./cdn/cloudinary";
 
 export const BANNED_TOURISM_PHOTO_IDS = ["1524492412937"] as const;
 
-export const UNSPLASH_IMAGE_PARAMS = "?auto=format&fit=crop&w=1200&q=80";
+/** Retina-friendly Unsplash params for destination photography. */
+export const UNSPLASH_IMAGE_PARAMS = "?auto=format&fit=crop&w=1600&q=85";
+
+/** Package card / cover delivery — sharper than default q_auto on travel photos. */
+export const PACKAGE_COVER_IMAGE_OPTIONS = {
+  width: 1600,
+  crop: "fill" as const,
+  quality: "auto:good" as const,
+};
 
 export function buildUnsplashOriginUrl(photoId: string): string {
   return `https://images.unsplash.com/photo-${photoId}${UNSPLASH_IMAGE_PARAMS}`;
 }
 
 export function buildUnsplashUrl(photoId: string): string {
-  return deliverCdnImageUrl(buildUnsplashOriginUrl(photoId), { width: 1200, crop: "fill" });
+  return deliverCdnImageUrl(buildUnsplashOriginUrl(photoId), { ...PACKAGE_COVER_IMAGE_OPTIONS });
+}
+
+/**
+ * Soft AI / Canva collage covers saved as hashed PNGs under /uploads.
+ * They ship with baked-in title text that looks muddy on retina package cards.
+ */
+export function isSoftPackageUploadUrl(url: string): boolean {
+  try {
+    return /\/uploads\/[a-f0-9]+\.png$/i.test(new URL(url).pathname);
+  } catch {
+    return /\/uploads\/[a-f0-9]+\.png$/i.test(url);
+  }
+}
+
+export function deliverPackageCoverUrl(sourceUrl: string, env?: NodeJS.ProcessEnv): string {
+  return deliverCdnImageUrl(sourceUrl, { ...PACKAGE_COVER_IMAGE_OPTIONS }, env);
 }
 
 export function isBannedTourismPhotoUrl(url: string): boolean {
@@ -51,15 +75,19 @@ export const CITY_TOURISM_PHOTO_SETS: Record<CityPhotoSet, readonly string[]> = 
 
 export const DEFAULT_TOURISM_FALLBACK_URL = buildUnsplashUrl(UDAIPUR_PHOTO_IDS[0]);
 
-export const PACKAGE_CITY_FALLBACKS: Record<string, string> = {
-  udaipur: buildUnsplashUrl(UDAIPUR_PHOTO_IDS[0]),
-  jaipur: buildUnsplashUrl(JAIPUR_PHOTO_IDS[0]),
-  jodhpur: buildUnsplashUrl(JODHPUR_PHOTO_IDS[0]),
-  jaisalmer: buildUnsplashUrl(JODHPUR_PHOTO_IDS[0]),
-  bikaner: buildUnsplashUrl(JODHPUR_PHOTO_IDS[1]),
-  pushkar: buildUnsplashUrl(JAIPUR_PHOTO_IDS[0]),
-  ajmer: buildUnsplashUrl(JAIPUR_PHOTO_IDS[0]),
+const PACKAGE_CITY_FALLBACK_IDS: Record<string, string> = {
+  udaipur: UDAIPUR_PHOTO_IDS[0],
+  jaipur: JAIPUR_PHOTO_IDS[0],
+  jodhpur: JODHPUR_PHOTO_IDS[0],
+  jaisalmer: JODHPUR_PHOTO_IDS[0],
+  bikaner: JODHPUR_PHOTO_IDS[1],
+  pushkar: JAIPUR_PHOTO_IDS[0],
+  ajmer: JAIPUR_PHOTO_IDS[0],
 };
+
+export const PACKAGE_CITY_FALLBACKS: Record<string, string> = Object.fromEntries(
+  Object.entries(PACKAGE_CITY_FALLBACK_IDS).map(([city, photoId]) => [city, buildUnsplashUrl(photoId)]),
+);
 
 export const CITY_TO_PHOTO_SET: Record<string, CityPhotoSet> = {
   Udaipur: "udaipur",
@@ -97,12 +125,37 @@ export function getCityPlanImageUrls(city: string): string[] {
   return [...CITY_TOURISM_PHOTO_SETS[photoSet]];
 }
 
-export function resolvePackageImageFallback(title: string, slug: string): string {
+export function resolvePackageFallbackPhotoId(title: string, slug: string): string {
   const searchable = `${title} ${slug}`.toLowerCase();
-  const cityEntry = Object.entries(PACKAGE_CITY_FALLBACKS).find(([city]) =>
+  const cityEntry = Object.entries(PACKAGE_CITY_FALLBACK_IDS).find(([city]) =>
     searchable.includes(city),
   );
-  return cityEntry?.[1] ?? DEFAULT_TOURISM_FALLBACK_URL;
+  return cityEntry?.[1] ?? UDAIPUR_PHOTO_IDS[0];
+}
+
+/** Raw Unsplash origin — apply {@link deliverPackageCoverUrl} at the edge. */
+export function resolvePackageImageFallbackOrigin(title: string, slug: string): string {
+  return buildUnsplashOriginUrl(resolvePackageFallbackPhotoId(title, slug));
+}
+
+export function resolvePackageImageFallback(title: string, slug: string): string {
+  return deliverPackageCoverUrl(resolvePackageImageFallbackOrigin(title, slug));
+}
+
+/**
+ * Prefer real destination photography over soft local marketing PNG collages.
+ * JPEG/WebP uploads and remote CDN photos are kept as-is.
+ */
+export function resolvePackageImageSource(
+  images: readonly string[],
+  title: string,
+  slug: string,
+): string {
+  const primary = images.find((image) => typeof image === "string" && image.trim().length > 0)?.trim();
+  if (primary && !isSoftPackageUploadUrl(primary)) {
+    return primary;
+  }
+  return resolvePackageImageFallbackOrigin(title, slug);
 }
 
 /** Seeded Udaipur destination and package images — all Lake Palace / Udaipur tourism. */

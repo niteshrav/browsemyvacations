@@ -4,12 +4,20 @@
  * travel photos and logos hit an edge CDN with automatic format/quality.
  */
 
+export type CloudinaryQuality =
+  | "auto"
+  | "auto:good"
+  | "auto:best"
+  | "auto:eco"
+  | "auto:low"
+  | number;
+
 export type CloudinaryTransformOptions = {
   width?: number;
   height?: number;
   /** Defaults to fill when width or height is set. */
   crop?: "fill" | "fit" | "limit" | "scale" | "thumb";
-  quality?: "auto" | number;
+  quality?: CloudinaryQuality;
   format?: "auto" | "webp" | "avif" | "png" | "jpg";
 };
 

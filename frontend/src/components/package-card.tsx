@@ -11,9 +11,7 @@ export function PackageCard({ pkg }: Props) {
   return (
     <article className="group mx-auto flex h-full w-full max-w-[22rem] flex-col overflow-hidden rounded-xl border border-stone-200/80 bg-white shadow-[0_8px_22px_rgba(28,25,23,0.05)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(15,118,110,0.12)] sm:max-w-none">
       <div className="aspect-[4/3] overflow-hidden bg-stone-100">
-        <div className="h-full w-full transition duration-700 ease-out group-hover:scale-[1.02]">
-          <PackageCardImage pkg={pkg} alt={`${pkg.title} preview`} />
-        </div>
+        <PackageCardImage pkg={pkg} alt={`${pkg.title} preview`} />
       </div>
       <div className="flex flex-1 flex-col p-3 sm:p-3.5">
         <h3 className="text-[0.875rem] font-semibold leading-snug text-stone-900 sm:text-[0.925rem]">

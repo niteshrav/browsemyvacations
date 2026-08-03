@@ -8,7 +8,9 @@ import {
   DEFAULT_TOURISM_FALLBACK_URL,
   getCityPlanImageUrls,
   isBannedTourismPhotoUrl,
+  isSoftPackageUploadUrl,
   resolvePackageImageFallback,
+  resolvePackageImageSource,
   UDAIPUR_SEED_IMAGES,
 } from "./city-tourism-images";
 
@@ -64,6 +66,26 @@ describe("city tourism images", () => {
 
     const image = resolvePackageImageFallback("E2E Package", "e2e-package");
     expect(image).toBe(DEFAULT_TOURISM_FALLBACK_URL);
+  });
+
+  it("detects soft local marketing PNG uploads", () => {
+    expect(isSoftPackageUploadUrl("https://browsemyvacations.com/uploads/5e181df2771670bd.png")).toBe(
+      true,
+    );
+    expect(isSoftPackageUploadUrl("https://browsemyvacations.com/uploads/abcdef0123456789.jpg")).toBe(
+      false,
+    );
+  });
+
+  it("swaps soft PNG uploads for destination tourism origins", () => {
+    const source = resolvePackageImageSource(
+      ["https://browsemyvacations.com/uploads/5e181df2771670bd.png"],
+      "2D/1N Udaipur: The Romantic Lake Escape",
+      "udaipur-romantic",
+    );
+    expect(source).toContain("1599661046289");
+    expect(source).toContain("w=1600");
+    expect(source).not.toContain("/uploads/");
   });
 
   it("returns three Unsplash city-plan images per photo set", () => {

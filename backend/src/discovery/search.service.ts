@@ -1,14 +1,31 @@
 import { Injectable } from "@nestjs/common";
-import { deliverCdnImageUrl, packageMatchesSearchQuery, type SearchablePackage } from "@bmv/shared";
+import {
+  deliverPackageCoverUrl,
+  packageMatchesSearchQuery,
+  resolvePackageImageSource,
+  type SearchablePackage,
+} from "@bmv/shared";
 import { Prisma } from "@bmv/database";
 import { PrismaService } from "../prisma/prisma.service";
 import { decimalToNumber } from "../common/serialize";
 
-function deliverPackageImages(images: Prisma.JsonValue): string[] {
-  if (!Array.isArray(images)) return [];
-  return images
-    .filter((image): image is string => typeof image === "string" && image.trim().length > 0)
-    .map((image) => deliverCdnImageUrl(image, { width: 1200, crop: "fill" }));
+function deliverPackageImages(
+  images: Prisma.JsonValue,
+  title: string,
+  slug: string,
+): string[] {
+  if (!Array.isArray(images)) {
+    return [deliverPackageCoverUrl(resolvePackageImageSource([], title, slug))];
+  }
+  const list = images.filter(
+    (image): image is string => typeof image === "string" && image.trim().length > 0,
+  );
+  if (list.length === 0) {
+    return [deliverPackageCoverUrl(resolvePackageImageSource([], title, slug))];
+  }
+  return list.map((image) =>
+    deliverPackageCoverUrl(resolvePackageImageSource([image], title, slug)),
+  );
 }
 
 const packageCardSelect = {
@@ -86,7 +103,7 @@ export class SearchService {
         isFixed: row.priceIsFixed,
         currency: row.currency,
       },
-      images: deliverPackageImages(row.images),
+      images: deliverPackageImages(row.images, row.title, row.slug),
     };
   }
 }
