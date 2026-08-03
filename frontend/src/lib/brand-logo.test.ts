@@ -45,7 +45,9 @@ describe("brand logo", () => {
     // 3x of ~168×112 display (h-28) keeps retina sharp without shipping a 1536px asset.
     expect(BRAND_LOGO_WIDTH).toBe(504);
     expect(BRAND_LOGO_HEIGHT).toBe(336);
-    expect(BRAND_LOGO_DISPLAY_HEIGHT).toBeGreaterThan(0);
+    expect(BRAND_LOGO_DISPLAY_HEIGHT).toBe(96);
+    expect(brandLogoIntegratedClassName()).toMatch(/h-20/);
+    expect(brandLogoIntegratedClassName()).toMatch(/md:h-28/);
     expect(BRAND_LOGO_WIDTH).toBeGreaterThan(BRAND_LOGO_HEIGHT);
   });
 
