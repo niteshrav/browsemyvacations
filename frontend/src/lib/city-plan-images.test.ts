@@ -18,8 +18,8 @@ describe("city plan images", () => {
 
   it("uses Jaipur tourism photos for Jaipur city plans", () => {
     const urls = getCityPlanImageUrls("Jaipur");
-    expect(urls[0]).toContain("1477587458883");
-    expect(urls[1]).toContain("1705861145407");
+    expect(urls[0]).toContain("1705861145407");
+    expect(urls[1]).toContain("1723529983733");
   });
 
   it("uses Jodhpur tourism photos for western Rajasthan cities", () => {

@@ -1,11 +1,11 @@
-import { buildUnsplashUrl } from "../city-tourism-images";
+import { buildUnsplashUrl, CITY_PALACE_UDAIPUR_IMAGE } from "../city-tourism-images";
 
-/** Curated Unsplash tourism photos for marketing pages (https://unsplash.com/license). */
+/** Curated tourism photos for marketing pages (https://unsplash.com/license + local assets). */
 export const MARKETING_IMAGES = {
   /** Homepage full-bleed hero background — City Palace / Lake Pichola at golden hour. */
   heroHalfBackground: buildUnsplashUrl("1695956353120-54ce5e91632b"),
   aboutHero: buildUnsplashUrl("1695956353120-54ce5e91632b"),
-  retailHolidays: buildUnsplashUrl("1477587458883-47145ed94245"),
+  retailHolidays: CITY_PALACE_UDAIPUR_IMAGE,
   customJourneys: buildUnsplashUrl("1703092289078-ff03b771237c"),
   corporateMice: buildUnsplashUrl("1600880292203-757bb62b4baf"),
   travelPhilosophy: buildUnsplashUrl("1674229010920-ad8493dc19eb"),
@@ -19,7 +19,7 @@ export const MARKETING_IMAGES = {
   contactCta: buildUnsplashUrl("1695956353120-54ce5e91632b"),
   destinations: {
     udaipur: buildUnsplashUrl("1695956353120-54ce5e91632b"),
-    jaipur: buildUnsplashUrl("1477587458883-47145ed94245"),
+    jaipur: CITY_PALACE_UDAIPUR_IMAGE,
     jodhpur: buildUnsplashUrl("1602643454724-21d5a40722db"),
     jaisalmer: buildUnsplashUrl("1551717256-ad2ac9ab0261"),
     kumbhalgarh: buildUnsplashUrl("1703092289078-ff03b771237c"),
@@ -38,13 +38,13 @@ export const MARKETING_IMAGES = {
     offsites: buildUnsplashUrl("1600880292203-757bb62b4baf"),
     incentive: buildUnsplashUrl("1507525428034-b723cf961d3e"),
     conferences: buildUnsplashUrl("1540575467063-178a50c2df87"),
-    dealerMeets: buildUnsplashUrl("1477587458883-47145ed94245"),
+    dealerMeets: CITY_PALACE_UDAIPUR_IMAGE,
     leadership: buildUnsplashUrl("1695956353120-54ce5e91632b"),
     international: buildUnsplashUrl("1512453979798-5ea266f8880c"),
   },
   formats: {
     udaipurLeadership: buildUnsplashUrl("1695956353120-54ce5e91632b"),
-    jaipurDealer: buildUnsplashUrl("1477587458883-47145ed94245"),
+    jaipurDealer: CITY_PALACE_UDAIPUR_IMAGE,
     goaOffsite: buildUnsplashUrl("1507525428034-b723cf961d3e"),
     jaisalmerIncentive: buildUnsplashUrl("1551717256-ad2ac9ab0261"),
     manaliRetreat: buildUnsplashUrl("1506905925346-21bda4d32df4"),

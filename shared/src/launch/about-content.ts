@@ -23,7 +23,7 @@ export const ABOUT_PAGE = {
         description:
           "Browse 100+ Rajasthan itineraries with clear durations and starting prices. Compare routes, explore highlights, and request a personalized quote when you are ready — no juggling dates or passenger counts upfront.",
         image: MARKETING_IMAGES.retailHolidays,
-        imageAlt: "Amber Fort and heritage architecture in Jaipur",
+        imageAlt: "City Palace illuminated along the lake in Udaipur, Rajasthan",
       },
       {
         id: "custom",

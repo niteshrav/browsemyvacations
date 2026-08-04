@@ -20,13 +20,19 @@ describe("city tourism images", () => {
     }
   });
 
-  it("bans the Taj Mahal Unsplash photo ID", () => {
+  it("bans the Taj Mahal and retired Hawa Mahal Unsplash photo IDs", () => {
     expect(
       isBannedTourismPhotoUrl(
         "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",
       ),
     ).toBe(true);
+    expect(
+      isBannedTourismPhotoUrl(
+        "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80",
+      ),
+    ).toBe(true);
     expect(BANNED_TOURISM_PHOTO_IDS).toContain("1524492412937");
+    expect(BANNED_TOURISM_PHOTO_IDS).toContain("1477587458883");
   });
 
   it("uses Udaipur tourism photos for Udaipur seed packages", () => {
@@ -51,7 +57,8 @@ describe("city tourism images", () => {
 
   it("resolves Jaipur package fallbacks to Jaipur tourism photos", () => {
     const image = resolvePackageImageFallback("Jaipur Heritage Tour", "jaipur-heritage-3n");
-    expect(image).toContain("1477587458883");
+    expect(image).toContain("1705861145407");
+    expect(isBannedTourismPhotoUrl(image)).toBe(false);
   });
 
   it("resolves Jodhpur package fallbacks to Jodhpur tourism photos", () => {
@@ -86,7 +93,7 @@ describe("city tourism images", () => {
     expect(jodhpur).toHaveLength(3);
 
     expect(udaipur.every((url) => url.includes("images.unsplash.com"))).toBe(true);
-    expect(jaipur[0]).toContain("1477587458883");
+    expect(jaipur[0]).toContain("1705861145407");
     expect(jodhpur[0]).toContain("1602643454724");
   });
 

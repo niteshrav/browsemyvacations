@@ -53,7 +53,7 @@ export const HOME_QUICK_PICKS = [
   {
     city: "Pushkar",
     landmark: "Brahma Temple",
-    photoId: "1477587458883-47145ed94245",
+    photoId: "1705861145407-62f12184e563",
   },
 ] as const;
 

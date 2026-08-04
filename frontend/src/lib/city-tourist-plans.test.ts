@@ -14,7 +14,7 @@ describe("getCityTouristPlans", () => {
     const plans = getCityTouristPlans("Jaipur");
     expect(plans).toHaveLength(3);
     expect(plans[0]?.city).toBe("Jaipur");
-    expect(plans[0]?.imageUrl).toContain("1477587458883");
+    expect(plans[0]?.imageUrl).toContain("1705861145407");
   });
 
   it("matches city names case-insensitively", () => {

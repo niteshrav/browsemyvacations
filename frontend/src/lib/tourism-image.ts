@@ -1,4 +1,4 @@
-import { deliverCdnImageUrl, isCloudinaryHostedUrl } from "@bmv/shared";
+import { deliverCdnImageUrl, isCloudinaryHostedUrl, rewriteRetiredTourismPhotoUrl } from "@bmv/shared";
 
 export const TOURISM_IMAGE_HOST = "images.unsplash.com";
 
@@ -20,7 +20,7 @@ export function isDirectTourismImageUrl(url: string): boolean {
 
 /** Ensure marketing / tourism `<img>` sources go through Cloudinary when configured. */
 export function resolveTourismImageSrc(src: string, width = 1200): string {
-  return deliverCdnImageUrl(src, { width, crop: "fill" });
+  return deliverCdnImageUrl(rewriteRetiredTourismPhotoUrl(src), { width, crop: "fill" });
 }
 
 export function tourismImageClassName(): string {

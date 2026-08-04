@@ -27,6 +27,14 @@ describe("tourism-image", () => {
     expect(resolveTourismImageSrc(src)).toBe(src);
   });
 
+  it("rewrites retired Hawa Mahal Unsplash urls to City Palace", () => {
+    expect(
+      resolveTourismImageSrc(
+        "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80",
+      ),
+    ).toBe("/marketing/city-palace-udaipur.jpg");
+  });
+
   it("uses full-bleed object-cover styling", () => {
     expect(tourismImageClassName()).toContain("object-cover");
     expect(tourismImageClassName()).toContain("h-full");

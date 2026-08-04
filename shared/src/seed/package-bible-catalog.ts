@@ -81,7 +81,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 1,
     "priceFrom": 14600,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -194,7 +194,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 4,
     "priceFrom": 14600,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -590,7 +590,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 14,
     "priceFrom": 24500,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -645,7 +645,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 15,
     "priceFrom": 24500,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -700,7 +700,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 16,
     "priceFrom": 24500,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -1925,7 +1925,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 39,
     "priceFrom": 24500,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -2218,7 +2218,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 44,
     "priceFrom": 30200,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -2291,7 +2291,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 45,
     "priceFrom": 34400,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -2364,7 +2364,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 46,
     "priceFrom": 34400,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -2429,7 +2429,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 47,
     "priceFrom": 30200,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -3791,7 +3791,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 66,
     "priceFrom": 34400,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -3872,7 +3872,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 67,
     "priceFrom": 38600,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -3961,7 +3961,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 68,
     "priceFrom": 42800,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -4034,7 +4034,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 69,
     "priceFrom": 34400,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -4803,7 +4803,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 79,
     "priceFrom": 38600,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -5030,7 +5030,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 82,
     "priceFrom": 38600,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -5194,7 +5194,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 84,
     "priceFrom": 40100,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -5285,7 +5285,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 85,
     "priceFrom": 44300,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -5384,7 +5384,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 86,
     "priceFrom": 48500,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -5467,7 +5467,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 87,
     "priceFrom": 40100,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -5558,7 +5558,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 88,
     "priceFrom": 44300,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -5831,7 +5831,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 91,
     "priceFrom": 40100,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -6296,7 +6296,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 96,
     "priceFrom": 44300,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -6397,7 +6397,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 97,
     "priceFrom": 48500,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {
@@ -6498,7 +6498,7 @@ export const PACKAGE_BIBLE_CATALOG: PackageBibleSeedPackage[] = [
     "displayOrder": 98,
     "priceFrom": 48500,
     "images": [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"
+      "/marketing/city-palace-udaipur.jpg"
     ]
   },
   {

@@ -33,6 +33,11 @@ export function siteHeaderClassName(): string {
   return "sticky top-0 z-50 border-b border-stone-200/90 bg-white/95 shadow-[0_1px_0_rgba(28,25,23,0.04)] backdrop-blur-sm";
 }
 
+/** Compact header row: tight vertical padding, logo size unchanged, nav right-aligned. */
+export function siteHeaderInnerClassName(): string {
+  return "site-container flex flex-col gap-1 py-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-1.5";
+}
+
 export function getBrandLogoPublicPath(): string {
   return path.join(process.cwd(), "public", "brand", "browsemyvacations-logo.png");
 }

@@ -292,7 +292,7 @@ function assignImages(destinations: string[]): string[] {
     return ["https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"];
   }
   if (lower.some((d) => d.includes("jaipur"))) {
-    return ["https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80"];
+    return ["/marketing/city-palace-udaipur.jpg"];
   }
   if (lower.some((d) => d.includes("jodhpur") || d.includes("jaisalmer") || d.includes("bikaner"))) {
     return ["https://images.unsplash.com/photo-1602643454724-21d5a40722db?auto=format&fit=crop&w=1200&q=80"];

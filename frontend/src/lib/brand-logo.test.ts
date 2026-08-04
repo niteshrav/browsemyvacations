@@ -15,6 +15,7 @@ import {
   getBrandLogoPublicPath,
   resolveBrandLogoSrc,
   siteHeaderClassName,
+  siteHeaderInnerClassName,
 } from "./brand-logo";
 import { rootBodyClassName } from "./root-layout";
 
@@ -63,6 +64,18 @@ describe("brand logo", () => {
     expect(siteHeaderClassName()).toContain("bg-white/95");
     expect(rootBodyClassName()).toContain("bg-stone-50");
     expect(siteHeaderClassName()).toContain("backdrop-blur");
+    expect(siteHeaderClassName()).toContain("sticky");
+  });
+
+  it("keeps a compact header shell without shrinking the logo", () => {
+    const inner = siteHeaderInnerClassName();
+    expect(inner).toMatch(/py-1/);
+    expect(inner).toMatch(/sm:py-1\.5/);
+    expect(inner).toContain("sm:items-center");
+    expect(inner).toContain("sm:justify-between");
+    expect(brandLogoIntegratedClassName()).toMatch(/h-20/);
+    expect(brandLogoIntegratedClassName()).toMatch(/sm:h-24/);
+    expect(brandLogoIntegratedClassName()).toMatch(/md:h-28/);
   });
 
   it("stores the transparent logo as a png with an alpha channel", () => {

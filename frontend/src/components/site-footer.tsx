@@ -106,7 +106,7 @@ export function SiteFooter() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-teal-100/65 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Browse My Vacations. All rights reserved.</p>
-          <p className="text-teal-100/55">Curated holidays across Rajasthan & beyond.</p>
+          <p className="text-teal-100/55">Designed &amp; Developed by Commiters Softwares</p>
         </div>
       </div>
     </footer>

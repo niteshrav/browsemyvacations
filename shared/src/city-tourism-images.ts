@@ -6,7 +6,13 @@
 
 import { deliverCdnImageUrl } from "./cdn/cloudinary";
 
-export const BANNED_TOURISM_PHOTO_IDS = ["1524492412937"] as const;
+export const BANNED_TOURISM_PHOTO_IDS = [
+  "1524492412937", // Taj Mahal — out of brand scope
+  "1477587458883", // Hawa Mahal — replaced by City Palace Udaipur marketing asset
+] as const;
+
+/** Local City Palace (Udaipur) — served from frontend/public/marketing. */
+export const CITY_PALACE_UDAIPUR_IMAGE = "/marketing/city-palace-udaipur.jpg";
 
 /** Retina-friendly Unsplash params for destination photography. */
 export const UNSPLASH_IMAGE_PARAMS = "?auto=format&fit=crop&w=1600&q=85";
@@ -26,8 +32,14 @@ export function buildUnsplashUrl(photoId: string): string {
   return deliverCdnImageUrl(buildUnsplashOriginUrl(photoId), { ...PACKAGE_COVER_IMAGE_OPTIONS });
 }
 
+/** Swap retired Hawa Mahal Unsplash URLs for the City Palace marketing asset. */
+export function rewriteRetiredTourismPhotoUrl(url: string): string {
+  if (url.includes("1477587458883")) return CITY_PALACE_UDAIPUR_IMAGE;
+  return url;
+}
+
 export function deliverPackageCoverUrl(sourceUrl: string, env?: NodeJS.ProcessEnv): string {
-  return deliverCdnImageUrl(sourceUrl, { ...PACKAGE_COVER_IMAGE_OPTIONS }, env);
+  return deliverCdnImageUrl(rewriteRetiredTourismPhotoUrl(sourceUrl), { ...PACKAGE_COVER_IMAGE_OPTIONS }, env);
 }
 
 export function isBannedTourismPhotoUrl(url: string): boolean {
@@ -44,9 +56,9 @@ const UDAIPUR_PHOTO_IDS = [
 ] as const;
 
 const JAIPUR_PHOTO_IDS = [
-  "1477587458883-47145ed94245",
   "1705861145407-62f12184e563",
   "1723529983733-9a30e30d841d",
+  "1695956353120-54ce5e91632b",
 ] as const;
 
 const JODHPUR_PHOTO_IDS = [
@@ -137,7 +149,7 @@ export function resolvePackageImageSource(
   slug: string,
 ): string {
   const primary = images.find((image) => typeof image === "string" && image.trim().length > 0)?.trim();
-  if (primary) return primary;
+  if (primary) return rewriteRetiredTourismPhotoUrl(primary);
   return resolvePackageImageFallbackOrigin(title, slug);
 }
 

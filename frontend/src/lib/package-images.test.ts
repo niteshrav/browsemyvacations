@@ -38,7 +38,7 @@ describe("resolvePackageImage", () => {
       slug: "jaipur-heritage-3n",
       images: [],
     });
-    expect(image).toContain("1477587458883");
+    expect(image).toContain("1705861145407");
   });
 
   it("returns Jodhpur tourism fallback for Jodhpur packages", () => {
