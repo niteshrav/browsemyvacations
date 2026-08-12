@@ -48,7 +48,7 @@ export function VacationRouteMap({ feasibility }: Props) {
         className="h-64 overflow-hidden rounded-xl border border-sky-100"
         data-testid="vacation-google-map"
       >
-        <VacationGoogleMap route={route} apiKey={apiKey} />
+        <VacationGoogleMap route={route} apiKey={apiKey} feasibility={feasibility} />
       </div>
     );
   }

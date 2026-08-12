@@ -10,13 +10,14 @@ import {
   useApiLoadingStatus,
   useMap,
 } from "@vis.gl/react-google-maps";
-import type { GoogleMapRoute } from "@bmv/shared";
+import type { FeasibilityResult, GoogleMapRoute } from "@bmv/shared";
 import { getGoogleMapsMapId, isGoogleMapsMapIdConfigured } from "@/lib/google-maps-config";
 import { VacationRouteMapEmbed } from "./vacation-route-map-embed";
 
 type Props = {
   route: GoogleMapRoute;
   apiKey: string;
+  feasibility: FeasibilityResult;
 };
 
 function FitBounds({ route }: { route: GoogleMapRoute }) {
@@ -104,11 +105,11 @@ function VacationGoogleMapCanvas({ route }: { route: GoogleMapRoute }) {
   );
 }
 
-function GoogleMapsLoadGate({ route }: { route: GoogleMapRoute }) {
+function GoogleMapsLoadGate({ route, feasibility }: { route: GoogleMapRoute; feasibility: FeasibilityResult }) {
   const status = useApiLoadingStatus();
 
   if (status === APILoadingStatus.FAILED || status === APILoadingStatus.AUTH_FAILURE) {
-    return <VacationRouteMapEmbed route={route} />;
+    return <VacationRouteMapEmbed route={route} feasibility={feasibility} />;
   }
 
   if (status === APILoadingStatus.NOT_LOADED || status === APILoadingStatus.LOADING) {
@@ -122,10 +123,10 @@ function GoogleMapsLoadGate({ route }: { route: GoogleMapRoute }) {
   return <VacationGoogleMapCanvas route={route} />;
 }
 
-export function VacationGoogleMap({ route, apiKey }: Props) {
+export function VacationGoogleMap({ route, apiKey, feasibility }: Props) {
   return (
     <APIProvider apiKey={apiKey}>
-      <GoogleMapsLoadGate route={route} />
+      <GoogleMapsLoadGate route={route} feasibility={feasibility} />
     </APIProvider>
   );
 }
