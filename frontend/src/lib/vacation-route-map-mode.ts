@@ -1,4 +1,5 @@
 import type { GoogleMapRoute } from "@bmv/shared";
+import { isGoogleMapsJsPreferred } from "./google-maps-config";
 
 export type VacationRouteMapMode = "empty" | "google" | "embed" | "fallback";
 
@@ -9,6 +10,7 @@ export function resolveVacationRouteMapMode(
 ): VacationRouteMapMode {
   if (!hasFeasibilityPoints) return "empty";
   if (!route) return "fallback";
-  if (isGoogleMapsConfigured) return "google";
+  // Iframe embed works without Maps JS API billing/referrer setup.
+  if (isGoogleMapsConfigured && isGoogleMapsJsPreferred()) return "google";
   return "embed";
 }

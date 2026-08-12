@@ -3,6 +3,7 @@ import {
   getGoogleMapsApiKey,
   getGoogleMapsMapId,
   isGoogleMapsConfigured,
+  isGoogleMapsMapIdConfigured,
   isValidGoogleMapsApiKeyFormat,
 } from "./google-maps-config";
 
@@ -30,8 +31,14 @@ describe("google-maps-config", () => {
     expect(isGoogleMapsConfigured()).toBe(false);
   });
 
-  it("falls back to DEMO_MAP_ID when map id unset", () => {
+  it("returns empty map id when unset", () => {
     vi.stubEnv("NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID", "");
-    expect(getGoogleMapsMapId()).toBe("DEMO_MAP_ID");
+    expect(getGoogleMapsMapId()).toBe("");
+    expect(isGoogleMapsMapIdConfigured()).toBe(false);
+  });
+
+  it("detects configured cloud map id", () => {
+    vi.stubEnv("NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID", "abc123map");
+    expect(isGoogleMapsMapIdConfigured()).toBe(true);
   });
 });

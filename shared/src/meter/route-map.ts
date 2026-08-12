@@ -25,17 +25,62 @@ export function getDestinationLatLng(slug: string): LatLng | null {
 }
 
 /** Google Maps iframe embed for vacation routes — works without a Maps JavaScript API key. */
-export function buildVacationRouteMapsEmbedUrl(route: GoogleMapRoute): string {
-  const places = route.markers.map((marker) =>
-    encodeURIComponent(`${marker.name}, Rajasthan, India`),
-  );
+export type VacationRouteMapsEmbedOptions = {
+  apiKey?: string;
+};
 
-  if (places.length === 1) {
-    return `https://maps.google.com/maps?q=${places[0]}&z=10&ie=UTF8&iwloc=&output=embed`;
+function placeLabel(name: string): string {
+  return `${name}, Rajasthan, India`;
+}
+
+function encodedPlace(name: string): string {
+  return encodeURIComponent(placeLabel(name));
+}
+
+export function buildVacationRouteMapsExternalUrl(route: GoogleMapRoute): string {
+  const { markers } = route;
+  if (markers.length === 1) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodedPlace(markers[0]!.name)}`;
+  }
+  if (markers.length === 2) {
+    return `https://www.google.com/maps/dir/?api=1&origin=${encodedPlace(markers[0]!.name)}&destination=${encodedPlace(markers[1]!.name)}`;
+  }
+  const path = markers.map((marker) => encodedPlace(marker.name)).join("/");
+  return `https://www.google.com/maps/dir/${path}`;
+}
+
+export function buildVacationRouteMapsEmbedUrl(
+  route: GoogleMapRoute,
+  options?: VacationRouteMapsEmbedOptions,
+): string {
+  const { markers } = route;
+  const apiKey = options?.apiKey?.trim();
+
+  if (apiKey) {
+    if (markers.length === 1) {
+      return `https://www.google.com/maps/embed/v1/place?key=${encodeURIComponent(apiKey)}&q=${encodedPlace(markers[0]!.name)}&zoom=9`;
+    }
+
+    const origin = encodedPlace(markers[0]!.name);
+    const destination = encodedPlace(markers[markers.length - 1]!.name);
+    let url = `https://www.google.com/maps/embed/v1/directions?key=${encodeURIComponent(apiKey)}&origin=${origin}&destination=${destination}&mode=driving`;
+    const waypoints = markers.slice(1, -1);
+    if (waypoints.length > 0) {
+      url += `&waypoints=${waypoints.map((marker) => encodedPlace(marker.name)).join("|")}`;
+    }
+    return url;
   }
 
-  const dirPath = places.join("/");
-  return `https://www.google.com/maps/dir/${dirPath}/@${route.center.lat},${route.center.lng},7z/data=!3m1!4b1!4m2!4m1!3e0?hl=en&output=embed`;
+  if (markers.length === 1) {
+    return `https://maps.google.com/maps?q=${encodedPlace(markers[0]!.name)}&z=10&output=embed`;
+  }
+
+  if (markers.length === 2) {
+    return `https://maps.google.com/maps?saddr=${encodedPlace(markers[0]!.name)}&daddr=${encodedPlace(markers[1]!.name)}&output=embed`;
+  }
+
+  const path = markers.map((marker) => encodedPlace(marker.name)).join("/");
+  return `https://www.google.com/maps/dir/${path}/@${route.center.lat},${route.center.lng},7z/data=!3m1!4b1!4m2!4m1!3e0?hl=en&output=embed`;
 }
 
 export function buildGoogleMapRoute(feasibility: FeasibilityResult): GoogleMapRoute | null {

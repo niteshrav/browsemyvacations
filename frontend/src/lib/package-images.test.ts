@@ -1,6 +1,6 @@
 import { BANNED_TOURISM_PHOTO_IDS, isBannedTourismPhotoUrl } from "@bmv/shared";
 import { describe, expect, it } from "vitest";
-import { resolvePackageImage, packageCardImageClassName, packageHeroImageClassName } from "./package-images";
+import { resolvePackageImage, packageCardImageClassName, packageCardMediaClassName, packageHeroImageClassName } from "./package-images";
 
 describe("resolvePackageImage", () => {
   it("uses first package image when present", () => {
@@ -65,12 +65,15 @@ describe("resolvePackageImage", () => {
 });
 
 describe("package image layout", () => {
-  it("uses object-contain for admin uploads and marketing art", () => {
-    expect(packageCardImageClassName("/uploads/cover.png")).toContain("object-contain");
+  it("uses a square frame and object-cover for admin uploads and marketing art on cards", () => {
+    expect(packageCardMediaClassName("/uploads/cover.png")).toContain("aspect-square");
+    expect(packageCardImageClassName("/uploads/cover.png")).toContain("object-cover");
+    expect(packageCardImageClassName("/marketing/city-palace.jpg")).toContain("object-cover");
     expect(packageHeroImageClassName("/marketing/city-palace.jpg")).toContain("object-contain");
   });
 
-  it("uses object-cover for stock tourism photos", () => {
+  it("uses a 4:3 frame and object-cover for stock tourism photos on cards", () => {
+    expect(packageCardMediaClassName("https://images.unsplash.com/photo-123")).toContain("aspect-[4/3]");
     expect(packageCardImageClassName("https://images.unsplash.com/photo-123")).toContain("object-cover");
     expect(packageHeroImageClassName("https://images.unsplash.com/photo-123")).toContain("object-cover");
   });

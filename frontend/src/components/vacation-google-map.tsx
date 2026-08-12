@@ -1,9 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import { APIProvider, AdvancedMarker, Map, useMap } from "@vis.gl/react-google-maps";
+import {
+  APILoadingStatus,
+  APIProvider,
+  AdvancedMarker,
+  Map,
+  Marker,
+  useApiLoadingStatus,
+  useMap,
+} from "@vis.gl/react-google-maps";
 import type { GoogleMapRoute } from "@bmv/shared";
-import { getGoogleMapsMapId } from "@/lib/google-maps-config";
+import { getGoogleMapsMapId, isGoogleMapsMapIdConfigured } from "@/lib/google-maps-config";
+import { VacationRouteMapEmbed } from "./vacation-route-map-embed";
 
 type Props = {
   route: GoogleMapRoute;
@@ -44,23 +53,12 @@ function RoutePolyline({ path }: { path: GoogleMapRoute["path"] }) {
   return null;
 }
 
-export function VacationGoogleMap({ route, apiKey }: Props) {
-  const mapId = getGoogleMapsMapId();
+function RouteMarkers({ route }: { route: GoogleMapRoute }) {
+  const useAdvancedMarkers = isGoogleMapsMapIdConfigured();
 
-  return (
-    <APIProvider apiKey={apiKey}>
-      <Map
-        mapId={mapId}
-        defaultCenter={route.center}
-        defaultZoom={7}
-        gestureHandling="cooperative"
-        disableDefaultUI
-        mapTypeId="terrain"
-        style={{ width: "100%", height: "100%" }}
-        aria-label="Google Maps route preview"
-      >
-        <FitBounds route={route} />
-        <RoutePolyline path={route.path} />
+  if (useAdvancedMarkers) {
+    return (
+      <>
         {route.markers.map((marker) => (
           <AdvancedMarker key={marker.slug} position={{ lat: marker.lat, lng: marker.lng }} title={marker.name}>
             <div className="flex flex-col items-center">
@@ -71,7 +69,63 @@ export function VacationGoogleMap({ route, apiKey }: Props) {
             </div>
           </AdvancedMarker>
         ))}
-      </Map>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {route.markers.map((marker) => (
+        <Marker key={marker.slug} position={{ lat: marker.lat, lng: marker.lng }} title={marker.name} />
+      ))}
+    </>
+  );
+}
+
+function VacationGoogleMapCanvas({ route }: { route: GoogleMapRoute }) {
+  const mapId = getGoogleMapsMapId();
+  const useAdvancedMarkers = isGoogleMapsMapIdConfigured();
+
+  return (
+    <Map
+      {...(useAdvancedMarkers ? { mapId } : {})}
+      defaultCenter={route.center}
+      defaultZoom={7}
+      gestureHandling="cooperative"
+      disableDefaultUI
+      mapTypeId="roadmap"
+      style={{ width: "100%", height: "100%" }}
+      aria-label="Google Maps route preview"
+    >
+      <FitBounds route={route} />
+      <RoutePolyline path={route.path} />
+      <RouteMarkers route={route} />
+    </Map>
+  );
+}
+
+function GoogleMapsLoadGate({ route }: { route: GoogleMapRoute }) {
+  const status = useApiLoadingStatus();
+
+  if (status === APILoadingStatus.FAILED || status === APILoadingStatus.AUTH_FAILURE) {
+    return <VacationRouteMapEmbed route={route} />;
+  }
+
+  if (status === APILoadingStatus.NOT_LOADED || status === APILoadingStatus.LOADING) {
+    return (
+      <div className="flex h-full items-center justify-center bg-sky-50 text-sm text-stone-500">
+        Loading map…
+      </div>
+    );
+  }
+
+  return <VacationGoogleMapCanvas route={route} />;
+}
+
+export function VacationGoogleMap({ route, apiKey }: Props) {
+  return (
+    <APIProvider apiKey={apiKey}>
+      <GoogleMapsLoadGate route={route} />
     </APIProvider>
   );
 }

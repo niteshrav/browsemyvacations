@@ -9,11 +9,11 @@ export const BRAND_LOGO_ALT = "Browse My Vacations";
 /** Intrinsic pixel size of the public PNG (3× of ~168×112 display). */
 export const BRAND_LOGO_WIDTH = 504;
 export const BRAND_LOGO_HEIGHT = 336;
-export const BRAND_LOGO_DISPLAY_HEIGHT = 80;
+export const BRAND_LOGO_DISPLAY_HEIGHT = 56;
 
 /** Tailwind height tokens for responsive logo sizing. */
-export const BRAND_LOGO_HEIGHT_CLASS = "h-16 sm:h-20 md:h-24";
-export const BRAND_LOGO_MAX_WIDTH_CLASS = "max-w-[min(100%,440px)]";
+export const BRAND_LOGO_HEIGHT_CLASS = "h-12 sm:h-14 md:h-16";
+export const BRAND_LOGO_MAX_WIDTH_CLASS = "max-w-[min(100%,340px)]";
 
 /** Logo is served directly (not via the image optimizer) on the page surface. */
 export const BRAND_LOGO_USE_OPTIMIZER = false;
@@ -35,7 +35,7 @@ export function siteHeaderClassName(): string {
 
 /** Compact header row: narrower shell, tighter vertical rhythm. */
 export function siteHeaderInnerClassName(): string {
-  return "site-header-shell flex flex-col gap-0.5 py-0 sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:py-0.5";
+  return "site-header-shell flex flex-col gap-0 py-0 sm:flex-row sm:items-center sm:justify-between sm:gap-1";
 }
 
 export function getBrandLogoPublicPath(): string {

@@ -54,7 +54,7 @@ export function VacationRouteMap({ feasibility }: Props) {
   }
 
   if (mode === "embed" && route) {
-    return <VacationRouteMapEmbed route={route} />;
+    return <VacationRouteMapEmbed route={route} feasibility={feasibility} />;
   }
 
   return <VacationRouteMapFallback feasibility={feasibility} />;

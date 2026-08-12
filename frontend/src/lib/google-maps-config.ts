@@ -4,7 +4,13 @@ export function getGoogleMapsApiKey(): string {
 }
 
 export function getGoogleMapsMapId(): string {
-  return process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID?.trim() || "DEMO_MAP_ID";
+  return process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID?.trim() ?? "";
+}
+
+/** Advanced markers need a Cloud Console map style id — not the demo placeholder. */
+export function isGoogleMapsMapIdConfigured(): boolean {
+  const mapId = getGoogleMapsMapId();
+  return mapId.length > 0 && mapId !== "DEMO_MAP_ID";
 }
 
 /** Google browser API keys start with AIza and are typically 39 characters. */
@@ -15,4 +21,10 @@ export function isValidGoogleMapsApiKeyFormat(key: string): boolean {
 export function isGoogleMapsConfigured(): boolean {
   const key = getGoogleMapsApiKey();
   return key.length > 0 && isValidGoogleMapsApiKeyFormat(key);
+}
+
+/** Opt in to Maps JavaScript API (billing + referrer restrictions required). Default is iframe embed. */
+export function isGoogleMapsJsPreferred(): boolean {
+  const flag = process.env.NEXT_PUBLIC_GOOGLE_MAPS_USE_JS?.trim().toLowerCase();
+  return flag === "1" || flag === "true" || flag === "yes";
 }

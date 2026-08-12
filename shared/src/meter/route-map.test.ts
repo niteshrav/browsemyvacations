@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculateVacationFeasibility } from "./feasibility";
-import { buildGoogleMapRoute, buildVacationRouteMapsEmbedUrl, getDestinationLatLng } from "./route-map";
+import { buildGoogleMapRoute, buildVacationRouteMapsEmbedUrl, buildVacationRouteMapsExternalUrl, getDestinationLatLng } from "./route-map";
 
 describe("route-map", () => {
   it("resolves lat/lng for known destinations", () => {
@@ -45,8 +45,20 @@ describe("route-map", () => {
   });
 
   it("builds a Google Maps embed URL for single and multi-stop routes", () => {
+    const twoStop = calculateVacationFeasibility({
+      destinationSlugs: ["udaipur", "jaipur"],
+      totalNights: 4,
+      pickupTime: "09:00",
+      dropoffTime: "18:00",
+      pacing: "moderate",
+    });
+    const twoStopRoute = buildGoogleMapRoute(twoStop)!;
+    expect(buildVacationRouteMapsEmbedUrl(twoStopRoute)).toMatch(/^https:\/\/maps\.google\.com\/maps\?saddr=/);
+    expect(buildVacationRouteMapsEmbedUrl(twoStopRoute)).toContain("daddr=");
+    expect(buildVacationRouteMapsEmbedUrl(twoStopRoute)).toContain("output=embed");
+
     const multi = calculateVacationFeasibility({
-      destinationSlugs: ["mount-abu", "udaipur"],
+      destinationSlugs: ["mount-abu", "kumbhalgarh", "udaipur"],
       totalNights: 4,
       pickupTime: "09:00",
       dropoffTime: "18:00",
@@ -66,5 +78,32 @@ describe("route-map", () => {
     const singleRoute = buildGoogleMapRoute(single)!;
     expect(buildVacationRouteMapsEmbedUrl(singleRoute)).toMatch(/^https:\/\/maps\.google\.com\/maps\?q=/);
     expect(buildVacationRouteMapsEmbedUrl(singleRoute)).toContain("output=embed");
+  });
+
+  it("uses Maps Embed API when an API key is supplied", () => {
+    const feasibility = calculateVacationFeasibility({
+      destinationSlugs: ["udaipur", "jaipur"],
+      totalNights: 4,
+      pickupTime: "09:00",
+      dropoffTime: "18:00",
+      pacing: "moderate",
+    });
+    const route = buildGoogleMapRoute(feasibility)!;
+    const url = buildVacationRouteMapsEmbedUrl(route, { apiKey: "AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" });
+    expect(url).toContain("maps/embed/v1/directions");
+    expect(url).toContain("origin=");
+    expect(url).toContain("destination=");
+  });
+
+  it("builds an external Google Maps link for opening in a new tab", () => {
+    const feasibility = calculateVacationFeasibility({
+      destinationSlugs: ["udaipur", "jaipur"],
+      totalNights: 4,
+      pickupTime: "09:00",
+      dropoffTime: "18:00",
+      pacing: "moderate",
+    });
+    const route = buildGoogleMapRoute(feasibility)!;
+    expect(buildVacationRouteMapsExternalUrl(route)).toContain("google.com/maps/dir/");
   });
 });
