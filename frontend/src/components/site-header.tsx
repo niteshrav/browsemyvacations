@@ -24,7 +24,7 @@ export function SiteHeader() {
           aria-label="Main navigation"
         >
           {nav.map((item) => (
-            <Link key={item.href} href={item.href} className="nav-link !py-1">
+            <Link key={item.href} href={item.href} className="nav-link !py-0.5 !text-[13px]">
               {item.label}
             </Link>
           ))}

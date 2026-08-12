@@ -43,12 +43,12 @@ describe("brand logo", () => {
   });
 
   it("defines intrinsic dimensions for layout sizing", () => {
-    // 3x of ~168×112 display (h-28) keeps retina sharp without shipping a 1536px asset.
+    // 3x of ~140×93 display (md:h-24) keeps retina sharp without shipping a 1536px asset.
     expect(BRAND_LOGO_WIDTH).toBe(504);
     expect(BRAND_LOGO_HEIGHT).toBe(336);
-    expect(BRAND_LOGO_DISPLAY_HEIGHT).toBe(96);
-    expect(brandLogoIntegratedClassName()).toMatch(/h-20/);
-    expect(brandLogoIntegratedClassName()).toMatch(/md:h-28/);
+    expect(BRAND_LOGO_DISPLAY_HEIGHT).toBe(80);
+    expect(brandLogoIntegratedClassName()).toMatch(/h-16/);
+    expect(brandLogoIntegratedClassName()).toMatch(/md:h-24/);
     expect(BRAND_LOGO_WIDTH).toBeGreaterThan(BRAND_LOGO_HEIGHT);
   });
 
@@ -67,15 +67,16 @@ describe("brand logo", () => {
     expect(siteHeaderClassName()).toContain("sticky");
   });
 
-  it("keeps a compact header shell without shrinking the logo", () => {
+  it("keeps a compact header shell", () => {
     const inner = siteHeaderInnerClassName();
-    expect(inner).toMatch(/py-1/);
-    expect(inner).toMatch(/sm:py-1\.5/);
+    expect(inner).toMatch(/py-0/);
+    expect(inner).toMatch(/sm:py-0\.5/);
+    expect(inner).toContain("site-header-shell");
     expect(inner).toContain("sm:items-center");
     expect(inner).toContain("sm:justify-between");
-    expect(brandLogoIntegratedClassName()).toMatch(/h-20/);
-    expect(brandLogoIntegratedClassName()).toMatch(/sm:h-24/);
-    expect(brandLogoIntegratedClassName()).toMatch(/md:h-28/);
+    expect(brandLogoIntegratedClassName()).toMatch(/h-16/);
+    expect(brandLogoIntegratedClassName()).toMatch(/sm:h-20/);
+    expect(brandLogoIntegratedClassName()).toMatch(/md:h-24/);
   });
 
   it("stores the transparent logo as a png with an alpha channel", () => {

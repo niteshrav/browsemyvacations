@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { resolvePackageImage } from "@/lib/package-images";
+import { packageHeroImageClassName, resolvePackageImage } from "@/lib/package-images";
 import { formatInrPrice } from "@/lib/format";
 import type { PackageDetail } from "@/types/catalog";
 
@@ -52,7 +52,7 @@ export function PackageDetailSections({ pkg, onQuoteClick }: Props) {
             <img
               src={image}
               alt={`${pkg.title} — ${pkg.duration.nights}N/${pkg.duration.days}D vacation package`}
-              className="aspect-[4/3] w-full object-cover lg:aspect-square"
+              className={packageHeroImageClassName(image)}
               loading="eager"
               decoding="async"
               fetchPriority="high"

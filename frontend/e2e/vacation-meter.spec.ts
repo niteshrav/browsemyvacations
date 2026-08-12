@@ -22,7 +22,7 @@ test.describe("Vacation Meter", () => {
     await page.getByLabel("Jaipur", { exact: true }).check();
     await expect(page.getByText(/Total: \d+ km/)).toBeVisible({ timeout: 10_000 });
     await expect(
-      page.getByTestId(/vacation-google-map|vacation-route-map-fallback/),
+      page.getByTestId(/vacation-google-map|vacation-google-map-embed|vacation-route-map-fallback/),
     ).toBeVisible();
   });
 });

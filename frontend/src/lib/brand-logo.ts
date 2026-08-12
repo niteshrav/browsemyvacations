@@ -9,11 +9,11 @@ export const BRAND_LOGO_ALT = "Browse My Vacations";
 /** Intrinsic pixel size of the public PNG (3× of ~168×112 display). */
 export const BRAND_LOGO_WIDTH = 504;
 export const BRAND_LOGO_HEIGHT = 336;
-export const BRAND_LOGO_DISPLAY_HEIGHT = 96;
+export const BRAND_LOGO_DISPLAY_HEIGHT = 80;
 
 /** Tailwind height tokens for responsive logo sizing. */
-export const BRAND_LOGO_HEIGHT_CLASS = "h-20 sm:h-24 md:h-28";
-export const BRAND_LOGO_MAX_WIDTH_CLASS = "max-w-[min(100%,520px)]";
+export const BRAND_LOGO_HEIGHT_CLASS = "h-16 sm:h-20 md:h-24";
+export const BRAND_LOGO_MAX_WIDTH_CLASS = "max-w-[min(100%,440px)]";
 
 /** Logo is served directly (not via the image optimizer) on the page surface. */
 export const BRAND_LOGO_USE_OPTIMIZER = false;
@@ -33,9 +33,9 @@ export function siteHeaderClassName(): string {
   return "sticky top-0 z-50 border-b border-stone-200/90 bg-white/95 shadow-[0_1px_0_rgba(28,25,23,0.04)] backdrop-blur-sm";
 }
 
-/** Compact header row: tight vertical padding, logo size unchanged, nav right-aligned. */
+/** Compact header row: narrower shell, tighter vertical rhythm. */
 export function siteHeaderInnerClassName(): string {
-  return "site-container flex flex-col gap-1 py-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-1.5";
+  return "site-header-shell flex flex-col gap-0.5 py-0 sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:py-0.5";
 }
 
 export function getBrandLogoPublicPath(): string {

@@ -24,6 +24,20 @@ export function getDestinationLatLng(slug: string): LatLng | null {
   return { lat: coord.lat, lng: coord.lng };
 }
 
+/** Google Maps iframe embed for vacation routes — works without a Maps JavaScript API key. */
+export function buildVacationRouteMapsEmbedUrl(route: GoogleMapRoute): string {
+  const places = route.markers.map((marker) =>
+    encodeURIComponent(`${marker.name}, Rajasthan, India`),
+  );
+
+  if (places.length === 1) {
+    return `https://maps.google.com/maps?q=${places[0]}&z=10&ie=UTF8&iwloc=&output=embed`;
+  }
+
+  const dirPath = places.join("/");
+  return `https://www.google.com/maps/dir/${dirPath}/@${route.center.lat},${route.center.lng},7z/data=!3m1!4b1!4m2!4m1!3e0?hl=en&output=embed`;
+}
+
 export function buildGoogleMapRoute(feasibility: FeasibilityResult): GoogleMapRoute | null {
   const markers = feasibility.mapPoints
     .map((point) => {

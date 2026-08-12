@@ -38,8 +38,17 @@ export function rewriteRetiredTourismPhotoUrl(url: string): string {
   return url;
 }
 
+/** Admin uploads and local marketing art should not be force-cropped. */
+export function isPackageMarketingImageUrl(url: string): boolean {
+  return /\/uploads\//.test(url) || url.includes("/marketing/");
+}
+
 export function deliverPackageCoverUrl(sourceUrl: string, env?: NodeJS.ProcessEnv): string {
-  return deliverCdnImageUrl(rewriteRetiredTourismPhotoUrl(sourceUrl), { ...PACKAGE_COVER_IMAGE_OPTIONS }, env);
+  const source = rewriteRetiredTourismPhotoUrl(sourceUrl);
+  const options = isPackageMarketingImageUrl(source)
+    ? { width: 1600, crop: "limit" as const, quality: "auto:good" as const }
+    : { ...PACKAGE_COVER_IMAGE_OPTIONS };
+  return deliverCdnImageUrl(source, options, env);
 }
 
 export function isBannedTourismPhotoUrl(url: string): boolean {

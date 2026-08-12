@@ -20,7 +20,7 @@ describe("resolveVacationRouteMapMode", () => {
     expect(resolveVacationRouteMapMode(true, true, route)).toBe("google");
   });
 
-  it("returns fallback when key is missing", () => {
-    expect(resolveVacationRouteMapMode(true, false, route)).toBe("fallback");
+  it("returns embed when key is missing", () => {
+    expect(resolveVacationRouteMapMode(true, false, route)).toBe("embed");
   });
 });

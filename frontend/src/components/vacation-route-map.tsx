@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { buildGoogleMapRoute, type FeasibilityResult } from "@bmv/shared";
 import { getGoogleMapsApiKey, isGoogleMapsConfigured } from "@/lib/google-maps-config";
 import { resolveVacationRouteMapMode } from "@/lib/vacation-route-map-mode";
+import { VacationRouteMapEmbed } from "./vacation-route-map-embed";
 import { VacationRouteMapFallback } from "./vacation-route-map-fallback";
 
 const VacationGoogleMap = dynamic(
@@ -50,6 +51,10 @@ export function VacationRouteMap({ feasibility }: Props) {
         <VacationGoogleMap route={route} apiKey={apiKey} />
       </div>
     );
+  }
+
+  if (mode === "embed" && route) {
+    return <VacationRouteMapEmbed route={route} />;
   }
 
   return <VacationRouteMapFallback feasibility={feasibility} />;

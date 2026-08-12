@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { resolvePackageImage } from "@/lib/package-images";
+import { resolvePackageImage, packageCardImageClassName } from "@/lib/package-images";
 import type { PackageCard as PackageCardType } from "@/types/catalog";
 
 type Props = {
@@ -50,7 +50,7 @@ export function PackageCardImage({ pkg, alt }: Props) {
     <img
       src={src}
       alt={alt}
-      className="h-full w-full object-cover object-[center_28%]"
+      className={packageCardImageClassName(src)}
       loading="lazy"
       decoding="async"
       onError={() => {

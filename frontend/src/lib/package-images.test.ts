@@ -1,6 +1,6 @@
 import { BANNED_TOURISM_PHOTO_IDS, isBannedTourismPhotoUrl } from "@bmv/shared";
 import { describe, expect, it } from "vitest";
-import { resolvePackageImage } from "./package-images";
+import { resolvePackageImage, packageCardImageClassName, packageHeroImageClassName } from "./package-images";
 
 describe("resolvePackageImage", () => {
   it("uses first package image when present", () => {
@@ -61,5 +61,17 @@ describe("resolvePackageImage", () => {
     for (const id of BANNED_TOURISM_PHOTO_IDS) {
       expect(image).not.toContain(id);
     }
+  });
+});
+
+describe("package image layout", () => {
+  it("uses object-contain for admin uploads and marketing art", () => {
+    expect(packageCardImageClassName("/uploads/cover.png")).toContain("object-contain");
+    expect(packageHeroImageClassName("/marketing/city-palace.jpg")).toContain("object-contain");
+  });
+
+  it("uses object-cover for stock tourism photos", () => {
+    expect(packageCardImageClassName("https://images.unsplash.com/photo-123")).toContain("object-cover");
+    expect(packageHeroImageClassName("https://images.unsplash.com/photo-123")).toContain("object-cover");
   });
 });
