@@ -11,6 +11,7 @@ import {
   BRAND_LOGO_USE_OPTIMIZER,
   BRAND_LOGO_WIDTH,
   brandLogoAssetHasAlphaChannel,
+  brandLogoHeaderClassName,
   brandLogoIntegratedClassName,
   getBrandLogoPublicPath,
   resolveBrandLogoSrc,
@@ -45,7 +46,7 @@ describe("brand logo", () => {
   it("defines intrinsic dimensions for layout sizing", () => {
     expect(BRAND_LOGO_WIDTH).toBe(504);
     expect(BRAND_LOGO_HEIGHT).toBe(336);
-    expect(BRAND_LOGO_DISPLAY_HEIGHT).toBe(72);
+    expect(BRAND_LOGO_DISPLAY_HEIGHT).toBe(96);
     expect(brandLogoIntegratedClassName()).toMatch(/h-12/);
     expect(brandLogoIntegratedClassName()).toMatch(/lg:h-\[4\.5rem\]/);
     expect(BRAND_LOGO_WIDTH).toBeGreaterThan(BRAND_LOGO_HEIGHT);
@@ -66,15 +67,14 @@ describe("brand logo", () => {
     expect(siteHeaderClassName()).toContain("sticky");
   });
 
-  it("keeps a compact header shell", () => {
+  it("keeps a fixed-height header bar with a full-height logo", () => {
     const inner = siteHeaderInnerClassName();
-    expect(inner).toMatch(/py-0/);
-    expect(inner).toContain("sm:py-0.5");
+    expect(inner).toContain("site-header-bar");
     expect(inner).toContain("site-header-shell");
-    expect(inner).toContain("sm:items-center");
-    expect(inner).toContain("sm:justify-between");
+    expect(inner).toContain("items-center");
+    expect(inner).toContain("justify-between");
+    expect(brandLogoHeaderClassName()).toBe("brand-logo-header");
     expect(brandLogoIntegratedClassName()).toMatch(/h-12/);
-    expect(brandLogoIntegratedClassName()).toMatch(/sm:h-14/);
     expect(brandLogoIntegratedClassName()).toMatch(/lg:h-\[4\.5rem\]/);
   });
 

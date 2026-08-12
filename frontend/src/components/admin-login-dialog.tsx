@@ -37,7 +37,7 @@ export function AdminLoginDialog() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="nav-link !px-1.5 !py-0 !text-[11px] font-semibold text-teal-800"
+        className="nav-link site-header-nav-link font-semibold text-teal-800"
         aria-haspopup="dialog"
       >
         {ADMIN_LOGIN_TRIGGER_LABEL}

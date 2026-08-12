@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { AdminLoginDialog } from "@/components/admin-login-dialog";
 import { BrandLogo } from "@/components/brand-logo";
-import { siteHeaderClassName, siteHeaderInnerClassName } from "@/lib/brand-logo";
+import {
+  brandLogoHeaderClassName,
+  brandLogoHeaderLinkClassName,
+  siteHeaderClassName,
+  siteHeaderInnerClassName,
+} from "@/lib/brand-logo";
 
 const nav = [
   { href: "/", label: "Home" },
@@ -16,15 +21,18 @@ export function SiteHeader() {
   return (
     <header className={siteHeaderClassName()} data-site-chrome="header">
       <div className={siteHeaderInnerClassName()}>
-        <Link href="/" className="inline-flex shrink-0 items-center transition hover:opacity-95">
-          <BrandLogo priority />
+        <Link
+          href="/"
+          className={`${brandLogoHeaderLinkClassName()} shrink-0 transition hover:opacity-95`}
+        >
+          <BrandLogo priority className={brandLogoHeaderClassName()} />
         </Link>
         <nav
-          className="flex flex-wrap items-center gap-0.5 sm:justify-end sm:gap-1"
+          className="flex flex-wrap items-center gap-0.5 sm:justify-end sm:gap-1.5"
           aria-label="Main navigation"
         >
           {nav.map((item) => (
-            <Link key={item.href} href={item.href} className="nav-link !px-1.5 !py-0 !text-[11px]">
+            <Link key={item.href} href={item.href} className="nav-link site-header-nav-link">
               {item.label}
             </Link>
           ))}

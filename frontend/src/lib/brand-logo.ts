@@ -9,12 +9,16 @@ export const BRAND_LOGO_ALT = "Browse My Vacations";
 /** Intrinsic pixel size of the public PNG (3× of ~168×112 display). */
 export const BRAND_LOGO_WIDTH = 504;
 export const BRAND_LOGO_HEIGHT = 336;
-export const BRAND_LOGO_DISPLAY_HEIGHT = 72;
+/** Logo display height at lg breakpoint: full 6rem header bar. */
+export const BRAND_LOGO_DISPLAY_HEIGHT = 96;
+export const SITE_HEADER_HEIGHT_REM = 6;
+export const SITE_HEADER_LOGO_HEIGHT_RATIO = 1;
 
-/** Wide wordmark stays readable without dominating the header bar. */
+/** Default integrated logo sizing (footer and other surfaces). */
 export const BRAND_LOGO_HEIGHT_CLASS = "h-12 sm:h-14 md:h-16 lg:h-[4.5rem]";
 export const BRAND_LOGO_MAX_WIDTH_CLASS =
   "max-w-[4.5rem] sm:max-w-[5.25rem] md:max-w-[6rem] lg:max-w-[6.75rem]";
+export const BRAND_LOGO_HEADER_CLASS = "brand-logo-header";
 
 /** Logo is served directly (not via the image optimizer) on the page surface. */
 export const BRAND_LOGO_USE_OPTIMIZER = false;
@@ -30,13 +34,22 @@ export function brandLogoIntegratedClassName(): string {
   return `${BRAND_LOGO_HEIGHT_CLASS} w-auto shrink-0 object-contain object-left ${BRAND_LOGO_MAX_WIDTH_CLASS}`;
 }
 
+/** Header logo fills the full header bar from top border to bottom border. */
+export function brandLogoHeaderClassName(): string {
+  return BRAND_LOGO_HEADER_CLASS;
+}
+
+export function brandLogoHeaderLinkClassName(): string {
+  return "brand-logo-header-link";
+}
+
 export function siteHeaderClassName(): string {
   return "sticky top-0 z-50 border-b border-stone-200/90 bg-white/95 shadow-[0_1px_0_rgba(28,25,23,0.04)] backdrop-blur-sm";
 }
 
-/** Compact header row with a readable wide wordmark. */
+/** Header row with fixed bar height; logo stretches edge to edge vertically. */
 export function siteHeaderInnerClassName(): string {
-  return "site-header-shell flex flex-col gap-0 py-0 sm:flex-row sm:items-center sm:justify-between sm:gap-1 sm:py-0.5";
+  return "site-header-shell site-header-bar flex flex-row items-center justify-between gap-3";
 }
 
 export function getBrandLogoPublicPath(): string {
