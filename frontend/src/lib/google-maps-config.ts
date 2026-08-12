@@ -28,3 +28,9 @@ export function isGoogleMapsJsPreferred(): boolean {
   const flag = process.env.NEXT_PUBLIC_GOOGLE_MAPS_USE_JS?.trim().toLowerCase();
   return flag === "1" || flag === "true" || flag === "yes";
 }
+
+/** Opt in to Maps Embed API (maps/embed/v1). Default uses maps.google.com iframe — no GCP API activation needed. */
+export function isGoogleMapsEmbedApiPreferred(): boolean {
+  const flag = process.env.NEXT_PUBLIC_GOOGLE_MAPS_USE_EMBED_API?.trim().toLowerCase();
+  return flag === "1" || flag === "true" || flag === "yes";
+}
