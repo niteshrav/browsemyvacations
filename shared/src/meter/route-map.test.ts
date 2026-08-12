@@ -65,7 +65,8 @@ describe("route-map", () => {
       pacing: "moderate",
     });
     const multiRoute = buildGoogleMapRoute(multi)!;
-    expect(buildVacationRouteMapsEmbedUrl(multiRoute)).toMatch(/^https:\/\/www\.google\.com\/maps\/dir\//);
+    expect(buildVacationRouteMapsEmbedUrl(multiRoute)).toMatch(/^https:\/\/maps\.google\.com\/maps\?saddr=/);
+    expect(buildVacationRouteMapsEmbedUrl(multiRoute)).toContain("+to:");
     expect(buildVacationRouteMapsEmbedUrl(multiRoute)).toContain("output=embed");
 
     const single = calculateVacationFeasibility({
@@ -95,15 +96,20 @@ describe("route-map", () => {
     expect(url).toContain("destination=");
   });
 
-  it("builds an external Google Maps link for opening in a new tab", () => {
+  it("builds a multi-stop embed URL with chained daddr waypoints", () => {
     const feasibility = calculateVacationFeasibility({
-      destinationSlugs: ["udaipur", "jaipur"],
+      destinationSlugs: ["ajmer", "alwar", "mount-abu"],
       totalNights: 4,
       pickupTime: "09:00",
       dropoffTime: "18:00",
       pacing: "moderate",
     });
     const route = buildGoogleMapRoute(feasibility)!;
-    expect(buildVacationRouteMapsExternalUrl(route)).toContain("google.com/maps/dir/");
+    const url = buildVacationRouteMapsEmbedUrl(route);
+    expect(url).toMatch(/^https:\/\/maps\.google\.com\/maps\?saddr=/);
+    expect(url).toContain("Ajmer");
+    expect(url).toContain("Alwar");
+    expect(url).toContain("Mount%20Abu");
+    expect(url).not.toContain("www.google.com/maps/dir/");
   });
 });

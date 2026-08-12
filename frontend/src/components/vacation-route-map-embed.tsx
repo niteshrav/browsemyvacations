@@ -2,6 +2,7 @@
 
 import type { FeasibilityResult, GoogleMapRoute } from "@bmv/shared";
 import { buildVacationRouteMapsEmbedUrl, buildVacationRouteMapsExternalUrl } from "@bmv/shared";
+import { getGoogleMapsApiKey, isGoogleMapsConfigured } from "@/lib/google-maps-config";
 import { VacationRouteMapFallback } from "./vacation-route-map-fallback";
 
 type Props = {
@@ -10,7 +11,8 @@ type Props = {
 };
 
 export function VacationRouteMapEmbed({ route, feasibility }: Props) {
-  const embedUrl = buildVacationRouteMapsEmbedUrl(route);
+  const apiKey = isGoogleMapsConfigured() ? getGoogleMapsApiKey() : undefined;
+  const embedUrl = buildVacationRouteMapsEmbedUrl(route, apiKey ? { apiKey } : undefined);
   const externalUrl = buildVacationRouteMapsExternalUrl(route);
 
   return (

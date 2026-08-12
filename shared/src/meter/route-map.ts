@@ -79,8 +79,9 @@ export function buildVacationRouteMapsEmbedUrl(
     return `https://maps.google.com/maps?saddr=${encodedPlace(markers[0]!.name)}&daddr=${encodedPlace(markers[1]!.name)}&output=embed`;
   }
 
-  const path = markers.map((marker) => encodedPlace(marker.name)).join("/");
-  return `https://www.google.com/maps/dir/${path}/@${route.center.lat},${route.center.lng},7z/data=!3m1!4b1!4m2!4m1!3e0?hl=en&output=embed`;
+  const origin = encodedPlace(markers[0]!.name);
+  const remaining = markers.slice(1).map((marker) => encodedPlace(marker.name)).join("+to:");
+  return `https://maps.google.com/maps?saddr=${origin}&daddr=${remaining}&output=embed`;
 }
 
 export function buildGoogleMapRoute(feasibility: FeasibilityResult): GoogleMapRoute | null {
