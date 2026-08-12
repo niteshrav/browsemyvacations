@@ -7,10 +7,12 @@ import { VacationRouteMapFallback } from "./vacation-route-map-fallback";
 
 type Props = {
   route: GoogleMapRoute;
-  feasibility: FeasibilityResult;
+  feasibility?: FeasibilityResult | null;
+  /** True when showing the Rajasthan overview before destinations are picked. */
+  isDefault?: boolean;
 };
 
-export function VacationRouteMapEmbed({ route, feasibility }: Props) {
+export function VacationRouteMapEmbed({ route, feasibility = null, isDefault = false }: Props) {
   const useEmbedApi = isGoogleMapsEmbedApiPreferred();
   const apiKey = useEmbedApi && isGoogleMapsConfigured() ? getGoogleMapsApiKey() : undefined;
   const embedUrl = buildVacationRouteMapsEmbedUrl(route, apiKey ? { apiKey } : undefined);
@@ -19,7 +21,7 @@ export function VacationRouteMapEmbed({ route, feasibility }: Props) {
   return (
     <div
       className="relative h-64 overflow-hidden rounded-xl border border-sky-100 bg-white"
-      data-testid="vacation-google-map-embed"
+      data-testid={isDefault ? "vacation-google-map-default" : "vacation-google-map-embed"}
     >
       <iframe
         title="Google Maps route preview"
@@ -38,7 +40,7 @@ export function VacationRouteMapEmbed({ route, feasibility }: Props) {
         Open in Google Maps
       </a>
       <noscript>
-        <VacationRouteMapFallback feasibility={feasibility} />
+        {feasibility ? <VacationRouteMapFallback feasibility={feasibility} /> : null}
       </noscript>
     </div>
   );

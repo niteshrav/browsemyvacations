@@ -58,7 +58,8 @@ export function buildVacationRouteMapsEmbedUrl(
 
   if (apiKey) {
     if (markers.length === 1) {
-      return `https://www.google.com/maps/embed/v1/place?key=${encodeURIComponent(apiKey)}&q=${encodedPlace(markers[0]!.name)}&zoom=9`;
+      const zoom = markers[0]!.slug === "rajasthan" ? 7 : 9;
+      return `https://www.google.com/maps/embed/v1/place?key=${encodeURIComponent(apiKey)}&q=${encodedPlace(markers[0]!.name)}&zoom=${zoom}`;
     }
 
     const origin = encodedPlace(markers[0]!.name);
@@ -72,7 +73,8 @@ export function buildVacationRouteMapsEmbedUrl(
   }
 
   if (markers.length === 1) {
-    return `https://maps.google.com/maps?q=${encodedPlace(markers[0]!.name)}&z=10&output=embed`;
+    const zoom = markers[0]!.slug === "rajasthan" ? 7 : 10;
+    return `https://maps.google.com/maps?q=${encodedPlace(markers[0]!.name)}&z=${zoom}&output=embed`;
   }
 
   if (markers.length === 2) {
@@ -82,6 +84,26 @@ export function buildVacationRouteMapsEmbedUrl(
   const origin = encodedPlace(markers[0]!.name);
   const remaining = markers.slice(1).map((marker) => encodedPlace(marker.name)).join("+to:");
   return `https://maps.google.com/maps?saddr=${origin}&daddr=${remaining}&output=embed`;
+}
+
+/** Rajasthan overview shown before any destinations are selected. */
+export function buildDefaultVacationMapRoute(): GoogleMapRoute {
+  const center = { lat: 26.75, lng: 74.5 };
+  const marker: MapPoint & LatLng = {
+    slug: "rajasthan",
+    name: "Rajasthan",
+    x: 50,
+    y: 50,
+    lat: center.lat,
+    lng: center.lng,
+  };
+
+  return {
+    markers: [marker],
+    path: [center],
+    center,
+    bounds: { north: 30.2, south: 23.0, east: 78.4, west: 69.5 },
+  };
 }
 
 export function buildGoogleMapRoute(feasibility: FeasibilityResult): GoogleMapRoute | null {

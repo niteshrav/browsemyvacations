@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculateVacationFeasibility } from "./feasibility";
-import { buildGoogleMapRoute, buildVacationRouteMapsEmbedUrl, buildVacationRouteMapsExternalUrl, getDestinationLatLng } from "./route-map";
+import { buildDefaultVacationMapRoute, buildGoogleMapRoute, buildVacationRouteMapsEmbedUrl, buildVacationRouteMapsExternalUrl, getDestinationLatLng } from "./route-map";
 
 describe("route-map", () => {
   it("resolves lat/lng for known destinations", () => {
@@ -94,6 +94,16 @@ describe("route-map", () => {
     expect(url).toContain("maps/embed/v1/directions");
     expect(url).toContain("origin=");
     expect(url).toContain("destination=");
+  });
+
+  it("builds a Rajasthan overview route when no destinations are selected", () => {
+    const route = buildDefaultVacationMapRoute();
+    expect(route.markers).toHaveLength(1);
+    expect(route.markers[0]?.slug).toBe("rajasthan");
+    const url = buildVacationRouteMapsEmbedUrl(route);
+    expect(url).toContain("Rajasthan");
+    expect(url).toContain("z=7");
+    expect(url).toContain("output=embed");
   });
 
   it("builds a multi-stop embed URL with chained daddr waypoints", () => {

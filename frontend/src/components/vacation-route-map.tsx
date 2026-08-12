@@ -1,7 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { buildGoogleMapRoute, type FeasibilityResult } from "@bmv/shared";
+import {
+  buildDefaultVacationMapRoute,
+  buildGoogleMapRoute,
+  type FeasibilityResult,
+} from "@bmv/shared";
 import { getGoogleMapsApiKey, isGoogleMapsConfigured } from "@/lib/google-maps-config";
 import { resolveVacationRouteMapMode } from "@/lib/vacation-route-map-mode";
 import { VacationRouteMapEmbed } from "./vacation-route-map-embed";
@@ -27,22 +31,21 @@ type Props = {
 };
 
 export function VacationRouteMap({ feasibility }: Props) {
-  if (!feasibility || feasibility.mapPoints.length === 0) {
-    return (
-      <div
-        className="flex h-64 items-center justify-center rounded-xl border border-dashed border-sky-200 bg-sky-50/50 text-sm text-stone-500"
-        data-testid="vacation-route-map-empty"
-      >
-        Select destinations to preview your route
-      </div>
-    );
+  const hasSelection = Boolean(feasibility?.mapPoints.length);
+  const route = hasSelection
+    ? buildGoogleMapRoute(feasibility!)
+    : buildDefaultVacationMapRoute();
+
+  if (!route) {
+    return <VacationRouteMapEmbed route={buildDefaultVacationMapRoute()} />;
   }
 
-  const route = buildGoogleMapRoute(feasibility);
   const apiKey = getGoogleMapsApiKey();
-  const mode = resolveVacationRouteMapMode(true, isGoogleMapsConfigured(), route);
+  const mode = hasSelection
+    ? resolveVacationRouteMapMode(true, isGoogleMapsConfigured(), route)
+    : "embed";
 
-  if (mode === "google" && route) {
+  if (mode === "google" && hasSelection && feasibility) {
     return (
       <div
         className="h-64 overflow-hidden rounded-xl border border-sky-100"
@@ -53,9 +56,19 @@ export function VacationRouteMap({ feasibility }: Props) {
     );
   }
 
-  if (mode === "embed" && route) {
-    return <VacationRouteMapEmbed route={route} feasibility={feasibility} />;
+  if (mode === "embed") {
+    return (
+      <VacationRouteMapEmbed
+        route={route}
+        feasibility={feasibility}
+        isDefault={!hasSelection}
+      />
+    );
   }
 
-  return <VacationRouteMapFallback feasibility={feasibility} />;
+  if (feasibility) {
+    return <VacationRouteMapFallback feasibility={feasibility} />;
+  }
+
+  return <VacationRouteMapEmbed route={route} isDefault />;
 }
