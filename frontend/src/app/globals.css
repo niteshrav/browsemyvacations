@@ -43,7 +43,7 @@
 
 @layer components {
   .site-container {
-    @apply mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 xl:px-10;
+    @apply mx-auto w-full max-w-[1400px] px-3 sm:px-4 lg:px-5 xl:px-6;
   }
 
   .site-header-shell {
@@ -51,7 +51,7 @@
   }
 
   .package-card-grid {
-    @apply mx-auto grid w-full max-w-6xl justify-center gap-5 sm:gap-6;
+    @apply grid w-full gap-5 sm:gap-6;
     grid-template-columns: repeat(auto-fill, minmax(17.5rem, 20rem));
   }
 
