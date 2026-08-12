@@ -57,7 +57,7 @@ export default async function PackagesPage({ searchParams }: Props) {
       {emptyMessage ? (
         <CatalogEmptyState message={emptyMessage} destination={destination} apiDown={!catalogAvailable} />
       ) : destination ? (
-        <div className="mt-10 mx-auto grid max-w-[92%] gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:max-w-[90%] xl:gap-7">
+        <div className="package-card-grid mt-10">
           {packages.map((pkg) => (
             <PackageCard key={pkg.id} pkg={pkg} />
           ))}
@@ -70,7 +70,7 @@ export default async function PackagesPage({ searchParams }: Props) {
                 <h2 className="font-serif text-2xl font-semibold text-teal-950">{group.name}</h2>
                 <div className="mx-auto mt-3 h-px w-16 bg-gradient-to-r from-transparent via-teal-600/50 to-transparent sm:mx-0" />
               </div>
-              <div className="mx-auto grid max-w-[92%] gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:max-w-[90%] xl:gap-7">
+              <div className="package-card-grid">
                 {group.packages.map((pkg) => (
                   <PackageCard key={pkg.id} pkg={pkg} />
                 ))}

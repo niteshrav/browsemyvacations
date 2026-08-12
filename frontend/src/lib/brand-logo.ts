@@ -9,11 +9,12 @@ export const BRAND_LOGO_ALT = "Browse My Vacations";
 /** Intrinsic pixel size of the public PNG (3× of ~168×112 display). */
 export const BRAND_LOGO_WIDTH = 504;
 export const BRAND_LOGO_HEIGHT = 336;
-export const BRAND_LOGO_DISPLAY_HEIGHT = 56;
+export const BRAND_LOGO_DISPLAY_HEIGHT = 72;
 
-/** Tailwind height tokens for responsive logo sizing. */
-export const BRAND_LOGO_HEIGHT_CLASS = "h-12 sm:h-14 md:h-16";
-export const BRAND_LOGO_MAX_WIDTH_CLASS = "max-w-[min(100%,340px)]";
+/** Wide wordmark stays readable without dominating the header bar. */
+export const BRAND_LOGO_HEIGHT_CLASS = "h-12 sm:h-14 md:h-16 lg:h-[4.5rem]";
+export const BRAND_LOGO_MAX_WIDTH_CLASS =
+  "max-w-[4.5rem] sm:max-w-[5.25rem] md:max-w-[6rem] lg:max-w-[6.75rem]";
 
 /** Logo is served directly (not via the image optimizer) on the page surface. */
 export const BRAND_LOGO_USE_OPTIMIZER = false;
@@ -33,9 +34,9 @@ export function siteHeaderClassName(): string {
   return "sticky top-0 z-50 border-b border-stone-200/90 bg-white/95 shadow-[0_1px_0_rgba(28,25,23,0.04)] backdrop-blur-sm";
 }
 
-/** Compact header row: narrower shell, tighter vertical rhythm. */
+/** Compact header row with a readable wide wordmark. */
 export function siteHeaderInnerClassName(): string {
-  return "site-header-shell flex flex-col gap-0 py-0 sm:flex-row sm:items-center sm:justify-between sm:gap-1";
+  return "site-header-shell flex flex-col gap-0 py-0 sm:flex-row sm:items-center sm:justify-between sm:gap-1 sm:py-0.5";
 }
 
 export function getBrandLogoPublicPath(): string {
@@ -43,7 +44,9 @@ export function getBrandLogoPublicPath(): string {
 }
 
 export function resolveBrandLogoSrc(): string {
-  return deliverBrandAssetUrl(BRAND_LOGO_PATH);
+  return deliverBrandAssetUrl(BRAND_LOGO_PATH, {
+    transforms: { width: BRAND_LOGO_WIDTH, crop: "limit", quality: "auto:best" },
+  });
 }
 
 export function brandLogoAssetHasAlphaChannel(): boolean {

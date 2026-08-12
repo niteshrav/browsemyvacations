@@ -12,7 +12,7 @@ export function PackageCard({ pkg }: Props) {
   const imageSrc = resolvePackageImage(pkg);
 
   return (
-    <article className="group mx-auto flex h-full w-full max-w-[22rem] flex-col overflow-hidden rounded-xl border border-stone-200/80 bg-white shadow-[0_8px_22px_rgba(28,25,23,0.05)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(15,118,110,0.12)] sm:max-w-none">
+    <article className="group flex h-full w-full flex-col overflow-hidden rounded-xl border border-stone-200/80 bg-white shadow-[0_8px_22px_rgba(28,25,23,0.05)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(15,118,110,0.12)]">
       <div className={packageCardMediaClassName(imageSrc)}>
         <PackageCardImage pkg={pkg} alt={`${pkg.title} preview`} />
       </div>

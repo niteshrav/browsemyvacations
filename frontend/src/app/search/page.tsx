@@ -73,7 +73,7 @@ export default async function SearchPage({ searchParams }: Props) {
               <p className="mt-1 text-sm text-stone-600">
                 Handpicked options you can customise for {displayQuery}.
               </p>
-              <div className="mt-6 mx-auto grid max-w-[92%] gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:max-w-[90%] xl:gap-7">
+              <div className="package-card-grid mt-6">
                 {relatedPackages.map((pkg) => (
                   <PackageCard key={pkg.id} pkg={pkg} />
                 ))}
@@ -82,7 +82,7 @@ export default async function SearchPage({ searchParams }: Props) {
           ) : null}
         </div>
       ) : (
-        <div className="mt-8 mx-auto grid max-w-[92%] gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:max-w-[90%] xl:gap-7">
+        <div className="package-card-grid mt-8">
           {packages.map((pkg) => (
             <PackageCard key={pkg.id} pkg={pkg} />
           ))}

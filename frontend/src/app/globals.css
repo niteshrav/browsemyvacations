@@ -50,6 +50,11 @@
     @apply mx-auto w-full max-w-[1180px] px-3 sm:px-4 lg:px-5;
   }
 
+  .package-card-grid {
+    @apply mx-auto grid w-full max-w-6xl justify-center gap-5 sm:gap-6;
+    grid-template-columns: repeat(auto-fill, minmax(17.5rem, 20rem));
+  }
+
   .nav-link {
     @apply rounded-md px-2.5 py-1.5 text-sm font-medium text-stone-600 no-underline transition-colors hover:bg-teal-50 hover:text-teal-800;
   }
