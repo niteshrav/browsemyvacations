@@ -106,7 +106,17 @@ export function SiteFooter() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-teal-100/65 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Browse My Vacations. All rights reserved.</p>
-          <p className="text-teal-100/55">Designed &amp; Developed by Commiters Softwares</p>
+          <p className="text-teal-100/55">
+            Crafted by{" "}
+            <a
+              href="https://www.commiters.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-teal-100/80 underline decoration-teal-100/30 underline-offset-2 transition hover:text-white"
+            >
+              Commiters
+            </a>
+          </p>
         </div>
       </div>
     </footer>
