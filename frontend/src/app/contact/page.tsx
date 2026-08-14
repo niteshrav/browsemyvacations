@@ -19,7 +19,7 @@ export default async function ContactPage() {
   ]);
 
   return (
-    <div className="bg-white pb-24 md:pb-0">
+    <div className="bg-white pb-36 md:pb-0">
       <ContactHero hero={hero} contact={contact} />
       <ContactInfoCards contact={contact} />
       <ContactInquiryForm contact={contact} />

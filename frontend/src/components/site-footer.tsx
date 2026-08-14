@@ -24,7 +24,7 @@ const SUPPORT_LINKS = [
 export function SiteFooter() {
   return (
     <footer
-      className="mt-auto border-t border-teal-900/20 bg-teal-950 text-teal-50"
+      className="mt-auto border-t border-teal-900/20 bg-teal-950 pb-28 text-teal-50 md:pb-0"
       data-site-chrome="footer"
     >
       <div className="site-container py-12 sm:py-14">

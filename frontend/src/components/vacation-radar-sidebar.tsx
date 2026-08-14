@@ -91,7 +91,7 @@ export function VacationRadarSidebar({
     <aside className="rounded-3xl border border-teal-100 bg-gradient-to-b from-teal-50/80 via-white to-white p-5 shadow-[0_16px_40px_rgba(15,118,110,0.08)]">
       <h2 className="text-xs font-bold tracking-widest text-teal-800">YOUR VACATION RADAR</h2>
 
-      <ol className="mt-4 grid grid-cols-3 gap-2">
+      <ol className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
         {STEPS.map((label, index) => {
           const active = index === step;
           const done = index < step;
@@ -206,7 +206,7 @@ export function VacationRadarSidebar({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="travelDate" className="block text-xs text-stone-600">
                 Pickup Date
@@ -290,7 +290,7 @@ export function VacationRadarSidebar({
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="adults" className="block text-xs text-stone-600">
                 Adults

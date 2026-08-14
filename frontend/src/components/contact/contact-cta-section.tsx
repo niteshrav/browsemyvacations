@@ -19,14 +19,14 @@ export function ContactCtaSection() {
         <FadeUp>
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{cta.heading}</h2>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href={cta.primaryCta.href} className="btn-primary min-w-[200px] px-6 py-3.5 text-base shadow-lg">
+            <Link href={cta.primaryCta.href} className="btn-primary w-full max-w-xs px-6 py-3.5 text-base shadow-lg sm:min-w-[200px] sm:w-auto">
               {cta.primaryCta.label}
             </Link>
             <a
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-w-[200px] items-center justify-center gap-2 rounded-lg border border-white/30 bg-[#25D366] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#1da851]"
+              className="inline-flex w-full max-w-xs items-center justify-center gap-2 rounded-lg border border-white/30 bg-[#25D366] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#1da851] sm:min-w-[200px] sm:w-auto"
             >
               {cta.secondaryCta.label}
             </a>

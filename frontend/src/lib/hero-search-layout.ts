@@ -6,7 +6,7 @@ export function heroSearchFormClassName(): string {
 }
 
 export function heroSearchButtonClassName(): string {
-  return "shrink-0 rounded-full bg-[#0b5c56] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700";
+  return "shrink-0 rounded-full bg-[#0b5c56] px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 sm:px-6 sm:py-2.5";
 }
 
 export function heroSearchInputShellClassName(): string {

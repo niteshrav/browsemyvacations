@@ -91,7 +91,7 @@ export function ContactInquiryForm({ contact }: Props) {
   }
 
   return (
-    <section id="contact-form" className="scroll-mt-24 bg-gradient-to-b from-teal-50/50 to-white py-16 sm:py-20" aria-labelledby="contact-form-heading">
+    <section id="contact-form" className="scroll-mt-28 bg-gradient-to-b from-teal-50/50 to-white py-16 sm:scroll-mt-24 sm:py-20" aria-labelledby="contact-form-heading">
       <div className="site-container">
         <SectionHeading eyebrow={form.eyebrow} title={form.heading} description={form.description} />
 

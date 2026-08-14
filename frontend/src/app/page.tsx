@@ -32,7 +32,7 @@ export default async function HomePage() {
             className="relative mx-auto w-full max-w-xl text-center lg:mx-0 lg:max-w-[34rem] lg:text-left xl:max-w-[38rem]"
             data-testid="hero-copy"
           >
-            <h1 className="font-serif text-[2.35rem] font-extrabold leading-[1.1] tracking-[-0.02em] text-[#0a1628] sm:text-[2.75rem] md:text-[3.15rem] md:leading-[1.06]">
+            <h1 className="font-serif text-[1.85rem] font-extrabold leading-[1.12] tracking-[-0.02em] text-[#0a1628] sm:text-[2.35rem] md:text-[3.15rem] md:leading-[1.06]">
               <span className="block">{heroCopy.headlinePrimary}</span>
               <span className="mt-1 block font-extrabold text-[#0a4f4a]">{heroCopy.headlineAccent}</span>
             </h1>

@@ -71,7 +71,7 @@ export function FormToast({ message, onDismiss }: { message: string; onDismiss: 
       initial={reduceMotion ? false : { opacity: 0, y: -16, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -8 }}
-      className="fixed right-4 top-24 z-[60] flex max-w-sm items-start gap-3 rounded-xl border border-teal-200 bg-white px-4 py-3 shadow-lg shadow-teal-900/10"
+      className="fixed right-4 top-32 z-[60] flex max-w-[calc(100vw-2rem)] items-start gap-3 rounded-xl border border-teal-200 bg-white px-4 py-3 shadow-lg shadow-teal-900/10 sm:top-24 sm:max-w-sm"
       data-testid="contact-success-toast"
     >
       <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-100 text-teal-700">

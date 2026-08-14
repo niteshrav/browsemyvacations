@@ -25,10 +25,10 @@ export function CtaBanner({ heading, image, imageAlt, primaryCta, secondaryCta }
           </h2>
           <div className="mx-auto mt-4 h-px w-20 bg-white/40" aria-hidden />
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href={primaryCta.href} className="btn-primary min-w-[200px] px-6 py-3.5 text-base">
+            <Link href={primaryCta.href} className="btn-primary w-full max-w-xs px-6 py-3.5 text-base sm:min-w-[200px] sm:w-auto">
               {primaryCta.label}
             </Link>
-            <Link href={secondaryCta.href} className="btn-secondary min-w-[200px] border-white/30 bg-white/95 px-6 py-3.5 text-base">
+            <Link href={secondaryCta.href} className="btn-secondary w-full max-w-xs border-white/30 bg-white/95 px-6 py-3.5 text-base sm:min-w-[200px] sm:w-auto">
               {secondaryCta.label}
             </Link>
           </div>

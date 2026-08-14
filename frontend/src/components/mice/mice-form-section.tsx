@@ -7,7 +7,7 @@ export function MiceFormSection() {
   const { form } = MICE_PAGE;
 
   return (
-    <section id="mice-inquiry" className="scroll-mt-24 bg-white py-16 sm:py-20">
+    <section id="mice-inquiry" className="scroll-mt-28 bg-white py-16 sm:scroll-mt-24 sm:py-20">
       <div className="site-container">
         <SectionHeading title={form.heading} description={form.description} className="mb-10" />
 

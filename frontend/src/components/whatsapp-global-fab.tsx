@@ -56,7 +56,7 @@ export function WhatsAppGlobalFab() {
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
       data-testid="whatsapp-floating-button"
-      className={`fixed right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/30 transition hover:scale-105 hover:bg-[#1da851] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] ${isContactPage ? "bottom-24 md:bottom-6" : "bottom-6"}`}
+      className={`fixed right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/30 transition hover:scale-105 hover:bg-[#1da851] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] sm:right-6 ${isContactPage ? "bottom-28 md:bottom-6" : "bottom-5 sm:bottom-6"}`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -48,7 +48,7 @@ export function FeasibilityEnginePanel({ feasibility, loading, onSubmit, submitD
 
   return (
     <section className="rounded-2xl border border-sky-100 bg-white p-6 shadow-sm">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
         <span className="text-lg" aria-hidden>
           ⚡
         </span>

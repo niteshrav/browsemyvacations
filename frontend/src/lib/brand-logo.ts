@@ -47,9 +47,13 @@ export function siteHeaderClassName(): string {
   return "sticky top-0 z-50 border-b border-stone-200/90 bg-white/95 shadow-[0_1px_0_rgba(28,25,23,0.04)] backdrop-blur-sm";
 }
 
-/** Header row with fixed bar height; logo stretches edge to edge vertically. */
+/** Compact single-row header on mobile; full-height logo from md up. */
 export function siteHeaderInnerClassName(): string {
-  return "site-header-shell site-header-bar flex flex-row items-center justify-between gap-3";
+  return "site-header-shell site-header-bar flex flex-row items-center gap-2 md:gap-3";
+}
+
+export function siteHeaderNavClassName(): string {
+  return "site-header-nav flex min-w-0 flex-1 flex-nowrap items-center justify-end gap-0.5 overflow-x-auto md:flex-wrap md:overflow-visible md:gap-1.5";
 }
 
 export function getBrandLogoPublicPath(): string {

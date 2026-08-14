@@ -17,6 +17,7 @@ import {
   resolveBrandLogoSrc,
   siteHeaderClassName,
   siteHeaderInnerClassName,
+  siteHeaderNavClassName,
 } from "./brand-logo";
 import { rootBodyClassName } from "./root-layout";
 
@@ -67,12 +68,14 @@ describe("brand logo", () => {
     expect(siteHeaderClassName()).toContain("sticky");
   });
 
-  it("keeps a fixed-height header bar with a full-height logo", () => {
+  it("keeps a responsive header shell with a full-height logo on desktop", () => {
     const inner = siteHeaderInnerClassName();
     expect(inner).toContain("site-header-bar");
     expect(inner).toContain("site-header-shell");
+    expect(inner).toContain("flex-row");
     expect(inner).toContain("items-center");
-    expect(inner).toContain("justify-between");
+    expect(siteHeaderNavClassName()).toContain("site-header-nav");
+    expect(siteHeaderNavClassName()).toContain("overflow-x-auto");
     expect(brandLogoHeaderClassName()).toBe("brand-logo-header");
     expect(brandLogoIntegratedClassName()).toMatch(/h-12/);
     expect(brandLogoIntegratedClassName()).toMatch(/lg:h-\[4\.5rem\]/);

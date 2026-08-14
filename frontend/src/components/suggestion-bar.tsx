@@ -68,7 +68,7 @@ export function SuggestionBar({ suggestions }: Props) {
 
   return (
     <section
-      className="relative left-1/2 mt-12 w-screen max-w-[100vw] -translate-x-1/2 px-4 sm:px-6 lg:px-10"
+      className="relative mt-12 -mx-3 w-[calc(100%+1.5rem)] px-3 sm:-mx-4 sm:w-[calc(100%+2rem)] sm:px-4 lg:mx-0 lg:w-full lg:px-0"
       aria-label="Quick suggestions"
       data-testid="quick-picks-bar"
     >

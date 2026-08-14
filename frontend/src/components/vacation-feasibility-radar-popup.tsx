@@ -40,13 +40,13 @@ export function VacationFeasibilityRadarPopup() {
     }
   }
 
-  if (!ready || pathname.startsWith("/admin") || pathname.startsWith("/vacation-meter") || dismissed) {
+  if (!ready || pathname.startsWith("/admin") || pathname.startsWith("/vacation-meter") || pathname === "/contact" || dismissed) {
     return null;
   }
 
   return (
     <aside
-      className="fixed bottom-24 right-4 z-40 w-[min(100vw-2rem,19.5rem)] origin-bottom-right animate-[hero-image-reveal_0.55s_ease-out] overflow-hidden rounded-2xl border border-stone-200/90 bg-white/95 shadow-[0_18px_50px_rgba(28,25,23,0.16)] backdrop-blur-md sm:bottom-6 sm:right-24"
+      className="fixed bottom-[4.75rem] left-3 right-[4.25rem] z-40 w-auto max-w-none origin-bottom-right animate-[hero-image-reveal_0.55s_ease-out] overflow-hidden rounded-2xl border border-stone-200/90 bg-white/95 shadow-[0_18px_50px_rgba(28,25,23,0.16)] backdrop-blur-md sm:bottom-6 sm:left-auto sm:right-24 sm:w-[min(100vw-2rem,19.5rem)]"
       aria-label="Vacation Feasibility Radar"
       data-testid="vacation-feasibility-radar-popup"
     >

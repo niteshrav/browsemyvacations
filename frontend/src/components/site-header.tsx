@@ -6,6 +6,7 @@ import {
   brandLogoHeaderLinkClassName,
   siteHeaderClassName,
   siteHeaderInnerClassName,
+  siteHeaderNavClassName,
 } from "@/lib/brand-logo";
 
 const nav = [
@@ -27,10 +28,7 @@ export function SiteHeader() {
         >
           <BrandLogo priority className={brandLogoHeaderClassName()} />
         </Link>
-        <nav
-          className="flex flex-wrap items-center gap-0.5 sm:justify-end sm:gap-1.5"
-          aria-label="Main navigation"
-        >
+        <nav className={siteHeaderNavClassName()} aria-label="Main navigation">
           {nav.map((item) => (
             <Link key={item.href} href={item.href} className="nav-link site-header-nav-link">
               {item.label}
