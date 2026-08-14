@@ -17,6 +17,8 @@ import {
   resolveBrandLogoSrc,
   siteHeaderClassName,
   siteHeaderInnerClassName,
+  siteHeaderMenuButtonClassName,
+  siteHeaderMobileNavClassName,
   siteHeaderNavClassName,
 } from "./brand-logo";
 import { rootBodyClassName } from "./root-layout";
@@ -74,8 +76,13 @@ describe("brand logo", () => {
     expect(inner).toContain("site-header-shell");
     expect(inner).toContain("flex-row");
     expect(inner).toContain("items-center");
+    expect(inner).toContain("justify-between");
     expect(siteHeaderNavClassName()).toContain("site-header-nav");
-    expect(siteHeaderNavClassName()).toContain("overflow-x-auto");
+    expect(siteHeaderNavClassName()).toContain("hidden");
+    expect(siteHeaderNavClassName()).toContain("md:flex");
+    expect(siteHeaderMenuButtonClassName()).toContain("site-header-menu-btn");
+    expect(siteHeaderMenuButtonClassName()).toContain("md:hidden");
+    expect(siteHeaderMobileNavClassName()).toContain("site-header-mobile-nav");
     expect(brandLogoHeaderClassName()).toBe("brand-logo-header");
     expect(brandLogoIntegratedClassName()).toMatch(/h-12/);
     expect(brandLogoIntegratedClassName()).toMatch(/lg:h-\[4\.5rem\]/);

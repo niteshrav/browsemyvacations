@@ -80,7 +80,7 @@
   .brand-logo-header {
     height: calc(var(--site-header-height) * 0.88);
     width: auto;
-    max-width: min(42vw, 7.75rem);
+    max-width: min(58vw, 10.5rem);
     object-fit: contain;
     object-position: left center;
     flex-shrink: 0;
@@ -91,15 +91,6 @@
       height: 100%;
       max-width: none;
     }
-  }
-
-  .site-header-nav {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .site-header-nav::-webkit-scrollbar {
-    display: none;
   }
 
   .site-header-nav-link {

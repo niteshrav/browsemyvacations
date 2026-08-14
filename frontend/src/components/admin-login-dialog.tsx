@@ -9,7 +9,12 @@ import {
   ADMIN_LOGIN_TRIGGER_LABEL,
 } from "@/lib/admin-login-ui";
 
-export function AdminLoginDialog() {
+type Props = {
+  triggerClassName?: string;
+  onTriggerClick?: () => void;
+};
+
+export function AdminLoginDialog({ triggerClassName, onTriggerClick }: Props) {
   const router = useRouter();
   const titleId = useId();
   const [open, setOpen] = useState(false);
@@ -36,8 +41,11 @@ export function AdminLoginDialog() {
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
-        className="nav-link site-header-nav-link font-semibold text-teal-800"
+        onClick={() => {
+          onTriggerClick?.();
+          setOpen(true);
+        }}
+        className={triggerClassName ?? "nav-link site-header-nav-link font-semibold text-teal-800"}
         aria-haspopup="dialog"
       >
         {ADMIN_LOGIN_TRIGGER_LABEL}

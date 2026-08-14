@@ -5,7 +5,7 @@ import {
   BRAND_LOGO_WIDTH,
   brandLogoIntegratedClassName,
   resolveBrandLogoSrc,
-} from "@/lib/brand-logo";
+} from "@/lib/brand-logo-ui";
 
 type BrandLogoProps = {
   priority?: boolean;
