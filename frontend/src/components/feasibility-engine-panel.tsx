@@ -2,6 +2,7 @@ import {
   feasibilityGaugeColor,
   feasibilityGaugeRotation,
   formatTravelSummary,
+  formatTravelHours,
 } from "@/lib/feasibility-display";
 import type { FeasibilityResult } from "@bmv/shared";
 import { VacationRouteMap } from "./vacation-route-map";
@@ -92,7 +93,7 @@ export function FeasibilityEnginePanel({ feasibility, loading, onSubmit, submitD
               <div>
                 <div className="mb-1 flex justify-between text-xs text-stone-500">
                   <span>Travel time</span>
-                  <span>{feasibility?.totalTravelHours ?? 0} hrs</span>
+                  <span>{formatTravelHours(feasibility?.totalTravelHours ?? 0)} hrs</span>
                 </div>
                 <div className="h-2 rounded-full bg-stone-100">
                   <div

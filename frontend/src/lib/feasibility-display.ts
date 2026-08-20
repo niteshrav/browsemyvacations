@@ -13,6 +13,11 @@ export function feasibilityGaugeColor(score: number): string {
   return "#dc2626";
 }
 
+export function formatTravelHours(hours: number): string {
+  const rounded = Math.round(hours * 10) / 10;
+  return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+}
+
 export function formatTravelSummary(feasibility: FeasibilityResult): string {
-  return `Total: ${feasibility.totalDistanceKm} km, ~${feasibility.totalTravelHours} hrs travel`;
+  return `Total: ${feasibility.totalDistanceKm} km, ~${formatTravelHours(feasibility.totalTravelHours)} hrs travel`;
 }
