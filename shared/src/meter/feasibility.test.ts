@@ -55,4 +55,18 @@ describe("calculateVacationFeasibility", () => {
     expect(pacingFromSlider(50)).toBe("moderate");
     expect(pacingFromSlider(90)).toBe("busy");
   });
+
+  it("rounds total travel hours after summing route segments", () => {
+    const result = calculateVacationFeasibility({
+      destinationSlugs: ["jaipur", "jaisalmer", "jodhpur", "udaipur"],
+      totalNights: 4,
+      pickupTime: "09:00",
+      dropoffTime: "18:00",
+      pacing: "moderate",
+    });
+
+    expect(result.totalTravelHours).toBeGreaterThan(0);
+    expect(Number.isInteger(result.totalTravelHours * 10)).toBe(true);
+    expect(`${result.totalTravelHours}`).not.toMatch(/\.\d{2,}0+$/);
+  });
 });

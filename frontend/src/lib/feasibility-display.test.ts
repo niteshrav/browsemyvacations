@@ -36,6 +36,7 @@ describe("feasibility-display", () => {
 
   it("rounds floating-point travel hours for display", () => {
     expect(formatTravelHours(15.899999999999999)).toBe("15.9");
+    expect(formatTravelHours(22.700000000000003)).toBe("22.7");
     expect(
       formatTravelSummary({
         totalDistanceKm: 873,

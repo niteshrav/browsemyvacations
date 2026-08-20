@@ -1,5 +1,5 @@
 import { findRajasthanCityBySlug } from "../city-slug";
-import { getRoadDistanceKm, getTravelHours, METER_DESTINATION_COORDS } from "./route-matrix";
+import { getRoadDistanceKm, getTravelHours, roundTravelHours, METER_DESTINATION_COORDS } from "./route-matrix";
 
 export type MeterPacing = "relaxed" | "moderate" | "busy";
 
@@ -159,7 +159,9 @@ export function calculateVacationFeasibility(input: FeasibilityInput): Feasibili
   }
 
   const totalDistanceKm = routeSegments.reduce((sum, seg) => sum + seg.distanceKm, 0);
-  const totalTravelHours = routeSegments.reduce((sum, seg) => sum + seg.travelHours, 0);
+  const totalTravelHours = roundTravelHours(
+    routeSegments.reduce((sum, seg) => sum + seg.travelHours, 0),
+  );
   const feasibilityScore = computeFeasibilityScore(
     totalTravelHours,
     input.totalNights,

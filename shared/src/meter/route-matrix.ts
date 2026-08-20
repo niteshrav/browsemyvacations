@@ -79,6 +79,10 @@ export function getRoadDistanceKm(fromSlug: string, toSlug: string): number {
   return 200;
 }
 
+export function roundTravelHours(hours: number): number {
+  return Math.round(hours * 10) / 10;
+}
+
 export function getTravelHours(distanceKm: number): number {
-  return Math.round((distanceKm / AVG_ROAD_SPEED_KMH) * 10) / 10;
+  return roundTravelHours(distanceKm / AVG_ROAD_SPEED_KMH);
 }

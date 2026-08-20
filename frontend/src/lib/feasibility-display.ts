@@ -15,7 +15,8 @@ export function feasibilityGaugeColor(score: number): string {
 
 export function formatTravelHours(hours: number): string {
   const rounded = Math.round(hours * 10) / 10;
-  return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+  if (Number.isInteger(rounded)) return String(rounded);
+  return parseFloat(rounded.toFixed(1)).toFixed(1);
 }
 
 export function formatTravelSummary(feasibility: FeasibilityResult): string {
